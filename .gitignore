@@ -34,7 +34,7 @@ Thumbs.db
 *.log
 #node_modules
 [Dd]ebug*/
-*.lib
+#*.lib
 *.sbr
 obj/
 [Rr]elease*/

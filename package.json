@@ -1,6 +1,7 @@
 {
   "name": "zabava",
   "version": "1.0.0",
+  "private": true,
   "description": "Zabava website",
   "homepage": "https://github.com/tangrytangrytangry/README.md",
   "main": "./bin/server.js",

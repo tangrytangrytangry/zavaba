@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('site:server');
+var debug = require('debug')('server');
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
@@ -51,6 +51,7 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 console.log(configData.server.desc.value + ' started listening on port ' + port);
+console.log('Listening on ' + 'bind');
 console.log('date          = ' + new Date());
 console.log('description   = ' + configData.server.desc.value);
 console.log('server type   = ' + configData.server.type.value);
