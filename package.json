@@ -1,7 +1,6 @@
 {
   "name": "zabava",
   "version": "1.0.0",
-  "private": true,
   "description": "Zabava website",
   "homepage": "https://github.com/tangrytangrytangry/README.md",
   "main": "./bin/server.js",
@@ -21,6 +20,7 @@
     "express": "~4.16.0",
     "mongoose": "^5.1.6",
     "morgan": "~1.9.0",
-    "pg": "^7.4.3"
+    "pg": "^7.4.3",
+    "serve-favicon": "^2.5.0"
   }
 }
