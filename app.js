@@ -4,11 +4,26 @@ var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var debug = require('debug')('server:app');
+var nunjucks = require('nunjucks');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+// Install nunjucks as the rendering engine for the express app
+var envNunjucks = nunjucks.configure('views', {
+    autoescape: true,
+    express: app,
+    cache: false,
+    watch: true
+});
+
+// Set Nunjucks as rendering engine for pages with .njk suffix
+//app.engine( 'njk', nunjucks.render ) ;
+//app.set( 'view engine', 'njk' ) ;
+app.engine('html', nunjucks.render);
+app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
