@@ -14,8 +14,8 @@ var path = require('path');
  * Read server configuration data.
  */
 
-var configFileName = 'config.json';
-var configFileDir = path.join(__dirname, '..');
+var configFileName = 'config-server.json';
+var configFileDir = path.join(__dirname, '../config');
 var configFileFull;
 var configData;
 
@@ -54,7 +54,7 @@ console.log(configData.server.desc.value + ' started listening on port ' + port)
 console.log('Listening on ' + 'bind');
 console.log('date          = ' + new Date());
 console.log('description   = ' + configData.server.desc.value);
-console.log('server type   = ' + configData.server.type.value);
+console.log('server type   = ' + configData.server.env.value);
 console.log('environment   = ' + app.get('env'));
 console.log('version       = ' + process.version);
 console.log('directory     = ' + __dirname);

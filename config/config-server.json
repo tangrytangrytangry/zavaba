@@ -1,0 +1,16 @@
+{
+    "server": {
+        "port": {
+            "value": 3000,
+            "comment": "NODE server port number"
+        },
+        "env": {
+            "value": "development",
+            "comment": "NODE server type"
+        },
+        "desc": {
+            "value": "ZABAVA Node server",
+            "comment": "ZABAVA Node server"
+        }
+    }
+}

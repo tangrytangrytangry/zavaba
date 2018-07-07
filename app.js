@@ -5,6 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var debug = require('debug')('server:app');
 var nunjucks = require('nunjucks');
+var crypto = require('crypto');
+var helmet = require('helmet');
+var credentials = require('./credentials/credentials.js');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -24,6 +27,10 @@ var envNunjucks = nunjucks.configure('views', {
 //app.set( 'view engine', 'njk' ) ;
 app.engine('html', nunjucks.render);
 app.set('view engine', 'html');
+
+// Helmet can help protect your app from some well-known 
+// web vulnerabilities by setting HTTP headers appropriately
+app.use(helmet());
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -51,5 +58,16 @@ app.use(function (err, req, res, next) {
     res.send('500 - Server Error');
     // res.status(500).send('Something broke!');
 });
+
+/*
+app.use(function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../public', '404.html'));
+  })
+  
+  app.use(function (err, req, res, next) {
+    res.sendFile(path.join(__dirname, '../public', '500.html'));
+  })
+  
+*/
 
 module.exports = app;
