@@ -1,12 +1,12 @@
 var express = require('express');
 const passport = require('passport');
-var debug = require('debug')('server:index');
+var debug = require('debug')('server:login');
 const User = require('../db/models/user');
 var router = express.Router();
 
 /* GET login page. */
 router.get('/', function (req, res, next) {
-  res.render('../views/login', { welcome: 'Welcome to Express' });
+  res.render('../views/login', { welcome: 'Welcome to Express from login', user : req.user, error : req.flash('error')});
 });
 
 /* POST login page. */
@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
 //  res.render('../views/home', { welcome: 'Welcome to Express' });
 //});
 
-router.post('/', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
+router.post('/', passport.authenticate('local', { failureRedirect: '/login', failureFlash: false }),
   (req, res, next) => {
     req.session.save((err) => {
       if (err) {
@@ -23,7 +23,5 @@ router.post('/', passport.authenticate('local', { failureRedirect: '/login', fai
       res.redirect('/');
     });
   });
-
-
 
 module.exports = router;

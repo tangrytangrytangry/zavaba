@@ -50,7 +50,7 @@ var User = require('./db/models/user');
 passport.use(new LocalStrategy({
     usernameField: 'username',
     passwordField: 'password',
-    passReqToCallback: true,
+    passReqToCallback: false,
     session: true
 },
     /*
@@ -104,14 +104,6 @@ passport.deserializeUser(function (id, cb) {
 */
 passport.deserializeUser(User.deserializeUser());
 
-// Initialize Passport and restore authentication state, if any, from the
-// session. To use Passport in an Express or Connect-based application, configure 
-// it with the required passport.initialize() middleware. 
-// If your application uses persistent login sessions (recommended, but not required), 
-// passport.session() middleware must also be used.
-app.use(passport.initialize());
-app.use(passport.session());
-
 // The flash is a special area of the session used for storing messages. 
 // Messages are written to the flash and cleared after being displayed to the user. 
 app.use(flash());
@@ -154,6 +146,7 @@ var mongoConnectionOptions = {
     touchAfter: 24 * 3600 // time period in seconds to lazy update the session
 };
 
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 const mongoConnection = new MongoStore(mongoConnectionOptions);
 
 app.use(session({
@@ -176,6 +169,7 @@ app.use(passport.session());
 
 // Use the session middleware
 // Access the session as req.session
+/*
 app.get('/', function (req, res, next) {
     if (req.session.views) {
         req.session.views++
@@ -188,7 +182,7 @@ app.get('/', function (req, res, next) {
         res.end('welcome to the session demo. refresh!')
     }
 })
-
+*/
 
 // 5.4. Контроль доступа
 // Express предоставляет элегатный способ по ограничению доступа для 
@@ -210,9 +204,9 @@ function loadUser(req, res, next) {
     }
 }
 
-app.get('/documents.:format?', loadUser, function (req, res) {
+//app.get('/documents.:format?', loadUser, function (req, res) {
     // ...
-});
+//});
 
 // Теперь доступ к адресу (URL), требующему только авторизованных пользователей, 
 // может быть ограничен простым добавлением loadUser в соответствующий HTTP-обработчик. 
