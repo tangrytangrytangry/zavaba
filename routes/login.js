@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
 //  res.render('../views/home', { welcome: 'Welcome to Express' });
 //});
 
-router.post('/', passport.authenticate('local', { failureRedirect: '/login', failureFlash: false }),
+router.post('/', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
   (req, res, next) => {
     req.session.save((err) => {
       if (err) {
