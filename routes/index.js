@@ -4,7 +4,8 @@ var debug = require('debug')('server:index');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('../views/home', { welcome: 'Welcome to Express' });
+  res.render('../views/home', { user: req.user, main_currentLang : req.currentLang });
+
 });
 
 module.exports = router;

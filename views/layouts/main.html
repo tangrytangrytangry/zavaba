@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
         <title>simple example</title>
@@ -10,17 +10,38 @@
 
 </head>
 
+<header>
+        <img src="images/Zabava_08.png" alt="Zabava Logo">
+
+        <h1>{{ title }}</h1>
+
+        <br>
+        <h4>main.html: User        = {{ user }}</h4>
+        <h4>main.html: Error       = {{ error }}</h4>
+        <h4>main.html: currentLang = {{ main_currentLang }}</h4>
+        <br>
+        <br>
+
+</header>
+
 <body>
         <h3>Simple example of main.html</h3>
         <br>
 
         <p>start views/layouts/main.html</p>
 
-        {% block body %} {% endblock %}
+        {% block body %} {% endblock body %}
 
         <p>end views/layouts/main.html</p>
 
         <br>
+
+        <div id="footer">
+                {% block footer %} &copy; Copyright 2008 by
+                <a href="http://domain.invalid/">you</a>
+                {% endblock footer %}
+        </div>
+
 </body>
 
 <script src="javascripts/jquery-3.3.1.js"></script>

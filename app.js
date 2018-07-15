@@ -23,9 +23,10 @@ var credentials = require('./credentials/credentials.js');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
+var registerRouter = require('./routes/register');
+var logoutRouter = require('./routes/logout');
 
 var app = express();
-
 // Install nunjucks as the rendering engine for the express app
 var envNunjucks = nunjucks.configure('views', {
     autoescape: true,
@@ -124,7 +125,7 @@ app.get('/', function (req, res) {
   })
 */
 
-// build mongo database connection url //
+// Duild mongo database connection url //
 
 process.env.DB_HOST = process.env.DB_HOST || credentials.mongo.development.host;
 process.env.DB_PORT = process.env.DB_PORT || credentials.mongo.development.port;
@@ -205,7 +206,7 @@ function loadUser(req, res, next) {
 }
 
 //app.get('/documents.:format?', loadUser, function (req, res) {
-    // ...
+// ...
 //});
 
 // Теперь доступ к адресу (URL), требующему только авторизованных пользователей, 
@@ -217,19 +218,23 @@ function loadUser(req, res, next) {
 // Если пользователь не найден, то функция next не вызывается и происход 
 // переадресация на окно ввода логина/пароля.
 
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, '/public/images/Zabava_08.png')));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/', function (req, res, next) {
+    req.currentLang = app.get('currentLang');
+    next();
+},
+    indexRouter);
 app.use('/home', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
+app.use('/register', registerRouter);
+app.use('/logout', logoutRouter);
 
 // custom 404 page
 app.use(function (req, res, next) {

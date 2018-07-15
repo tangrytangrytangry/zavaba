@@ -6,7 +6,7 @@ var router = express.Router();
 
 /* GET login page. */
 router.get('/', function (req, res, next) {
-  res.render('../views/login', { welcome: 'Welcome to Express from login', user : req.user, error : req.flash('error')});
+  res.render('../views/login', { welcome: 'Welcome to Express from login', user: req.user, error: req.flash('error') });
 });
 
 /* POST login page. */
@@ -20,7 +20,7 @@ router.post('/', passport.authenticate('local', { failureRedirect: '/login', fai
       if (err) {
         return next(err);
       }
-      res.redirect('/');
+      res.redirect('/home');
     });
   });
 
