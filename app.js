@@ -3,7 +3,6 @@ var session = require('express-session');
 var path = require('path');
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
 var debug = require('debug')('server:app');
 var nunjucks = require('nunjucks');
 var crypto = require('crypto');
@@ -26,7 +25,74 @@ var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
 var logoutRouter = require('./routes/logout');
 
+var i18n = require("i18n");
+var i18Ext = require("./lib/i18n-ext");
+var winston = require('winston');
+var winstonDailyRotateFile = require('winston-daily-rotate-file');
+
 var app = express();
+
+// Configure i18n
+i18Ext.configure(app, i18n);
+
+// Configure logging
+winston.format.combine(
+    winston.format.colorize(),
+    winston.format.json()
+);
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+        //
+        // - Write to all logs with level `info` and below to `combined.log` 
+        // - Write all logs error (and below) to `error.log`.
+        //
+
+        new winston.transports.File({ filename: __dirname + '/logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: __dirname + '/logs/combined.log' })
+    ]
+});
+
+//
+// If we're not in production then log to the `console` with the format:
+// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
+// 
+/*
+
+        new winston.transports.Console({
+            colorize: true,
+            label: module.filename
+        }),
+*/
+
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.simple()
+    }));
+}
+
+// If app language was changed then change req language
+app.use('/', function (req, res, next) {
+    let appCurrentLang = app.get('currentLang');
+    let reqCurrentLang = req.getLocale();
+
+    if (!appCurrentLang) {
+        app.use(i18n.init);
+        app.set('currentLang', i18n.getLocale());
+        app.set('currentLangData', i18n.getCatalog(i18n.getLocale()));
+    };
+
+    if (appCurrentLang !== reqCurrentLang) {
+        req.setLocale(appCurrentLang);
+        req.currentLang = appCurrentLang;
+        req.currentLangData = i18n.getCatalog(appCurrentLang);
+    }
+
+    next();
+});
+
 // Install nunjucks as the rendering engine for the express app
 var envNunjucks = nunjucks.configure('views', {
     autoescape: true,
@@ -219,7 +285,7 @@ function loadUser(req, res, next) {
 // переадресация на окно ввода логина/пароля.
 
 app.use(favicon(path.join(__dirname, '/public/images/Zabava_08.png')));
-app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
