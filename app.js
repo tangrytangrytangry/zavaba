@@ -30,7 +30,6 @@ var i18Ext = require("./config/config-i18n");
 
 var winston = require('winston');
 var winstonExt = require("./config/config-winston");
-var winstonDailyRotateFile = require('winston-daily-rotate-file');
 
 var app = express();
 
