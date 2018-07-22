@@ -53,8 +53,8 @@ app.use('/', function (req, res, next) {
     if (appCurrentLang !== reqCurrentLang) {
         req.setLocale(appCurrentLang);
         req.currentLang = appCurrentLang;
-        req.currentLangData = i18n.getCatalog(appCurrentLang);
     }
+    req.currentLangData = i18n.getCatalog(appCurrentLang);
 
     next();
 });

@@ -31,27 +31,6 @@ catch (exception) {
 app.set('port', configData.server.port.value);
 
 /**
- * Read multi language support data.
- */
-
-var multilangFileName = 'multilang.json';
-var multilangFileDir = path.join(__dirname, '../config');
-var multilangFileFull;
-var multilangData;
-
-try {
-  multilangFileFull = path.join(multilangFileDir, multilangFileName);
-  multilangData = JSON.parse(fs.readFileSync(multilangFileFull))
-}
-catch (exception) {
-  console.log('Error reading configuration file ' + multilangFileFull + ':\n' + exception);
-  process.exit(1);
-}
-
-app.set('currentLang', multilangData.dftlang);
-app.set('multiLang', multilangData);
-
-/**
  * Get port from environment and store in Express.
  */
 
@@ -82,7 +61,6 @@ console.log('language      = ' + app.get('currentLang'));
 console.log('directory     = ' + __dirname);
 console.log('file          = ' + __filename);
 console.log('configuration = ' + configFileFull);
-console.log('multilang     = ' + multilangFileFull);
 console.log('process       = ' + process.argv);
 
 /**

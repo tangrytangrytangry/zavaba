@@ -1,18 +1,13 @@
 {
-    "dftlang": "en",
-    "langs": {
-        "en": "English",
-        "es": "Espanol",
-        "ru": "Русский"
-    },
+    "langcode": "en",
+    "langname": "English",
     "html": {
         "page": {
             "main": {
-                "username": {
-                    "en": "User name",
-                    "es": "Nombre de usuario",
-                    "ru": "Имя пользователя"
-                }
+                "username": "User name"
+            },
+            "home": {
+                "username": "User name"
             }
         }
     }

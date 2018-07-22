@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-        <title>simple example</title>
+        <title>Zabava for you</title>
 
         <link href="stylesheets/jquery-ui.css" rel="stylesheet">
         <link href="stylesheets/bootstrap.css" rel="stylesheet">
@@ -16,11 +16,29 @@
         <h1>{{ title }}</h1>
 
         <br>
-        <h4>main.html: User        = {{ user }}</h4>
-        <h4>main.html: Error       = {{ error }}</h4>
-<!--        <h4>main.html: currentLang = {{ main_currentLang }}</h4>  -->
-        <h4>main.html: currentLang = {{ main_currentLang.zz }}</h4>
+        <h4>main.html: User = {{ user }}</h4>
+        <h4>main.html: Error = {{ error }}</h4>
+        <!--    <h4>main.html: currentLang = {{ main_currentLang }}</h4>        -->
+        <!--    <h4>main.html: currentLang = {{ main_currentLang.zz }}</h4>     -->
+        <h4>main.html: username = {{ main.username }}</h4>
         <br>
+        <!--
+        <select class="selectpicker">
+                <option data-icon="glyphicon glyphicon-eye-open">en</option>
+                <option data-icon="images/Zabava_08.png">es</option>
+                <option data-icon="images/Zabava_08.png">ru</option>
+        </select>
+-->
+        <div class="form">
+                <label>Некая пользовательская настройка</label>
+                <br/>
+                <br/>
+                <select class="select-events">
+                        <option value="1" class="icon-ok">Вкл.</option>
+                        <option value="0" class="icon-error">Выкл.</option>
+                </select>
+        </div>
+
         <br>
 
 </header>
@@ -48,5 +66,7 @@
 <script src="javascripts/jquery-3.3.1.js"></script>
 <script src="javascripts/jquery-ui.js"></script>
 <script src="javascripts/bootstrap.js"></script>
+<script src="javascripts/zb-select-lang.js"></script>
+<script src="javascripts/zb-init.js"></script>
 
 </html>
