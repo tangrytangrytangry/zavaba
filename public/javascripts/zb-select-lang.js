@@ -1,34 +1,40 @@
-// Функция очистки класса
+// Clear class
 function zbCleanSelectLang(select) {
-    // Очищаем от стилей
-    return $(select).removeClass('icon-ok').removeClass('icon-error')
+    // Clear styles
+    return $(select).removeClass();
 }
 
 // Form select-list of languages and it's events
 function zbFormSelectLang() {
 
     // получаем выпадающий список с уже очищенными классами
-    var select = zbCleanSelectLang('.select-events');
+    var selectLang = zbCleanSelectLang('.select-lang');
 
-    // Добавляем класс, который соответствует выбранному элементу
-    select.addClass(select.val() == '1' ? 'icon-ok' : 'icon-error');
+    // Add class for every language
+    selectLang.addClass(function () {
+        return 'select-lang__icon-flag-' + this.value;
+    });
 
-    // Добавляем стили, чтобы у списка не было видно полосы прокрутки
-    select.css({ height: 'auto', overflow: 'hidden', zIndex: '40000' });
+    // Add style to hide scroll bars
+    selectLang.css({ height: 'auto', overflow: 'hidden', zIndex: '40000' });
 
-    // Определяем обработчик на событие ухода мышки с области элемента
-    select.on('mouseleave', function () {
-        // Устанавливаем обычный размер
+    // Leaving lang selection - setup new language
+    //selectLang.on('mouseleave', function () {
+    selectLang.on('click mouseleave', function () {
+        // Normal size
         this.size = 1;
 
-        // Добавляем класс стиля в соответствии с выбранным элементом
-        zbCleanSelectLang(this).addClass($(this).val() == '1' ? 'icon-ok' : 'icon-error');
+        zbCleanSelectLang(this).addClass(function () {
+            return 'select-lang__icon-flag-' + this.value;
+        });
+
+        return;
 
     });
 
 
     // Определяем обработчик на событие ухода мышки с области элемента
-    select.on('mouseover', function () {
+    selectLang.on('mouseover', function () {
         // Очищаем стиль списка, чтобы он не мешал отображению
         zbCleanSelectLang(this);
 
