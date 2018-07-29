@@ -39,6 +39,30 @@ i18Ext.configure(app, i18n);
 // Configure Winston logging
 var logger = winstonExt.configure(app, winston);
 
+// If app language was changed then change app language
+app.use('/language', function (req, res) {
+
+    let data = "";
+    
+    //let reqLang = decodeURIComponent(req.params.lang);
+	let reqLang = decodeURIComponent(req.query.lang);
+
+    let appCurrentLang = app.get('currentLang');
+
+    if (appCurrentLang !== reqLang) {
+
+        let pos = app.locals.i18n.locales.indexOf(reqLang);
+
+        if (pos >= 0) {
+            app.set('currentLang', reqLang);
+            app.set('currentLangData', i18n.getCatalog(reqLang));
+        };
+    };
+
+    res.end(data);
+    return;
+});
+
 // If app language was changed then change req language
 app.use('/', function (req, res, next) {
     let appCurrentLang = app.get('currentLang');

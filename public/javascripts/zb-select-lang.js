@@ -1,3 +1,6 @@
+// Current lang
+var currentLang = "";
+
 // Clear class
 function zbCleanSelectLang(select) {
     // Clear styles
@@ -7,7 +10,7 @@ function zbCleanSelectLang(select) {
 // Form select-list of languages and it's events
 function zbFormSelectLang() {
 
-    // получаем выпадающий список с уже очищенными классами
+    // Get claean lang dropdown list
     var selectLang = zbCleanSelectLang('.select-lang');
 
     // Add class for every language
@@ -19,19 +22,28 @@ function zbFormSelectLang() {
     selectLang.css({ height: 'auto', overflow: 'hidden', zIndex: '40000' });
 
     // Leaving lang selection - setup new language
-    //selectLang.on('mouseleave', function () {
     selectLang.on('click mouseleave', function () {
+
+        let data = {};
+
         // Normal size
         this.size = 1;
+
 
         zbCleanSelectLang(this).addClass(function () {
             return 'select-lang__icon-flag-' + this.value;
         });
 
+        if (currentLang !== this.value) {
+            currentLang = this.value;
+            // data = sendGetRequestToServer('language/' + currentLang);
+            data = sendGetRequestToServer('language', '?lang=' + currentLang);
+            location.reload(true);         
+        }
+
         return;
 
     });
-
 
     // Определяем обработчик на событие ухода мышки с области элемента
     selectLang.on('mouseover', function () {

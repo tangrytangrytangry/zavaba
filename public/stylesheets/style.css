@@ -1,3 +1,7 @@
+/*----------------------------------------------*/
+/* Global BEGIN */
+
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -6,64 +10,61 @@ body {
 a {
   color: #00B7FF;
 }
+/* Global BEGIN */
+/*----------------------------------------------*/
 
-
-option
-{
-    padding-left: 30px;
-    padding-top: 3px;
-    padding-bottom: 3px;
-}
-
-
-option:hover
-{
-    background-color: #eee;
-}
-
+/*----------------------------------------------*/
 /* Language bar BEGIN */
 
 .select-lang
 {
-    width: 150px;
+    width: 120px;
 }
 
-.select-lang__icon-flag-es
+option[class^="select-lang__icon-flag-"]
 {
-    background: url('../images/flag-es.png') no-repeat;
-    /* background-size: 30px; */
-    background-size: auto 90%; 
-    padding-left: 30px;
+    padding-left: 20px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+option[class^="select-lang__icon-flag-"]:hover
+{
+    background-color: #eee;
+}
+
+.select-lang__icon-flag-en
+{
+    background: url('../images/flag-en.png') no-repeat;
+    background-size: 20px;
+    padding-left: 20px;
     background-position: 0 1px;
 }
 
 .select-lang__icon-flag-en
 {
     background: url('../images/flag-en.png') no-repeat;
-    background-size: 30px;
-    padding-left: 30px;
+    background-size: 20px;
+    padding-left: 20px;
+    background-position: 0 1px;
+}
+
+.select-lang__icon-flag-es
+{
+    background: url('../images/flag-es.png') no-repeat;
+    background-size: 20px; 
+    padding-left: 20px;
     background-position: 0 1px;
 }
 
 .select-lang__icon-flag-ru
 {
     background: url('../images/flag-ru.png') no-repeat;
-    background-size: 30px;
-    padding-left: 30px;
+    background-size: 20px;
+    padding-left: 20px;
     background-position: 0 1px;
 }
 
 /* Language bar END */
-
-select.icon-ok,
-
-select.icon-error
-
-{
-    padding-top: 2px;
-    padding-bottom: 3px;
-    padding-left: 16px;
-    background-position: 0 1px;
-}
-
+/*----------------------------------------------*/
 

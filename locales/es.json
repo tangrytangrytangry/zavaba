@@ -1,1 +1,14 @@
-{}
+{
+    "langcode": "es",
+    "langname": "Espanol",
+    "html": {
+        "page": {
+            "main": {
+                "username": "Nombre de usuario"
+            },
+            "home": {
+                "username": "Nombre de usuario"
+            }
+        }
+    }
+}

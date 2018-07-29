@@ -1,1 +1,14 @@
-{}
+{
+    "langcode": "ru",
+    "langname": "Русский",
+    "html": {
+        "page": {
+            "main": {
+                "username": "Имя пользователя"
+            },
+            "home": {
+                "username": "Имя пользователя"
+            }
+        }
+    }
+}
