@@ -18,30 +18,172 @@
         <br>
         <h4>main.html: User = {{ user }}</h4>
         <h4>main.html: Error = {{ error }}</h4>
-        <!--    <h4>main.html: currentLang = {{ main_currentLang }}</h4>        -->
-        <!--    <h4>main.html: currentLang = {{ main_currentLang.zz }}</h4>     -->
         <h4>main.html: username = {{ main.username }}</h4>
         <br>
-        <!--
-        <select class="selectpicker">
-                <option data-icon="glyphicon glyphicon-eye-open">en</option>
-                <option data-icon="images/Zabava_08.png">es</option>
-                <option data-icon="images/Zabava_08.png">ru</option>
-        </select>
--->
         <div class="div-lang">
-                <select class="select-lang">
-                        <option value="en" class="select-lang__icon-flag-en">English</option>
-                        <option value="es" class="select-lang__icon-flag-es">Espanol</option>
-                        <option value="ru" class="select-lang__icon-flag-ru">Русский</option>
+                <select id="main-select-lang" class="select-lang" lang="{{main.currentLang}}">
+                        <option value="en">English</option>
+                        <option value="es">Espanol</option>
+                        <option value="ru">Русский</option>
                 </select>
         </div>
 
         <br>
 
+
+        <!-- Breadcrumbs BEGIN -->
+
+        <ol class="breadcrumb">
+                <li class="breadcrumb-item active">Home</li>
+        </ol>
+        <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                        <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item active">Library</li>
+        </ol>
+        <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                        <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                        <a href="#">Library</a>
+                </li>
+                <li class="breadcrumb-item active">Data</li>
+        </ol>
+
+        <br>
+
+        <!-- Breadcrumbs END -->
+
+
+        <!-- NAV BEGIN -->
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                        <ul class="navbar-nav mr-auto">
+                                <li class="nav-item active">
+                                        <a class="nav-link" href="#">Home
+                                                <span class="sr-only">(current)</span>
+                                        </a>
+                                </li>
+                                <li class="nav-item">
+                                        <a class="nav-link" href="#">Features</a>
+                                </li>
+                                <li class="nav-item">
+                                        <a class="nav-link" href="#">Pricing</a>
+                                </li>
+                                <li class="nav-item">
+                                        <a class="nav-link" href="#">About</a>
+                                </li>
+                        </ul>
+                        <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" placeholder="Search" type="text">
+                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                </div>
+        </nav>
+
+        <!-- NAV END -->
+
+        <br>
+
+        <!-- SIDEBAR BEGIN -->
+
+
+        <div class="container-fluid text-center">
+                <div class="row content">
+                        <div class="col-sm-2 sidenav">
+                                <p>
+                                        <a href="#">Link</a>
+                                </p>
+                                <p>
+                                        <a href="#">Link</a>
+                                </p>
+                                <p>
+                                        <a href="#">Link</a>
+                                </p>
+                        </div>
+                        <div class="col-sm-8 text-left">
+                                <h1>Welcome</h1>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                                        ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                        ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat
+                                        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                                        consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                                        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                                        nisi ut aliquip ex ea commodo consequat.</p>
+                                <hr>
+                                <h3>Test</h3>
+                                <p>Lorem ipsum...</p>
+                        </div>
+                        <div class="col-sm-2 sidenav">
+                                <div class="well">
+                                        <p>ADS</p>
+                                </div>
+                                <div class="well">
+                                        <p>ADS</p>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+
+        <!-- SIDEBAR END -->
+
+        <!-- BUTTONBAR BEGIN -->
+
+        <div class="btn-group-vertical" data-toggle="buttons">
+                <button type="button" class="btn btn-primary">Button</button>
+                <button type="button" class="btn btn-primary">Button</button>
+                <button type="button" class="btn btn-primary">Button</button>
+                <button type="button" class="btn btn-primary">Button</button>
+                <button type="button" class="btn btn-primary">Button</button>
+                <button type="button" class="btn btn-primary">Button</button>
+        </div>
+
+        <br>
+
+        <!-- BUTTONBAR END -->
+
+        <br>
+        <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                </li>
+                <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+        </ul>
+
+
+
+
 </header>
 
 <body>
+
+
+
         <h3>Simple example of main.html</h3>
         <br>
 

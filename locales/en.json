@@ -4,6 +4,7 @@
     "html": {
         "page": {
             "main": {
+                "currentLang": "en",
                 "username": "User name"
             },
             "home": {
