@@ -1,0 +1,31 @@
+
+/*----------------------------------------------*/
+/* Logo BEGIN */
+
+:root {
+    --main-color-primrose-yellow: #f0d278;
+}
+
+.grid-separator-color {
+  border-color: var(--main-color-primrose-yellow) !important; 
+}
+
+.img-logo {
+    max-width: 100%;
+    height: auto;
+}
+
+/*.w3-2017-primrose-yellow
+  {color:#000;background-color:#f6d155}
+*/
+
+a[href^="tel"] {
+    color: rgb(139, 43, 0);
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Logo END */
+/*----------------------------------------------*/
+    
