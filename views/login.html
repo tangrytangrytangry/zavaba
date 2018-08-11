@@ -1,22 +1,96 @@
-
-{% extends "layouts/main.html" %}
-
-{% block body %}
+ {% extends "layouts/main.html" %} {% block body %}
 
 <form action="/login" method="post">
 	<div>
-	<label>Username:</label>
-	<input type="text" name="username"/><br/>
+		<label>Username:</label>
+		<input type="text" name="username" />
+		<br/>
 	</div>
 	<div>
-	<label>Password:</label>
-	<input type="password" name="password"/>
+		<label>Password:</label>
+		<input type="password" name="password" />
 	</div>
 	<div>
-	<input type="submit" value="Submit"/>
+		<input type="submit" value="Submit" />
 	</div>
 </form>
 
 
-{% endblock %}
-
+<div class="center-vertical" id="login">
+	<form class="well" id="form-login" method="post">
+		<h2>Hello!</h2>
+		<h6>Please Login To Your Account</h6>
+		<div class="form-group">
+			<label>Username</label>
+			<input class="form-control" type="text" id="user-tf" name="user">
+		</div>
+		<div class="form-group">
+			<label>Password</label>
+			<input class="form-control" type="password" id="pass-tf" name="pass">
+		</div>
+		<div class="controls">
+			<button class="btn btn-default button-rememember-me" type="button">
+				<span class="fa fa-square-o fa-pull-left button-rememember-me-glyph"></span>Remember Me</button>
+			<button class="btn btn-primary button-sign-in" type="submit">
+<!--				<span class="glyphicon glyphicon-lock"></span>Sign In</button> -->
+				<span class="fa fa-lock fa-pull-left"></span>Sign In</button>
+		</div>
+		<div class="clearfix"></div>
+		<hr>
+		<div class="btm-links">
+			<div id="forgot-password">
+				<a href="#">Forgot Your Password?</a>
+			</div>
+			<div id="create-account">
+				<a href="/signup">Create An Account</a>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</form>
+</div>
+<div class="modal-alert modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<!--button.close(data-dismiss='modal') x-->
+				<h4></h4>
+			</div>
+			<div class="modal-body">
+				<p></p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" data-dismiss="modal" id="ok">OK</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="get-credentials">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal">x</button>
+				<h4>Retrieve Password</h4>
+			</div>
+			<div class="modal-body">
+				<form class="well" method="post" id="get-credentials-form">
+					<div class="form-group">
+						<label>Please enter the email address associated with your account</label>
+						<input class="form-control required" type="text" id="email-tf" name="email">
+						<div class="alert alert-danger hide"></div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal" id="cancel">Cancel</button>
+				<button class="btn btn-primary" type="submit" id="retrieve-password-submit">Submit</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="/vendor/jquery-2.2.3.min.js"></script>
+<script src="/vendor/jquery.form.min.js"></script>
+<script src="/vendor/bootstrap.min.js"></script>
+<script src="/js/views/login.js"></script>
+<script src="/js/controllers/loginController.js"></script>
+<script src="/js/form-validators/loginValidator.js"></script>
+<script src="/js/form-validators/emailValidator.js"></script> {% endblock %}
