@@ -17,6 +17,14 @@ body {
     color: #00B7FF;
     }
 
+    :root {
+        --main-color-primrose-yellow:rgb(240, 210, 120);
+        --main-color-primrose-yellow-dark:rgb(230, 179, 25);
+        --main-color-nav-hover:rgb(139, 43, 0);
+        --main-color-nav-hover-dark:rgb(102, 32, 0);
+    }
+    
+
 /* Global END */
 /*----------------------------------------------*/
     

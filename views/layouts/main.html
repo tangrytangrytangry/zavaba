@@ -13,12 +13,12 @@
         <link href="stylesheets/zb-global.css" rel="stylesheet">
         <link href="stylesheets/zb-lang.css" rel="stylesheet">
         <link href="stylesheets/zb-logo.css" rel="stylesheet">
+        <link href="stylesheets/zb-nav.css" rel="stylesheet">
         <!-- ZABAVA END -->
 
 </head>
 
 <header>
-
 
         <!-- LOGO BEGIN -->
 
@@ -30,18 +30,70 @@
                                 </a>
                         </div>
                         <div class="col-sm-3 w3-border-right grid-separator-color">
-                                <a href="tel:+7 (926) 999-59-70">+7 (926) 999-59-70</a>
+                                <a href="tel: +7 (495) 78-888-78">+7 (495) 78-888-78</a>
                                 <br>
                                 <!--
                                 <a ajaxform="1" class="callback" href="#" js_max_width="600" section="278">Request a call back</a>
                                 -->
                         </div>
-                        <div class="col-sm-3 w3-border-right grid-separator-color"></div>
+                        <div class="col-sm-3 w3-border-right grid-separator-color">
+                                <div id="main-div-lang" class="div-lang">
+                                        <select id="main-select-lang" class="select-lang" lang="{{main.currentLang}}">
+                                                <option value="en">English</option>
+                                                <option value="es">Espanol</option>
+                                                <option value="ru">Русский</option>
+                                        </select>
+                                </div>
+
+                        </div>
                         <div class="col-sm-3">.col-sm-3 4</div>
                 </div>
         </div>
 
         <!-- LOGO END -->
+
+        <br>
+
+        <!-- NAV BEGIN -->
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-sevice">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                        <ul class="navbar-nav mr-auto">
+                                <li class="nav-item">
+                                        <a class="nav-link" href="/home">Home
+                                                <span class="sr-only">(current)</span>
+                                        </a>
+                                </li>
+                                <li class="nav-item">
+                                        <a class="nav-link" href="/login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                        <a class="nav-link" href="/logout">Logout</a>
+                                </li>
+                                <li class="nav-item">
+                                        <a class="nav-link" href="/register">Register</a>
+                                </li>
+                                <li class="nav-item">
+                                        <a class="nav-link" href="/users">Users</a>
+                                </li>
+                                <li class="nav-item">
+                                        <a class="nav-link" href="/about">About</a>
+                                </li>
+                        </ul>
+                        <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" placeholder="Search" type="text">
+                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                </div>
+        </nav>
+
+        <!-- NAV END -->
 
 
         <h1>{{ title }}</h1>
@@ -50,17 +102,8 @@
         <h4>main.html: User = {{ user }}</h4>
         <h4>main.html: Error = {{ error }}</h4>
         <h4>main.html: username = {{ main.username }}</h4>
-        <br>
-        <div id="main-div-lang" class="div-lang">
-                <select id="main-select-lang" class="select-lang" lang="{{main.currentLang}}">
-                        <option value="en">English</option>
-                        <option value="es">Espanol</option>
-                        <option value="ru">Русский</option>
-                </select>
-        </div>
 
         <br>
-
 
         <!-- Breadcrumbs BEGIN -->
 
@@ -86,41 +129,6 @@
         <br>
 
         <!-- Breadcrumbs END -->
-        
-        <!-- NAV BEGIN -->
-
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                <a class="navbar-brand" href="#">Navbar</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarColor01">
-                        <ul class="navbar-nav mr-auto">
-                                <li class="nav-item active">
-                                        <a class="nav-link" href="#">Home
-                                                <span class="sr-only">(current)</span>
-                                        </a>
-                                </li>
-                                <li class="nav-item">
-                                        <a class="nav-link" href="#">Features</a>
-                                </li>
-                                <li class="nav-item">
-                                        <a class="nav-link" href="#">Pricing</a>
-                                </li>
-                                <li class="nav-item">
-                                        <a class="nav-link" href="#">About</a>
-                                </li>
-                        </ul>
-                        <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" placeholder="Search" type="text">
-                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                        </form>
-                </div>
-        </nav>
-
-        <!-- NAV END -->
 
         <br>
 
@@ -156,7 +164,8 @@
 
 <!-- ZABAVA BEGIN -->
 <script src="javascripts/zb-core-utils.js"></script>
-<script src="javascripts/zb-select-lang.js"></script>
+<script src="javascripts/zb-init-lang.js"></script>
+<script src="javascripts/zb-init-nav.js"></script>
 <script src="javascripts/zb-init.js"></script>
 <!-- ZABAVA END -->
 

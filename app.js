@@ -43,9 +43,9 @@ var logger = winstonExt.configure(app, winston);
 app.use('/language', function (req, res) {
 
     let data = "";
-    
+
     //let reqLang = decodeURIComponent(req.params.lang);
-	let reqLang = decodeURIComponent(req.query.lang);
+    let reqLang = decodeURIComponent(req.query.lang);
 
     let appCurrentLang = app.get('currentLang');
 
@@ -293,6 +293,7 @@ app.use('/', function (req, res, next) {
 },
     indexRouter);
 app.use('/home', indexRouter);
+app.use('/index', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
