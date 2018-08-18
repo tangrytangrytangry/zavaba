@@ -6,9 +6,11 @@ function zbInitNav() {
 
     navMenuItems
         .filter(function (index, element) {
-            let isCurrPage = element.pathname === document.location.pathname;
-            console.log("element.pathname = " + element.pathname,
-                "isCurrPage = " + isCurrPage)
+            let isCurrPage = (element.pathname === document.location.pathname ||
+                (element.pathname === '/home' && document.location.pathname === '/')
+            );
+            //console.log("element.pathname = " + element.pathname,
+            //    "isCurrPage = " + isCurrPage)
             return isCurrPage;
         })
         .addClass("nav-link_active");

@@ -10,14 +10,15 @@
         <link href="stylesheets/w3-colors-2017.css" rel="stylesheet">
         <link href="stylesheets/font-awesome.css" rel="stylesheet">
 
-        <!-- ZABAVA BEGIN -->
+        <!-- ZABAVACSS BEGIN -->
         <link href="stylesheets/zb-global.css" rel="stylesheet">
         <link href="stylesheets/zb-lang.css" rel="stylesheet">
         <link href="stylesheets/zb-logo.css" rel="stylesheet">
         <link href="stylesheets/zb-nav.css" rel="stylesheet">
         <link href="stylesheets/zb-login.css" rel="stylesheet">
+        <link href="stylesheets/zb-signup.css" rel="stylesheet">
         <link href="stylesheets/zb-modal-rtv-password.css" rel="stylesheet">
-        <!-- ZABAVA END -->
+        <!-- ZABAVACSS END -->
 
 </head>
 
@@ -47,7 +48,10 @@
                                                 <option value="ru">Русский</option>
                                         </select>
                                 </div>
+                                User = {{ user.username }}
+                                <div>
 
+                                </div>
                         </div>
                         <div class="col-sm-3">.col-sm-3 4</div>
                 </div>
@@ -57,7 +61,7 @@
 
         <br>
 
-        <!-- NAV BEGIN -->
+        <!-- NAVBAR BEGIN -->
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-sevice">
                 <a class="navbar-brand" href="#">Navbar</a>
@@ -72,6 +76,9 @@
                                         <a class="nav-link" href="/home">Home
                                                 <span class="sr-only">(current)</span>
                                         </a>
+                                </li>
+                                <li class="nav-item">
+                                        <a class="nav-link" href="/signup">Signup</a>
                                 </li>
                                 <li class="nav-item">
                                         <a class="nav-link" href="/login">Login</a>
@@ -96,7 +103,7 @@
                 </div>
         </nav>
 
-        <!-- NAV END -->
+        <!-- NAVBAR END -->
 
         <h1>{{ title }}</h1>
 
@@ -109,6 +116,7 @@
 
         <!-- Breadcrumbs BEGIN -->
 
+        <!--
         <ol class="breadcrumb">
                 <li class="breadcrumb-item active">Home</li>
         </ol>
@@ -129,7 +137,7 @@
         </ol>
 
         <br>
-
+        -->
         <!-- Breadcrumbs END -->
 
         <br>

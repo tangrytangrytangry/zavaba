@@ -22,6 +22,7 @@ var credentials = require('./credentials/credentials.js');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
+var signupRouter = require('./routes/signup');
 var registerRouter = require('./routes/register');
 var logoutRouter = require('./routes/logout');
 
@@ -296,6 +297,7 @@ app.use('/home', indexRouter);
 app.use('/index', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
+app.use('/signup', signupRouter);
 app.use('/register', registerRouter);
 app.use('/logout', logoutRouter);
 
