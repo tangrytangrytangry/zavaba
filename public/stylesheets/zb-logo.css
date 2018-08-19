@@ -22,6 +22,30 @@ a[href^="tel"] {
     text-decoration: none;
 }
 
+.main-user-div {
+  color: red;
+}
+
+.main-user-div_display {
+  display: block;
+}
+
+.main-user-div_hide {
+  display: none;
+}
+
+.main-user-div:link {
+  background-color: yellow;
+}
+
+.main-user-div:hover {
+  background-color: lightgreen;
+}
+
+.main-user-div:active {
+  background-color: hotpink;
+} 
+
 /* Logo END */
 /*----------------------------------------------*/
     

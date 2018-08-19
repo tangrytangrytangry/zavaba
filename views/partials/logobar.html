@@ -1,0 +1,39 @@
+<!-- LOGOBAR BEGIN -->
+
+<div id="main-div-logo" class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3">
+			<a href="/">
+				<img src="images/Zabava_08.png" class="img-logo" alt="Zabava Logo">
+			</a>
+		</div>
+		<div class="col-sm-3 w3-border-right grid-separator-color">
+			<a href="tel: +7 (495) 78-888-78">+7 (495) 78-888-78</a>
+			<br>
+			<!--
+					<a ajaxform="1" class="callback" href="#" js_max_width="600" section="278">Request a call back</a>
+					-->
+		</div>
+		<div class="col-sm-3 w3-border-right grid-separator-color">
+			<div id="main-div-lang" class="div-lang">
+				<select id="main-select-lang" class="select-lang" lang="{{main.currentLang}}">
+					<option value="en">English</option>
+					<option value="es">Espanol</option>
+					<option value="ru">Русский</option>
+				</select>
+			</div>
+			<br>
+			<div id="main-user-div">I am:
+				<a id="main-user-name">{{ user.username   }}</a>
+				<a href="/logout">(Logout)</a>
+			</div>
+			<div id="main-nouser-div">
+				<a href="/login">Login</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-3">.col-sm-3 4</div>
+</div>
+</div>
+
+<!-- LOGOBAR END -->

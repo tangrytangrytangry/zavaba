@@ -4,6 +4,9 @@ jQuery(function () {
     // Form select-list of languages and it's events
     zbFormSelectLang();
 
+    // Init main logo bar
+    zbLogoBar();
+
     // Init main navigation panel
     zbInitNav();
 
