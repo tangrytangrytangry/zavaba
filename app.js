@@ -182,19 +182,18 @@ app.get('/', function (req, res) {
   })
 */
 
-// Duild mongo database connection url //
-
+// Build mongo database connection url //
 process.env.DB_HOST = process.env.DB_HOST || credentials.mongo.development.host;
 process.env.DB_PORT = process.env.DB_PORT || credentials.mongo.development.port;
 process.env.DB_NAME = process.env.DB_NAME || credentials.mongo.development.name;
-process.env.DB_NAME = process.env.DB_USER || credentials.mongo.development.user;
-process.env.DB_NAME = process.env.DB_PASS || credentials.mongo.development.pass;
+process.env.DB_USER = process.env.DB_USER || credentials.mongo.development.user;
+process.env.DB_PASS = process.env.DB_PASS || credentials.mongo.development.pass;
 
 if (app.get('env') === 'production') {
     process.env.DB_URL = credentials.mongo.production.connectionString;
 } else {
     process.env.DB_URL = credentials.mongo.development.connectionString;
-}
+} 
 
 var mongoConnectionOptions = {
     url: process.env.DB_URL,

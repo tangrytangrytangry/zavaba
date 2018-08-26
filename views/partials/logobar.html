@@ -23,16 +23,16 @@
 				</select>
 			</div>
 			<br>
-			<div id="main-user-div">I am:
-				<a id="main-user-name">{{ user.username   }}</a>
-				<a href="/logout">(Logout)</a>
+			<div id="main-user-div">{{ main.iam }}:
+				<a id="main-user-name">{{ user.username }}</a>
+				<a href="/logout">({{ main.signout }})</a>
 			</div>
 			<div id="main-nouser-div">
-				<a href="/login">Login</a>
+				<a href="/login">{{ main.signin }}</a>
 			</div>
 		</div>
+		<div class="col-sm-3">.col-sm-3 4</div>
 	</div>
-	<div class="col-sm-3">.col-sm-3 4</div>
 </div>
 </div>
 

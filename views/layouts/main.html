@@ -24,23 +24,20 @@
 
 <header>
 
-        <!-- LOGOBAR BEGIN -->
-        {% include "partials/logobar.html" %}
-        <!-- LOGOBAR END -->
+        {# LOGOBAR BEGIN #} {% include "partials/logobar.html" %} {# LOGOBAR END #}
 
-        <br>
-
-        <!-- NAVBAR BEGIN -->
-        {% include "partials/navbar.html" %}
-        <!-- NAVBAR END -->
+        <br> {# NAVBAR BEGIN -->#} {% include "partials/navbar.html" %} {# NAVBAR END #}
 
         <h1>{{ title }}</h1>
 
-        <br>
-        
+        <br> {% if user %}
         <h4>main.html: User = {{ user }}</h4>
+        {% endif %} {% if error %}
         <h4>main.html: Error = {{ error }}</h4>
-        <h4>main.html: username = {{ main.username }}</h4>
+        {% endif %} {% if user %}
+        <h4>main.html: username = {% if user.personalData.name %} {{ user.personalData.name }} {% else %} {{ user.username }}
+                {% endif %}</h4>
+        {% endif %}
 
         <br>
 
@@ -79,13 +76,7 @@
 
         {% block body %} {% endblock body %}
 
-        <br>
-
-        <div id="footer">
-                {% block footer %} &copy; Copyright 2008 by
-                <a href="http://domain.invalid/">you</a>
-                {% endblock footer %}
-        </div>
+        <br> {# FOOTER BEGIN #} {% include "partials/footer.html" %} {# FOOTER END #}
 
 </body>
 

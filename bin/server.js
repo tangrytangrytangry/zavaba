@@ -62,6 +62,7 @@ console.log('directory     = ' + __dirname);
 console.log('file          = ' + __filename);
 console.log('configuration = ' + configFileFull);
 console.log('process       = ' + process.argv);
+console.log('mongoDBURL    = ' + process.env.DB_URL);
 
 /**
  * Normalize a port into a number, string, or false.

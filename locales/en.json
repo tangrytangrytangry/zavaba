@@ -5,7 +5,10 @@
         "page": {
             "main": {
                 "currentLang": "en",
-                "username": "User name"
+                "username": "User name",
+                "signin": "Sign in",
+                "signout": "Sign out",
+                "iam": "I am"
             },
             "home": {
                 "username": "User name"

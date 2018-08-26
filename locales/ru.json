@@ -5,7 +5,10 @@
         "page": {
             "main": {
                 "currentLang": "ru",
-                "username": "Имя пользователя"
+                "username": "Имя пользователя",
+                "signin": "Войти",
+                "signout": "Выйти",
+                "iam": "Я"
             },
             "home": {
                 "username": "Имя пользователя"

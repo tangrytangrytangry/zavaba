@@ -11,7 +11,8 @@ var userSchema = mongoose.Schema({
     active: Boolean,
     personalData: {
         name: String,
-        email: String
+        email: String,
+        location: String
     }
 });
 

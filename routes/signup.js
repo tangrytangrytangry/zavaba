@@ -8,21 +8,37 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res, next) => {
-  Account.register(new Account({ username: req.body.username, role: "Some role" }), req.body.password, (err, account) => {
-    if (err) {
-      return res.render('../views/signup', { user: req.user, error: err.message });
-    }
+  Account.register(
+    new Account(
+      {
+        username: req.body.username,
+        role: "standard",
+        created: new Date(),
+        admin: false,
+        active: true,
+        personalData: {
+          name: req.body.name,
+          email: req.body.email,
+          location: req.body.country
+      }
 
-    passport.authenticate('local')(req, res, () => {
-      req.session.save((err) => {
-        if (err) {
-          return next(err);
-        }
-        res.redirect('/home');
+      }),
+
+    req.body.password,
+    (err, account) => {
+      if (err) {
+        return res.render('../views/signup', { user: req.user, error: err.message });
+      }
+      passport.authenticate('local')(req, res, () => {
+        req.session.save((err) => {
+          if (err) {
+            return next(err);
+          }
+          res.redirect('/home');
+        });
+
       });
-
     });
-  });
 });
 
 module.exports = router;
