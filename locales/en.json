@@ -8,7 +8,14 @@
                 "username": "User name",
                 "signin": "Sign in",
                 "signout": "Sign out",
-                "iam": "I am"
+                "iam": "I am",
+                "home": "Home",
+                "menu": "Menu",
+                "signup": "Signup",
+                "login": "Login",
+                "logout": "Logout",
+                "users": "Users",
+                "about": "About"
             },
             "home": {
                 "username": "User name"

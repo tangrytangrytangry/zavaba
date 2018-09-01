@@ -1,7 +1,7 @@
 {# NAVBAR BEGIN #}
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-sevice">
-	<a class="navbar-brand" href="#">Navbar</a>
+	<a class="navbar-brand" href="#">{{ main.menu }}</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01"
 	 aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -10,27 +10,27 @@
 	<div class="collapse navbar-collapse" id="navbarColor01">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item">
-				<a class="nav-link" href="/home">Home
+				<a class="nav-link" href="/home">{{ main.home }}
 					<span class="sr-only">(current)</span>
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/signup">Signup</a>
+				<a class="nav-link" href="/signup">{{ main.signup }}</a>
 			</li>
 			{% if user %}
 			<li class="nav-item">
-				<a class="nav-link" href="/logout">Logout</a>
+				<a class="nav-link" href="/logout">{{ main.logout }}</a>
 			</li>
 			{% else %}
 			<li class="nav-item">
-				<a class="nav-link" href="/login">Login</a>
+				<a class="nav-link" href="/login">{{ main.login }}</a>
 			</li>
 			{% endif %}
 			<li class="nav-item">
-				<a class="nav-link" href="/users">Users</a>
+				<a class="nav-link" href="/users">{{ main.users }}</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/about">About</a>
+				<a class="nav-link" href="/about">{{ main.about }}</a>
 			</li>
 		</ul>
 		<form class="form-inline my-2 my-lg-0">
