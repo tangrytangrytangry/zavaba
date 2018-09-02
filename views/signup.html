@@ -6,23 +6,23 @@
 <input type="hidden" id="userId">
 <div class="center-vertical" id="account-form-container">
   <form class="form-horizontal well" method="post" id="account-form">
-    <h2>Signup</h2>
-    <h6 id="sub1">Please tell us a little about yourself</h6>
+    <h2>{{ signup.signup }}</h2>
+    <h6 id="sub1">{{ signup.tellusabout }}</h6>
     <hr>
     <div class="form-group">
-      <label class="control-label col-sm-3">Name</label>
+      <label class="control-label col-sm-3">{{ signup.name }}</label>
       <div class="col-sm-9">
         <input class="form-control" id="name-tf" type="text" name="name">
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label col-sm-3">Email</label>
+      <label class="control-label col-sm-3">{{ signup.email }}</label>
       <div class="col-sm-9">
         <input class="form-control" id="email-tf" type="text" name="email">
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label col-sm-3">Location</label>
+      <label class="control-label col-sm-3">{{ signup.location }}</label>
       <div class="col-sm-9">
         <!-- COUNTRIES BEGIN -->
         {% include "./partials/countries-select.html" %}
@@ -30,15 +30,15 @@
       </div>
     </div>
     <hr>
-    <h6 id="sub2">Choose your username &amp; password</h6>
+    <h6 id="sub2">{{ signup.сhooseusername }}</h6>
     <div class="form-group">
-      <label class="control-label col-sm-3">Username</label>
+      <label class="control-label col-sm-3">{{ signup.username }}</label>
       <div class="col-sm-9">
         <input class="form-control disabled" id="user-tf" type="text" name="username">
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label col-sm-3">Password</label>
+      <label class="control-label col-sm-3">{{ signup.userpassword }}</label>
       <div class="col-sm-9">
         <input class="form-control" id="pass-tf" type="password" name="password" value="">
       </div>

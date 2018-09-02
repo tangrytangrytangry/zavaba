@@ -13,6 +13,9 @@ jQuery(function () {
     // Init login controller
     var lc = new zbLoginController();
 
+    // Init signup controller
+    var sc = zbSignupController();
+
     // Init form validator
     var rv = new zbResetValidator();
 

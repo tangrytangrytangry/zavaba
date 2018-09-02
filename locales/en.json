@@ -17,8 +17,24 @@
                 "users": "Users",
                 "about": "About"
             },
-            "home": {
-                "username": "User name"
+            "login": {
+                "hello": "Hello!",
+                "enteraccount": "Please Login To Your Account:",
+                "username": "User name",
+                "userpassword": "Password",
+                "rememberme": "Remember Me",
+                "signin": "Sign in"
+            },
+            "signup": {
+                "signup": "Signup",
+                "tellusabout": "Please tell us a little about yourself",
+                "name": "Name",
+                "email": "E-Mail",
+                "location": "Location",
+                "selectcountry": "Please select a country",
+                "сhooseusername": "Choose your username and password",
+                "username": "User name",
+                "userpassword": "Password"
             }
         }
     }

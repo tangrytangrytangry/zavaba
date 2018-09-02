@@ -4,7 +4,22 @@ const Account = require('../db/models/user');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.render('../views/signup', {});
+
+  var errors = req.flash('error');
+
+  var signupRenderParms = {
+    user: req.user,
+    "main": req.currentLangData.html.page.main,
+    "signup": req.currentLangData.html.page.signup
+  };
+
+  // If were errors, then add them to screen (flash)
+  if (errors.length > 0) {
+    signupRenderParms.error = errors;
+  };
+
+  res.render('../views/signup', signupRenderParms);
+
 });
 
 router.post('/', (req, res, next) => {
@@ -20,7 +35,7 @@ router.post('/', (req, res, next) => {
           name: req.body.name,
           email: req.body.email,
           location: req.body.country
-      }
+        }
 
       }),
 

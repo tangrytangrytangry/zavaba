@@ -7,26 +7,22 @@ var router = express.Router();
 /* GET login page. */
 router.get('/', function (req, res, next) {
 
-  //var errors = req.flash();
   var errors = req.flash('error');
 
-  if (errors.length > 0) {
-    res.render('../views/login',
-      {
-        welcome: 'Welcome to Express from login',
-        user: req.user,
-        error: errors,
-        "main": req.currentLangData.html.page.main
-      });
+  var loginRenderParms = {
+    welcome: 'Welcome to Express from login',
+    user: req.user,
+    "main": req.currentLangData.html.page.main,
+    "login": req.currentLangData.html.page.login
+  };
 
-  } else {
-    res.render('../views/login',
-      {
-        welcome: 'Welcome to Express from login',
-        user: req.user,
-        "main": req.currentLangData.html.page.main
-      });
-  }
+  // If were errors, then add them to screen (flash)
+  if (errors.length > 0) {
+    loginRenderParms.error = errors;
+  };
+
+  res.render('../views/login', loginRenderParms );
+
 });
 
 /* POST login page. */

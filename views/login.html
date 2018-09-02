@@ -4,21 +4,21 @@
 
 <div class="center-vertical" id="login">
 	<form class="well" id="form-login" method="post" action="/login">
-		<h2>Hello!</h2>
-		<h6>Please Login To Your Account</h6>
+		<h2>{{ login.hello }}</h2>
+		<h6>{{ login.enteraccount }}</h6>
 		<div class="form-group">
-			<label>Username</label>
+			<label>{{ login.username }}</label>
 			<input class="form-control" type="text" id="user-tf" name="username">
 		</div>
 		<div class="form-group">
-			<label>Password</label>
+			<label>{{ login.userpassword }}</label>
 			<input class="form-control" type="password" id="pass-tf" name="password">
 		</div>
 		<div class="controls">
 			<button class="btn btn-default button-rememember-me" type="button">
-				<span class="fa fa-square-o fa-pull-left button-rememember-me-glyph"></span>Remember Me</button>
+				<span class="fa fa-square-o fa-pull-left button-rememember-me-glyph"></span>{{ login.rememberme }}</button>
 			<button class="btn btn-primary button-sign-in" type="submit">
-				<span class="fa fa-lock fa-pull-left"></span>Sign In</button>
+				<span class="fa fa-lock fa-pull-left"></span>{{ login.signin }}</button>
 		</div>
 		<div class="clearfix"></div>
 		<hr>

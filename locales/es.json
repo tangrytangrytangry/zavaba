@@ -17,8 +17,24 @@
                 "users": "Usuarios",
                 "about": "Sobre nosotros"
             },
-            "home": {
-                "username": "Nombre de usuario"
+            "login": {
+                "hello": "Hola!",
+                "enteraccount": "Por Favor, Inicie Sesión En Su Cuenta:",
+                "username": "Nombre de usuario",
+                "userpassword": "Contraseña",
+                "rememberme": "Recuérdame",
+                "signin": "Entrar"
+            },
+            "signup": {
+                "signup": "Registro",
+                "tellusabout": "Por favor, cuéntanos un poco sobre ti",
+                "name": "Nombre",
+                "email": "Correo electrónico",
+                "location": "Ubicación",
+                "selectcountry": "Por favor seleccione un país",
+                "сhooseusername": "Elija su nombre de usuario y contraseña",
+                "username": "Nombre de usuario",
+                "userpassword": "Contraseña"
             }
         }
     }
