@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const Account = require('../db/models/user');
 const router = express.Router();
+var debug = require('debug')('server:signup');
 
 router.get('/', (req, res) => {
 

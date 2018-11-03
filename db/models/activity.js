@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var activitySchema = mongoose.Schema({
-    date: { type: Date, required: true },
+    date: { type: Number, required: true },
     item: { type: Number, required: true },
     data: {
         year: Number,
