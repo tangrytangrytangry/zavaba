@@ -25,6 +25,80 @@ var activitySchema = mongoose.Schema({
     }
 });
 
+//activitySchema.method('meow', function () {
+//    console.log('meow:   this.date=' + this.date + '   ' + 'this.item=' + this.item);
+//  })
+
+activitySchema.static('crtNewActivity',
+    function (user, date, pict_Name, pict_Body, attach_Name, attach_Body) {
+
+        let searchDate = 0;
+        let newItem = 0;
+
+        if (date) {
+            searchDate = date;
+        } else {
+            let today = new Date();
+            searchDate = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        }
+
+        Activity.countDocuments({ date: searchDate }, function (err, docCount) {
+            if (err) return handleError(err);
+            docCount = docCount + 1;
+            newItem = docCount;
+            savNewActivity(searchDate, docCount);
+            // console.log('docCount = ' + docCount);
+        });
+
+        // New item number for the date
+        // let promiseCount = Activity.countDocuments({ date: searchDate }).exec();
+        // promiseCount.then(function (docCount) { savNewActivity(docCount); })
+
+        function savNewActivity(itemDate, docCount) {
+
+            let itemYear = Math.trunc(itemDate / 10000);
+            let itemMonth = Math.trunc((itemDate - itemYear * 10000) / 100);
+            let itemDay = Math.trunc(itemDate - (itemYear * 10000 + itemMonth * 100));
+
+            var newActivity = new Activity(
+                {
+                    date: itemDate,
+                    item: newItem,
+                    data: {
+                        year: itemYear,
+                        month: itemMonth,
+                        day: itemDay,
+                        kind: "ordinary",
+                        picture: {
+                            name: pict_Name,
+                            body: pict_Body
+                        },
+                        attachment: {
+                            name: attach_Name,
+                            body: attach_Body
+                        }
+                    },
+                    log: {
+                        usernamecrt: user
+                    }
+                });
+
+            console.log('1 newActivity.meow() = ' + newActivity.meow());
+
+            newActivity.save(function (err, newActivity) {
+                if (err) return console.error(err);
+            });
+
+            console.log('2 newActivity.meow() = ' + newActivity.meow());
+
+            //console.log('newActivity = ' + newActivity);
+
+        }; // savNewActivity
+
+    } // crtNewActivity
+
+); // activitySchema.method('crtNewActivity') 
+
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;
 

@@ -312,7 +312,8 @@ app.use(function (err, req, res, next) {
     console.error(err.stack);
     res.type('text/plain');
     res.status(500);
-    res.send('500 - Server Error');
+    res.send('500 - Server Error \n' +
+    err.message);
     // res.status(500).send('Something broke!');
 });
 
