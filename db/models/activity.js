@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var activitySchema = mongoose.Schema({
     date: { type: Number, required: true },
     item: { type: Number, required: true },
+    active: String,
     data: {
         year: Number,
         month: Number,
@@ -21,13 +22,14 @@ var activitySchema = mongoose.Schema({
         created: { type: Date, default: Date.now },
         usernamecrt: String,
         updated: Date,
-        usernameupd: Date
+        usernameupd: String
     }
 });
 
-//activitySchema.method('meow', function () {
-//    console.log('meow:   this.date=' + this.date + '   ' + 'this.item=' + this.item);
-//  })
+activitySchema.method('meow', function () {
+    console.log('meow:   this.date=' + this.date + '   ' + 'this.item=' + this.item);
+    return this.item;
+})
 
 activitySchema.static('crtNewActivity',
     function (user, date, pict_Name, pict_Body, attach_Name, attach_Body) {
@@ -64,6 +66,7 @@ activitySchema.static('crtNewActivity',
                 {
                     date: itemDate,
                     item: newItem,
+                    active: "Y",
                     data: {
                         year: itemYear,
                         month: itemMonth,
@@ -83,21 +86,19 @@ activitySchema.static('crtNewActivity',
                     }
                 });
 
-            console.log('1 newActivity.meow() = ' + newActivity.meow());
-
             newActivity.save(function (err, newActivity) {
                 if (err) return console.error(err);
             });
 
-            console.log('2 newActivity.meow() = ' + newActivity.meow());
 
-            //console.log('newActivity = ' + newActivity);
+            //console.log('1 newActivity.meow() = ' + newActivity.meow());
+
 
         }; // savNewActivity
 
     } // crtNewActivity
 
-); // activitySchema.method('crtNewActivity') 
+); // activitySchema.static('crtNewActivity') 
 
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;
