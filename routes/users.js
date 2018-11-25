@@ -23,11 +23,18 @@ router.get('/', function (req, res, next) {
   var attachName = path.join(attachPath, 'Zabava_08.png');
   var attachBody = fs.readFileSync(attachName);
 
-  Activity.crtNewActivity(req.user.username, curDate, pictName, pictBody, attachName, attachBody);
-  
-  Description.crtNewDescription(req.user.username, curDate, undefined, 'RU', 'Русское описание');
-  Description.crtNewDescription(req.user.username, curDate, undefined, 'ES', 'Español descripción');
-  Description.crtNewDescription(req.user.username, curDate, undefined, 'EN', 'English description');
+
+  var activityTexts = [
+    { langcode: 'RU', text: 'Русское описание' },
+    { langcode: 'ES', text: 'Español descripción' },
+    { langcode: 'EN', text: 'English description' }
+  ];
+
+  Activity.crtNewActivity(req.user.username, curDate, "ordinary", pictName, pictBody, attachName, attachBody, activityTexts);
+
+  //Description.crtNewDescription(req.user.username, curDate, undefined, 'RU', 'Русское описание');
+  //Description.crtNewDescription(req.user.username, curDate, undefined, 'ES', 'Español descripción');
+  //Description.crtNewDescription(req.user.username, curDate, undefined, 'EN', 'English description');
 
   //const query1 = MyModel.find({ name: /john/i }, null, { skip: 10 });
   //const result1 = await query1.exec();

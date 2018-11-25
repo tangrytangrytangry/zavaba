@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 
+const Description = require('./description');
+
 var activitySchema = mongoose.Schema({
     date: { type: Number, required: true },
     item: { type: Number, required: true },
@@ -32,10 +34,12 @@ activitySchema.method('meow', function () {
 })
 
 activitySchema.static('crtNewActivity',
-    function (user, date, pict_Name, pict_Body, attach_Name, attach_Body) {
+    function (user, date, kind = "ordinary", pict_Name, pict_Body, attach_Name, attach_Body, ...restArgs) {
 
         let searchDate = 0;
         let newItem = 0;
+
+        console.log('...restArgs = ' + restArgs);
 
         if (date) {
             searchDate = date;
@@ -48,15 +52,23 @@ activitySchema.static('crtNewActivity',
             if (err) return handleError(err);
             docCount = docCount + 1;
             newItem = docCount;
-            savNewActivity(searchDate, docCount);
+            savNewActivity(searchDate, docCount, kind);
             // console.log('docCount = ' + docCount);
+
+            if (restArgs.length > 0) {
+                for (let index = 0; index < restArgs[0].length; index++) {
+                    Description.crtNewDescription(user, date, newItem,
+                        restArgs[0][index].langcode,
+                        restArgs[0][index].text);
+                }
+            }
         });
 
         // New item number for the date
         // let promiseCount = Activity.countDocuments({ date: searchDate }).exec();
         // promiseCount.then(function (docCount) { savNewActivity(docCount); })
 
-        function savNewActivity(itemDate, docCount) {
+        function savNewActivity(itemDate, docCount, itemKind) {
 
             let itemYear = Math.trunc(itemDate / 10000);
             let itemMonth = Math.trunc((itemDate - itemYear * 10000) / 100);
@@ -71,7 +83,7 @@ activitySchema.static('crtNewActivity',
                         year: itemYear,
                         month: itemMonth,
                         day: itemDay,
-                        kind: "ordinary",
+                        kind: itemKind,
                         picture: {
                             name: pict_Name,
                             body: pict_Body
