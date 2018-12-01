@@ -34,19 +34,26 @@ router.get('/', function (req, res, next) {
   //Activity.crtNewActivity(req.user.username, curDate, 
   //  "ordinary", pictName, pictBody, attachName, attachBody, activityTexts);
 
-  var updDate = 20181125;
-  var updItem = 1;
+  //var updDate = 20181125;
+  //var updItem = 111;
+  //Activity.updActivity(req.user.username, updDate, updItem,
+  //  "ordinary", pictName, pictBody, attachName, attachBody, activityTexts);
 
-  Activity.updActivity(req.user.username, updDate, updItem,
-    "ordinary", pictName, pictBody, attachName, attachBody, activityTexts);
+  //var updDate = 20181125;
+  //var updItem = 1;
+  //var langcode = 'RU';
+  //var descText = 'Превед ! ' + new Date();
+  //Description.updDescription(req.user.username, updDate, updItem, langcode,
+  //  descText);
 
+  var updDate = curDate;
+  var updItem = 3;
+  var langcode = 'EN';
+  Description.dltDescription(req.user.username, updDate, updItem, langcode);
 
-  updDate = 20181125;
-  updItem = 1;
-  var langcode = 'RU';
-  var descText = 'Превед ! ' + new Date();
-  Description.updDescription(req.user.username, updDate, updItem, langcode,
-    descText);
+  //var dltDate = curDate;
+  //var dltItem = 1;
+  //Activity.dltActivity(req.user.username, dltDate, dltItem);
 
   //Description.crtNewDescription(req.user.username, curDate, undefined, 'RU', 'Русское описание');
   //Description.crtNewDescription(req.user.username, curDate, undefined, 'ES', 'Español descripción');

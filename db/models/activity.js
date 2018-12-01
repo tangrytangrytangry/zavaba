@@ -149,7 +149,7 @@ activitySchema.static('updActivity',
 
         function savActivity(parActivity) {
 
-            //console.log("savActivity: parActivity = " + parActivity);
+            if (parActivity == null) { return; }
 
             parActivity.data.kind = kind;
             parActivity.log.updated = new Date();
@@ -165,6 +165,38 @@ activitySchema.static('updActivity',
 
 ); // activitySchema.static('updActivity') 
 
+activitySchema.static('dltActivity',
+    function (user, date, item) {
+
+        let searchDate = date;
+        let dltItem = item;
+
+        Activity.findOne({ date: searchDate, item: dltItem, active: "Y" }, function (err, thisActivity) {
+            if (err) return handleError(err);
+            deactActivity(thisActivity);
+        });
+
+        // New item number for the date
+        // let promiseCount = Activity.countDocuments({ date: searchDate }).exec();
+        // promiseCount.then(function (docCount) { savNewActivity(docCount); })
+
+        function deactActivity(parActivity) {
+
+            if (parActivity == null) { return; }
+
+            parActivity.active = "N";
+            parActivity.log.updated = new Date();
+            parActivity.log.usernameupd = user;
+
+            parActivity.save(function (err, parActivity) {
+                if (err) return console.error(err);
+            });
+
+        }; // dltActivity()
+
+    } // dltActivity()
+
+); // activitySchema.static('dltActivity') 
 
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;

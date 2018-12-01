@@ -120,7 +120,7 @@ descriptionSchema.static('updDescription',
 
         function savDescription(parDescription) {
 
-            console.log("savDescription: parDescription = " + parDescription);
+            if (parDescription == null) { return; }
 
             parDescription.data.text = desc_text;
             parDescription.log.updated = new Date();
@@ -135,6 +135,37 @@ descriptionSchema.static('updDescription',
     } // updDescription
 
 ); // descriptionSchema.static('updDescription') 
+
+descriptionSchema.static('dltDescription',
+    function (user, date, item, langcode) {
+
+        let searchDate = date;
+        let dltItem = item;
+
+
+        Description.findOne({ date: searchDate, item: dltItem, langcode: langcode, active: "Y" },
+            function (err, thisDescription) {
+                if (err) return handleError(err);
+                deactDescription(thisDescription);
+            });
+
+        function deactDescription(parDescription) {
+
+            if (parDescription == null) { return; }
+
+            parDescription.active = "N";
+            parDescription.log.updated = new Date();
+            parDescription.log.usernameupd = user;
+
+            parDescription.save(function (err, parDescription) {
+                if (err) return console.error(err);
+            });
+
+        }; // savDescription
+
+    } // dltDescription
+
+); // descriptionSchema.static('dltDescription') 
 
 var Description = mongoose.model('Description', descriptionSchema);
 module.exports = Description;
