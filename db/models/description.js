@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 const Activity = require('./activity');
 
-
 var descriptionSchema = mongoose.Schema({
     date: { type: Number, required: true },
     item: { type: Number, required: true },
@@ -19,24 +18,35 @@ var descriptionSchema = mongoose.Schema({
 });
 
 descriptionSchema.static('crtNewDescription',
-    function (user, date, item = undefined, langcode, desc_text) {
+    function (user, date = undefined, item = undefined, langcode, desc_text) {
 
+        let searchDate = 0;
         let lastItem = 0;
+
+        if (date) {
+            searchDate = date;
+        }
+
+        if (searchDate <= 0) {
+            let today = new Date();
+            searchDate = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        }
 
         if (item) {
             lastItem = item;
         }
 
-        if (lastItem === 0) {
+        if (lastItem <= 0) {
 
-            Activity.countDocuments({ date: date }, function (err, docCount) {
-                if (err) return handleError(err);
-                lastItem = docCount;
-                savNewDescription(date, lastItem, langcode);
-            });
+            Activity.countDocuments({ date: searchDate },
+                function (err, docCount) {
+                    if (err) return handleError(err);
+                    lastItem = docCount;
+                    savNewDescription(searchDate, lastItem, langcode);
+                });
 
         } else {
-            savNewDescription(date, lastItem, langcode);
+            savNewDescription(searchDate, lastItem, langcode);
         }
 
         function savNewDescription(descDate, descItem, descLangcode) {
@@ -64,6 +74,67 @@ descriptionSchema.static('crtNewDescription',
     } // crtNewDescription
 
 ); // descriptionSchema.static('crtNewDescription') 
+
+descriptionSchema.static('updDescription',
+    function (user, date = undefined, item = undefined, langcode, desc_text) {
+
+        let searchDate = 0;
+        let updItem = 0;
+
+        if (date) {
+            searchDate = date;
+        }
+
+        if (searchDate <= 0) {
+            let today = new Date();
+            searchDate = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        }
+
+        if (item) {
+            updItem = item;
+        }
+
+        if (updItem <= 0) {
+
+            Activity.countDocuments({ date: searchDate }, function (err, docCount) {
+                if (err) return handleError(err);
+                updItem = docCount;
+
+                Description.findOne({ date: searchDate, item: updItem, langcode: langcode, active: "Y" },
+                    function (err, thisDescription) {
+                        if (err) return handleError(err);
+                        savDescription(thisDescription);
+                    });
+
+            });
+
+        } else {
+
+            Description.findOne({ date: searchDate, item: updItem, langcode: langcode, active: "Y" },
+                function (err, thisDescription) {
+                    if (err) return handleError(err);
+                    savDescription(thisDescription);
+                });
+
+        }
+
+        function savDescription(parDescription) {
+
+            console.log("savDescription: parDescription = " + parDescription);
+
+            parDescription.data.text = desc_text;
+            parDescription.log.updated = new Date();
+            parDescription.log.usernameupd = user;
+
+            parDescription.save(function (err, parDescription) {
+                if (err) return console.error(err);
+            });
+
+        }; // savDescription
+
+    } // updDescription
+
+); // descriptionSchema.static('updDescription') 
 
 var Description = mongoose.model('Description', descriptionSchema);
 module.exports = Description;

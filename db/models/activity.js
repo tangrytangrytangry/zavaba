@@ -28,22 +28,18 @@ var activitySchema = mongoose.Schema({
     }
 });
 
-activitySchema.method('meow', function () {
-    console.log('meow:   this.date=' + this.date + '   ' + 'this.item=' + this.item);
-    return this.item;
-})
-
 activitySchema.static('crtNewActivity',
-    function (user, date, kind = "ordinary", pict_Name, pict_Body, attach_Name, attach_Body, ...restArgs) {
+    function (user, date = undefined,
+        kind = "ordinary", pict_Name, pict_Body, attach_Name, attach_Body, ...restArgs) {
 
         let searchDate = 0;
         let newItem = 0;
 
-        console.log('...restArgs = ' + restArgs);
-
         if (date) {
             searchDate = date;
-        } else {
+        }
+
+        if (searchDate <= 0) {
             let today = new Date();
             searchDate = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
         }
@@ -53,7 +49,6 @@ activitySchema.static('crtNewActivity',
             docCount = docCount + 1;
             newItem = docCount;
             savNewActivity(searchDate, docCount, kind);
-            // console.log('docCount = ' + docCount);
 
             if (restArgs.length > 0) {
                 for (let index = 0; index < restArgs[0].length; index++) {
@@ -102,15 +97,74 @@ activitySchema.static('crtNewActivity',
                 if (err) return console.error(err);
             });
 
+        }; // savNewActivity()
 
-            //console.log('1 newActivity.meow() = ' + newActivity.meow());
-
-
-        }; // savNewActivity
-
-    } // crtNewActivity
+    } // crtNewActivity()
 
 ); // activitySchema.static('crtNewActivity') 
+
+activitySchema.static('updActivity',
+    function (user, date = undefined, item = undefined,
+        kind = "ordinary", pict_Name, pict_Body, attach_Name, attach_Body, ...restArgs) {
+
+        let searchDate = 0;
+        let updItem = 0;
+
+        if (date) {
+            searchDate = date;
+        }
+
+        if (searchDate <= 0) {
+            let today = new Date();
+            searchDate = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        }
+
+        if (item) {
+            updItem = item;
+        }
+
+        if (updItem <= 0) {
+
+            Activity.countDocuments({ date: searchDate }, function (err, docCount) {
+                if (err) return handleError(err);
+                updItem = docCount;
+
+                Activity.findOne({ date: searchDate, item: updItem, active: "Y" }, function (err, thisActivity) {
+                    if (err) return handleError(err);
+                    savActivity(thisActivity);
+                });
+
+            });
+
+        } else {
+            Activity.findOne({ date: searchDate, item: updItem, active: "Y" }, function (err, thisActivity) {
+                if (err) return handleError(err);
+                savActivity(thisActivity);
+            });
+        }
+
+        // New item number for the date
+        // let promiseCount = Activity.countDocuments({ date: searchDate }).exec();
+        // promiseCount.then(function (docCount) { savNewActivity(docCount); })
+
+        function savActivity(parActivity) {
+
+            //console.log("savActivity: parActivity = " + parActivity);
+
+            parActivity.data.kind = kind;
+            parActivity.log.updated = new Date();
+            parActivity.log.usernameupd = user;
+
+            parActivity.save(function (err, parActivity) {
+                if (err) return console.error(err);
+            });
+
+        }; // savActivity()
+
+    } // updActivity()
+
+); // activitySchema.static('updActivity') 
+
 
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;

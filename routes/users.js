@@ -9,6 +9,7 @@ var debug = require('debug')('server:users');
 const Activity = require('../db/models/activity');
 const Description = require('../db/models/description');
 
+
 /* GET users listing. */
 router.get('/', function (req, res, next) {
 
@@ -30,7 +31,22 @@ router.get('/', function (req, res, next) {
     { langcode: 'EN', text: 'English description' }
   ];
 
-  Activity.crtNewActivity(req.user.username, curDate, "ordinary", pictName, pictBody, attachName, attachBody, activityTexts);
+  //Activity.crtNewActivity(req.user.username, curDate, 
+  //  "ordinary", pictName, pictBody, attachName, attachBody, activityTexts);
+
+  var updDate = 20181125;
+  var updItem = 1;
+
+  Activity.updActivity(req.user.username, updDate, updItem,
+    "ordinary", pictName, pictBody, attachName, attachBody, activityTexts);
+
+
+  updDate = 20181125;
+  updItem = 1;
+  var langcode = 'RU';
+  var descText = 'Превед ! ' + new Date();
+  Description.updDescription(req.user.username, updDate, updItem, langcode,
+    descText);
 
   //Description.crtNewDescription(req.user.username, curDate, undefined, 'RU', 'Русское описание');
   //Description.crtNewDescription(req.user.username, curDate, undefined, 'ES', 'Español descripción');
