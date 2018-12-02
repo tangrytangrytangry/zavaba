@@ -142,12 +142,28 @@ descriptionSchema.static('dltDescription',
         let searchDate = date;
         let dltItem = item;
 
+        if (langcode == undefined) {
 
-        Description.findOne({ date: searchDate, item: dltItem, langcode: langcode, active: "Y" },
-            function (err, thisDescription) {
-                if (err) return handleError(err);
-                deactDescription(thisDescription);
-            });
+            Description.find({ date: searchDate, item: dltItem, active: "Y" },
+                function (err, theseDescriptions) {
+                    if (err) return handleError(err);
+
+                    for (let index = 0; index < theseDescriptions.length; index++) {
+                        const thisDescription = theseDescriptions[index];
+                        deactDescription(thisDescription);
+                    }
+
+                });
+
+        } else {
+
+            Description.findOne({ date: searchDate, item: dltItem, langcode: langcode, active: "Y" },
+                function (err, thisDescription) {
+                    if (err) return handleError(err);
+                    deactDescription(thisDescription);
+                });
+
+        }
 
         function deactDescription(parDescription) {
 
@@ -161,7 +177,7 @@ descriptionSchema.static('dltDescription',
                 if (err) return console.error(err);
             });
 
-        }; // savDescription
+        }; // deactDescription
 
     } // dltDescription
 
@@ -169,4 +185,3 @@ descriptionSchema.static('dltDescription',
 
 var Description = mongoose.model('Description', descriptionSchema);
 module.exports = Description;
-

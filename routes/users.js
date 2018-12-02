@@ -18,10 +18,12 @@ router.get('/', function (req, res, next) {
 
   var pictPath = path.join(__dirname, '../public/images');
   var pictName = path.join(pictPath, 'Zabava_08_3D_Yellow.png');
+  var pictText = "Picture text";
   var pictBody = fs.readFileSync(pictName);
 
   var attachPath = path.join(__dirname, '../public/images');
   var attachName = path.join(attachPath, 'Zabava_08.png');
+  var attachText = "Attachement text";
   var attachBody = fs.readFileSync(attachName);
 
 
@@ -31,25 +33,36 @@ router.get('/', function (req, res, next) {
     { langcode: 'EN', text: 'English description' }
   ];
 
-  //Activity.crtNewActivity(req.user.username, curDate, 
-  //  "ordinary", pictName, pictBody, attachName, attachBody, activityTexts);
+  Activity.crtNewActivity(req.user.username, curDate, "ordinary",
+    pictName, pictText, pictBody,
+    attachName, attachText, attachBody,
+    activityTexts);
 
-  //var updDate = 20181125;
-  //var updItem = 111;
-  //Activity.updActivity(req.user.username, updDate, updItem,
-  //  "ordinary", pictName, pictBody, attachName, attachBody, activityTexts);
+  /*
+  var updDate = 20181202;
+  var updItem = 1;
+  Activity.updActivity(req.user.username, updDate, updItem, "ordinary",
+    pictName, 'pictText', pictBody,
+    attachName, 'attachText', attachBody,
+    activityTexts);
+  */
 
-  //var updDate = 20181125;
-  //var updItem = 1;
-  //var langcode = 'RU';
-  //var descText = 'Превед ! ' + new Date();
-  //Description.updDescription(req.user.username, updDate, updItem, langcode,
-  //  descText);
-
-  var updDate = curDate;
-  var updItem = 3;
+  /*
+  var updDate = 20181201;
+  var updItem = 1;
   var langcode = 'EN';
-  Description.dltDescription(req.user.username, updDate, updItem, langcode);
+  var descText = 'Preved ! ' + new Date();
+  Description.updDescription(req.user.username, updDate, updItem, langcode,
+    descText);
+*/
+
+  /*
+    var dltDate = 20181201;
+    var dltItem = 3;
+    var langcode = 'EN';
+    //Description.dltDescription(req.user.username, dltDate, dltItem, langcode);
+    Description.dltDescription(req.user.username, dltDate, dltItem);
+  */
 
   //var dltDate = curDate;
   //var dltItem = 1;

@@ -13,10 +13,12 @@ var activitySchema = mongoose.Schema({
         kind: { type: String, required: true },
         picture: {
             name: String,
+            text: String,
             body: Buffer
         },
         attachment: {
             name: String,
+            text: String,
             body: Buffer
         }
     },
@@ -29,8 +31,10 @@ var activitySchema = mongoose.Schema({
 });
 
 activitySchema.static('crtNewActivity',
-    function (user, date = undefined,
-        kind = "ordinary", pict_Name, pict_Body, attach_Name, attach_Body, ...restArgs) {
+    function (user, date = undefined, kind = "ordinary",
+        pict_Name, pict_Text, pict_Body,
+        attach_Name, attach_Text, attach_Body,
+        ...restArgs) {
 
         let searchDate = 0;
         let newItem = 0;
@@ -52,7 +56,7 @@ activitySchema.static('crtNewActivity',
 
             if (restArgs.length > 0) {
                 for (let index = 0; index < restArgs[0].length; index++) {
-                    Description.crtNewDescription(user, date, newItem,
+                    Description.crtNewDescription(user, searchDate, newItem,
                         restArgs[0][index].langcode,
                         restArgs[0][index].text);
                 }
@@ -81,10 +85,12 @@ activitySchema.static('crtNewActivity',
                         kind: itemKind,
                         picture: {
                             name: pict_Name,
+                            text: pict_Text,
                             body: pict_Body
                         },
                         attachment: {
                             name: attach_Name,
+                            text: attach_Text,
                             body: attach_Body
                         }
                     },
@@ -104,8 +110,10 @@ activitySchema.static('crtNewActivity',
 ); // activitySchema.static('crtNewActivity') 
 
 activitySchema.static('updActivity',
-    function (user, date = undefined, item = undefined,
-        kind = "ordinary", pict_Name, pict_Body, attach_Name, attach_Body, ...restArgs) {
+    function (user, date = undefined, item = undefined, kind = "ordinary",
+        pict_Name, pict_Text, pict_Body,
+        attach_Name, attach_Text, attach_Body,
+        ...restArgs) {
 
         let searchDate = 0;
         let updItem = 0;
@@ -132,14 +140,33 @@ activitySchema.static('updActivity',
                 Activity.findOne({ date: searchDate, item: updItem, active: "Y" }, function (err, thisActivity) {
                     if (err) return handleError(err);
                     savActivity(thisActivity);
+
+                    if (restArgs.length > 0) {
+                        for (let index = 0; index < restArgs[0].length; index++) {
+                            Description.updDescription(user, searchDate, updItem,
+                                restArgs[0][index].langcode,
+                                restArgs[0][index].text);
+                        }
+                    }
+
                 });
 
             });
 
         } else {
+
             Activity.findOne({ date: searchDate, item: updItem, active: "Y" }, function (err, thisActivity) {
                 if (err) return handleError(err);
                 savActivity(thisActivity);
+
+                if (restArgs.length > 0) {
+                    for (let index = 0; index < restArgs[0].length; index++) {
+                        Description.updDescription(user, searchDate, updItem,
+                            restArgs[0][index].langcode,
+                            restArgs[0][index].text);
+                    }
+                }
+
             });
         }
 
@@ -154,6 +181,28 @@ activitySchema.static('updActivity',
             parActivity.data.kind = kind;
             parActivity.log.updated = new Date();
             parActivity.log.usernameupd = user;
+
+            // Picture
+            if (pict_Name) {
+                parActivity.data.picture.name = pict_Name
+            }
+            if (pict_Text) {
+                parActivity.data.picture.text = pict_Text
+            }
+            if (pict_Body) {
+                parActivity.data.picture.body = pict_Body
+            }
+
+            // Attachment
+            if (attach_Name) {
+                parActivity.data.attachment.name = attach_Name
+            }
+            if (attach_Text) {
+                parActivity.data.attachment.text = attach_Text
+            }
+            if (attach_Body) {
+                parActivity.data.attachment.body = attach_Body
+            }
 
             parActivity.save(function (err, parActivity) {
                 if (err) return console.error(err);
@@ -174,6 +223,7 @@ activitySchema.static('dltActivity',
         Activity.findOne({ date: searchDate, item: dltItem, active: "Y" }, function (err, thisActivity) {
             if (err) return handleError(err);
             deactActivity(thisActivity);
+            Description.dltDescription(user, searchDate, dltItem);
         });
 
         // New item number for the date
