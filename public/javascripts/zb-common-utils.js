@@ -1,6 +1,6 @@
 
 //Send GET-request to the server
-function sendGetRequestToServer(url, inpParm) {
+function sendGetRequestToServerSync(url, inpParm) {
     var xhr = new XMLHttpRequest();
     url = encodeURIComponent(url);
     inpParm = (inpParm) ? '/' + inpParm : '';

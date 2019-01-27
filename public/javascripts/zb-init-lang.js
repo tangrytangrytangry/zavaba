@@ -64,8 +64,8 @@ function zbFormSelectLang() {
             selectLang.addClass(rtvLangClassName(currentLang));
             selectLang[0].value = currentLang;
 
-            // data = sendGetRequestToServer('language/' + currentLang);
-            data = sendGetRequestToServer('language', '?lang=' + currentLang);
+            // data = sendGetRequestToServerSync('language/' + currentLang);
+            data = sendGetRequestToServerSync('language', '?lang=' + currentLang);
             location.reload(true);
         }
 

@@ -64,6 +64,18 @@ app.use('/language', function (req, res) {
     return;
 });
 
+
+// Load all periods from server
+app.use('/periodlist', function (req, res) {
+
+    let data = "";
+
+    data = "Current date = " + new Date();
+
+    res.end(data);
+    return;
+});
+
 // If app language was changed then change req language
 app.use('/', function (req, res, next) {
     let appCurrentLang = app.get('currentLang');
@@ -193,7 +205,7 @@ if (app.get('env') === 'production') {
     process.env.DB_URL = credentials.mongo.production.connectionString;
 } else {
     process.env.DB_URL = credentials.mongo.development.connectionString;
-} 
+}
 
 var mongoConnectionOptions = {
     url: process.env.DB_URL,
@@ -292,6 +304,7 @@ app.use('/', function (req, res, next) {
     next();
 },
     indexRouter);
+    
 app.use('/home', indexRouter);
 app.use('/index', indexRouter);
 app.use('/users', usersRouter);
@@ -313,7 +326,7 @@ app.use(function (err, req, res, next) {
     res.type('text/plain');
     res.status(500);
     res.send('500 - Server Error \n' +
-    err.message);
+        err.message);
     // res.status(500).send('Something broke!');
 });
 

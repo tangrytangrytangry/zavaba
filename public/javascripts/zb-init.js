@@ -10,6 +10,9 @@ jQuery(function () {
     // Init main navigation panel
     zbInitNav();
 
+    // Load all periods from server to screen
+    zbPeriodList();
+
     // Init login controller
     var lc = new zbLoginController();
 

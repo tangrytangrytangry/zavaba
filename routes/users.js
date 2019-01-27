@@ -9,7 +9,6 @@ var debug = require('debug')('server:users');
 const Activity = require('../db/models/activity');
 const Description = require('../db/models/description');
 
-
 /* GET users listing. */
 router.get('/', function (req, res, next) {
 
@@ -25,7 +24,6 @@ router.get('/', function (req, res, next) {
   var attachName = path.join(attachPath, 'Zabava_08.png');
   var attachText = "Attachement text";
   var attachBody = fs.readFileSync(attachName);
-
 
   var activityTexts = [
     { langcode: 'RU', text: 'Русское описание' },

@@ -1,5 +1,33 @@
- {% extends "layouts/main.html" %} {% block body %}
+{% extends "layouts/main.html" %} {% block body %}
 <p> start views/home.html</p>
+
+<br>
+
+<!-- Breadcrumbs BEGIN -->
+
+<!--
+<ol class="breadcrumb">
+        <li class="breadcrumb-item active">Home</li>
+</ol>
+<ol class="breadcrumb">
+        <li class="breadcrumb-item">
+                <a href="#">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Library</li>
+</ol>
+<ol class="breadcrumb">
+        <li class="breadcrumb-item">
+                <a href="#">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+                <a href="#">Library</a>
+        </li>
+        <li class="breadcrumb-item active">Data</li>
+</ol>
+
+<br>
+-->
+<!-- Breadcrumbs END -->
 
 <br>
 
@@ -8,24 +36,44 @@
 <div class="container-fluid text-center">
         <div class="row content">
                 <div class="col-sm-2 sidenav">
-                        <p>
-                                <a href="#">Link</a>
-                        </p>
-                        <p>
-                                <a href="#">Link</a>
-                        </p>
+
+                        <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown
+                                        Example
+                                        <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                        <li><a href="#">2019</a></li>
+                                        <li><a href="#">2018</a></li>
+                                        <li><a href="#">2017</a></li>
+                                </ul>
+                        </div>
+
+                        <div class="container">
+                                <h2>List Group With Badges</h2>
+                                <ul class="list-group">
+                                        <li class="list-group-item">New <span class="badge">12</span></li>
+                                        <li class="list-group-item">Deleted <span class="badge">5</span></li>
+                                        <li class="list-group-item">Warnings <span class="badge">3</span></li>
+                                        <a href="#" class="list-group-item">First item</a>
+                                        <a href="#" class="list-group-item">Second item</a>
+                                        <a href="#" class="list-group-item">Third item</a>
+                                        <a href="#" class="list-group-item active">First item</a>
+                                        <a href="#" class="list-group-item">Second item</a>
+                                        <a href="#" class="list-group-item">Third item</a>
+                                        <li class="list-group-item list-group-item-success">First item</li>
+                                        <li class="list-group-item list-group-item-info">Second item</li>
+                                        <li class="list-group-item list-group-item-warning">Third item</li>
+                                        <li class="list-group-item list-group-item-danger">Fourth item</li>
+                                </ul>
+                        </div>
+
                         <p>
                                 <a href="#">Link</a>
                         </p>
                 </div>
                 <div class="col-sm-8 text-left">
                         <h1>Welcome</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                                et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident,
-                                sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit,
-                                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        <p>Lorem ipsum dolor sit ... </p>
                         <hr>
                         <h3>Test</h3>
                         <p>Lorem ipsum...</p>
