@@ -8,6 +8,7 @@ var nunjucks = require('nunjucks');
 var crypto = require('crypto');
 var helmet = require('helmet');
 var flash = require('connect-flash');
+var reports = require('./lib/reports.js');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -59,18 +60,6 @@ app.use('/language', function (req, res) {
             app.set('currentLangData', i18n.getCatalog(reqLang));
         };
     };
-
-    res.end(data);
-    return;
-});
-
-
-// Load all periods from server
-app.use('/periodlist', function (req, res) {
-
-    let data = "";
-
-    data = "Current date = " + new Date();
 
     res.end(data);
     return;
@@ -304,7 +293,7 @@ app.use('/', function (req, res, next) {
     next();
 },
     indexRouter);
-    
+
 app.use('/home', indexRouter);
 app.use('/index', indexRouter);
 app.use('/users', usersRouter);
@@ -312,6 +301,26 @@ app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
 app.use('/register', registerRouter);
 app.use('/logout', logoutRouter);
+
+// Read all periods from database
+app.get('/reports', function (req, res) {
+
+    let reportCode = req.query.report;
+    let data = "";
+
+    //data = "Current date = " + new Date();
+    switch (reportCode) {
+        case "periodlist":
+            data = reports.periodList(req, res);
+            break;
+
+        default:
+            break;
+    }
+    
+    res.end(data);
+    return;
+});
 
 // custom 404 page
 app.use(function (req, res, next) {
