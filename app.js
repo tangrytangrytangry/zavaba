@@ -302,24 +302,30 @@ app.use('/signup', signupRouter);
 app.use('/register', registerRouter);
 app.use('/logout', logoutRouter);
 
-// Read all periods from database
+// Get report data from database
 app.get('/reports', function (req, res) {
 
     let reportCode = req.query.report;
     let data = "";
 
-    //data = "Current date = " + new Date();
     switch (reportCode) {
+
         case "periodlist":
-            data = reports.periodList(req, res);
+
+            data = reports.periodList(req, res, function name(repData) {
+                //console.log("server app.js/reports/periodlist: repData = " + repData);
+                res.end(repData);
+                return;
+
+            });
             break;
 
         default:
             break;
     }
-    
-    res.end(data);
+
     return;
+
 });
 
 // custom 404 page
