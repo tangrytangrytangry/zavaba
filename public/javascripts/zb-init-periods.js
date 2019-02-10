@@ -14,6 +14,23 @@ function zbPeriodList() {
 
     function cb(periodsData) {
         console.log("sendGetRequestToServerAsync: periods = " + periodsData);
+
+        let li;
+
+        var parDataObj = JSON.parse(periodsData);
+
+        var divPeriodList = $("#div_period_list");
+        divPeriodList.empty();
+
+        var ulPeriodList = divPeriodList.append("<ul></ul>").addClass("list-group");
+        for (let index = 0; index < parDataObj.length; index++) {
+
+            li = ulPeriodList.append("<li>" +
+                "Item # " + index.toString() + "</li>");
+            li.addClass("list-group-item");
+
+
+        }
     }
 
     return;
