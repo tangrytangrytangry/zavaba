@@ -1,23 +1,24 @@
-// Load all periods from server to screen
-function zbPeriodList() {
+// Load last events from server to screen
+function zbLastEventList() {
 
     var runReportParam = "";
 
-    var periods = "";
-    // periods = sendGetRequestToServerSync('periodlist');
-    // console.log("sendGetRequestToServerSync: periods = " + periods);
+    var events = "";
 
-    var runReportParam = '?report=' + 'periodlist' +
+    var runReportParam = '?report=' + 'eventlist' +
+        '&deepListMonths=' + globalEventHistoryMonthsDeep.toString() +
         '&salt=' + Math.random().toString(36).substr(2, 5);
 
-    periods = sendGetRequestToServerAsync('reports', runReportParam, cb);
+    events = sendGetRequestToServerAsync('reports', runReportParam, cbListAll);
 
-    function cb(periodsData) {
-        //console.log("sendGetRequestToServerAsync: periodsData = " + periodsData);
+    function cbListAll(eventsData) {
+        console.log("sendGetRequestToServerAsync: eventsData = " + eventsData);
+
+        return;
 
         let li;
 
-        var parDataObj = JSON.parse(periodsData);
+        var parDataObj = JSON.parse(eventsData);
 
         var divPeriodList = $("#div_period_list");
         divPeriodList.empty();

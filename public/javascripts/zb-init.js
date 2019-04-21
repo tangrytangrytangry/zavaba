@@ -13,6 +13,9 @@ jQuery(function () {
     // Load all periods from server to screen
     zbPeriodList();
 
+    // Load last events from server to screen
+    zbLastEventList();
+
     // Init login controller
     var lc = new zbLoginController();
 
