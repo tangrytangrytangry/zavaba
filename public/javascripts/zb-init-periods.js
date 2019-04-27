@@ -10,9 +10,9 @@ function zbPeriodList() {
     var runReportParam = '?report=' + 'periodlist' +
         '&salt=' + Math.random().toString(36).substr(2, 5);
 
-    periods = sendGetRequestToServerAsync('reports', runReportParam, cb);
+    periods = sendGetRequestToServerAsync('reports', runReportParam, cbPeriodList);
 
-    function cb(periodsData) {
+    function cbPeriodList(periodsData) {
         //console.log("sendGetRequestToServerAsync: periodsData = " + periodsData);
 
         let li;
@@ -26,7 +26,7 @@ function zbPeriodList() {
         for (let index = 0; index < parDataObj.length; index++) {
 
             li = ulPeriodList.append("<li>" +
-                "Item # " + index.toString() +
+                "Period # " + index.toString() +
                 "  " +
                 parDataObj[index]._id.year +
                 "  " +

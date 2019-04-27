@@ -2,45 +2,73 @@
 function zbLastEventList() {
 
     var runReportParam = "";
-
     var events = "";
+    var event = "";
+    var ulEventList = "";
+    var li = "";
 
-    var runReportParam = '?report=' + 'eventlist' +
+    runReportParam = '?report=' + 'eventlist' +
         '&deepListMonths=' + globalEventHistoryMonthsDeep.toString() +
         '&salt=' + Math.random().toString(36).substr(2, 5);
 
     events = sendGetRequestToServerAsync('reports', runReportParam, cbListAll);
 
     function cbListAll(eventsData) {
-        console.log("sendGetRequestToServerAsync: eventsData = " + eventsData);
+        //console.log("sendGetRequestToServerAsync: eventsData = " + eventsData);
 
-        return;
+        var parEventsData = JSON.parse(eventsData);
 
-        let li;
+        var divEventList = $("#div_event_list");
+        divEventList.empty();
 
-        var parDataObj = JSON.parse(eventsData);
+        ulEventList = divEventList.append("<ul></ul>").addClass("list-group");
+        for (let index = 0; index < parEventsData.length; index++) {
 
-        var divPeriodList = $("#div_period_list");
-        divPeriodList.empty();
-
-        var ulPeriodList = divPeriodList.append("<ul></ul>").addClass("list-group");
-        for (let index = 0; index < parDataObj.length; index++) {
-
-            li = ulPeriodList.append("<li>" +
-                "Item # " + index.toString() +
+            li = ulEventList.append("<li>" +
+                "Event # " + index.toString() +
                 "  " +
-                parDataObj[index]._id.year +
+                parEventsData[index].date +
                 "  " +
-                parDataObj[index]._id.month +
-                "  " +
-                parDataObj[index].count +
+                parEventsData[index].item +
                 "</li>");
             li.addClass("list-group-item");
 
+            let eventDate = parEventsData[index].date.toString();
+            let eventNumber = parEventsData[index].item.toString();
+
+            runReportParam = '?report=' + 'oneevent' +
+                '&eventDate=' + eventDate +
+                '&eventNumber=' + eventNumber +
+                '&salt=' + Math.random().toString(36).substr(2, 5);
+
+            event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEvent);
+
+            function cbOneEvent(oneEventData) {
+                //console.log("sendGetRequestToServerAsync: oneEventData = " + oneEventData);
+
+                objEventData = JSON.parse(oneEventData);
+
+                li = ulEventList.append("<li>" +
+                    "Picture: " + index.toString() +
+                    "  " +
+                    objEventData[0].date +
+                    "  " +
+                    objEventData[0].item +
+                    "  " +
+                    objEventData[0].data.picture.name +
+                    "</li>");
+                li.addClass("list-group-item");
+
+                return null;
+
+            }
 
         }
+
+        return null;
+
     }
 
-    return;
+    return null;
 
 }
