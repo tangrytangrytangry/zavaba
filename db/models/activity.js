@@ -1,5 +1,12 @@
 var mongoose = require('mongoose');
 
+var fs = require('fs');
+var url = require('url');
+var path = require('path');
+
+var ROOT = __dirname + "/../../public";
+var FILEROORDIR = ROOT + "/images";
+
 const Description = require('./description');
 
 var activitySchema = mongoose.Schema({
@@ -101,6 +108,11 @@ activitySchema.static('crtNewActivity',
 
             newActivity.save(function (err, newActivity) {
                 if (err) return console.error(err);
+
+                // Save files to local file system
+                saveFileToLocal(itemDate, newItem, pict_Name, pict_Body);
+                saveFileToLocal(itemDate, newItem, attach_Name, attach_Body);
+
             });
 
         }; // savNewActivity()
@@ -122,7 +134,7 @@ activitySchema.static('updActivity',
             searchDate = date;
         }
 
-        if (searchDate <= 0) {
+        if (searchDate <= 0) { // Update today's activity
             let today = new Date();
             searchDate = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
         }
@@ -131,7 +143,7 @@ activitySchema.static('updActivity',
             updItem = item;
         }
 
-        if (updItem <= 0) {
+        if (updItem <= 0) { // Update last activity at date
 
             Activity.countDocuments({ date: searchDate }, function (err, docCount) {
                 if (err) return handleError(err);
@@ -206,6 +218,12 @@ activitySchema.static('updActivity',
 
             parActivity.save(function (err, parActivity) {
                 if (err) return console.error(err);
+
+                // Save files to local file system
+                saveFileToLocal(parActivity.date, parActivity.item,
+                    parActivity.data.picture.name, parActivity.data.picture.body);
+                saveFileToLocal(parActivity.date, parActivity.item,
+                    parActivity.data.attachment.name, parActivity.data.attachment.body);
             });
 
         }; // savActivity()
@@ -247,6 +265,42 @@ activitySchema.static('dltActivity',
     } // dltActivity()
 
 ); // activitySchema.static('dltActivity') 
+
+// Save file to local file system
+function saveFileToLocal(sfDate, sfItem, sfFileName, sfFileBody) {
+
+    let fileDir = "";
+    let fileNameFull = "";
+    let dirExists = "";
+
+    if (sfFileName === "" || sfFileBody === "" ||
+        sfFileName === undefined || sfFileBody === undefined) {
+        return "";
+    }
+
+    fileDir = path.join(FILEROORDIR, "/" + sfDate.toString() + "_" + sfItem.toString());
+    fileNameFull = path.join(fileDir, "/" + path.basename(sfFileName));
+
+    // Create directory /public/images/YYYYMMDD_nnn
+    try {
+        dirExists = fs.existsSync(fileDir);
+        if (!dirExists) {
+            fs.mkdirSync(fileDir);
+        }
+    } catch (error) {
+        return error;
+    }
+
+    // Save data to file in directory /public/images/YYYYMMDD_nnn/
+    try {
+        fs.writeFileSync(fileNameFull, sfFileBody);
+    } catch (error) {
+        return error;
+    }
+
+    return "";
+
+};
 
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;

@@ -31,19 +31,24 @@ router.get('/', function (req, res, next) {
     { langcode: 'EN', text: 'English description' }
   ];
 
+  //attachName = undefined;
+  //attachText = undefined;
+  //attachBody = undefined;
+
+  /*
   Activity.crtNewActivity(req.user.username, curDate, "ordinary",
     pictName, pictText, pictBody,
     attachName, attachText, attachBody,
     activityTexts);
-
-  /*
-  var updDate = 20181202;
-  var updItem = 1;
+*/
+  
+  var updDate = curDate;
+  var updItem = 15;
   Activity.updActivity(req.user.username, updDate, updItem, "ordinary",
     pictName, 'pictText', pictBody,
     attachName, 'attachText', attachBody,
     activityTexts);
-  */
+  
 
   /*
   var updDate = 20181201;
