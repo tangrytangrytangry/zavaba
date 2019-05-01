@@ -4,8 +4,8 @@ var fs = require('fs');
 var url = require('url');
 var path = require('path');
 
-var ROOT = __dirname + "/../../public";
-var FILEROORDIR = ROOT + "/images";
+var FULLROOT = __dirname + "/../../public";
+var FILEROORDIR = "/images";
 
 const Description = require('./description');
 
@@ -21,11 +21,13 @@ var activitySchema = mongoose.Schema({
         picture: {
             name: String,
             text: String,
+            lurl: String,
             body: Buffer
         },
         attachment: {
             name: String,
             text: String,
+            lurl: String,
             body: Buffer
         }
     },
@@ -80,6 +82,10 @@ activitySchema.static('crtNewActivity',
             let itemMonth = Math.trunc((itemDate - itemYear * 10000) / 100);
             let itemDay = Math.trunc(itemDate - (itemYear * 10000 + itemMonth * 100));
 
+            let fileFolder = path.join(FILEROORDIR, "/" + itemDate.toString() + "_" + newItem.toString());
+            let pict_URL = path.join(fileFolder, "/" + path.basename(pict_Name));
+            let attach_URL = path.join(fileFolder, "/" + path.basename(attach_Name));
+
             var newActivity = new Activity(
                 {
                     date: itemDate,
@@ -93,11 +99,13 @@ activitySchema.static('crtNewActivity',
                         picture: {
                             name: pict_Name,
                             text: pict_Text,
+                            lurl: pict_URL,
                             body: pict_Body
                         },
                         attachment: {
                             name: attach_Name,
                             text: attach_Text,
+                            lurl: attach_URL,
                             body: attach_Body
                         }
                     },
@@ -110,8 +118,8 @@ activitySchema.static('crtNewActivity',
                 if (err) return console.error(err);
 
                 // Save files to local file system
-                saveFileToLocal(itemDate, newItem, pict_Name, pict_Body);
-                saveFileToLocal(itemDate, newItem, attach_Name, attach_Body);
+                saveFileToLocal(itemDate, newItem, pict_Name, pict_Body, pict_URL);
+                saveFileToLocal(itemDate, newItem, attach_Name, attach_Body, attach_URL);
 
             });
 
@@ -219,11 +227,16 @@ activitySchema.static('updActivity',
             parActivity.save(function (err, parActivity) {
                 if (err) return console.error(err);
 
+
+                let fileFolder2 = path.join(FILEROORDIR, "/" + parActivity.date.toString() + "_" + parActivity.item.toString());
+                let pict_URL2 = path.join(fileFolder, "/" + path.basename(parActivity.data.picture.name));
+                let attach_URL2 = path.join(fileFolder, "/" + path.basename(parActivity.data.attachment.name));
+
                 // Save files to local file system
                 saveFileToLocal(parActivity.date, parActivity.item,
-                    parActivity.data.picture.name, parActivity.data.picture.body);
+                    parActivity.data.picture.name, parActivity.data.picture.body, pict_URL2);
                 saveFileToLocal(parActivity.date, parActivity.item,
-                    parActivity.data.attachment.name, parActivity.data.attachment.body);
+                    parActivity.data.attachment.name, parActivity.data.attachment.body, attach_URL2);
             });
 
         }; // savActivity()
@@ -267,7 +280,7 @@ activitySchema.static('dltActivity',
 ); // activitySchema.static('dltActivity') 
 
 // Save file to local file system
-function saveFileToLocal(sfDate, sfItem, sfFileName, sfFileBody) {
+function saveFileToLocal(sfDate, sfItem, sfFileName, sfFileBody, fileURL) {
 
     let fileDir = "";
     let fileNameFull = "";
@@ -278,8 +291,11 @@ function saveFileToLocal(sfDate, sfItem, sfFileName, sfFileBody) {
         return "";
     }
 
-    fileDir = path.join(FILEROORDIR, "/" + sfDate.toString() + "_" + sfItem.toString());
-    fileNameFull = path.join(fileDir, "/" + path.basename(sfFileName));
+    //var FULLROOT = __dirname + "/../../public";
+    //var FILEROORDIR = "/images";
+
+    fileDir = path.join(FULLROOT, FILEROORDIR + "/" + sfDate.toString() + "_" + sfItem.toString());
+    fileNameFull = path.join(FULLROOT, fileURL);
 
     // Create directory /public/images/YYYYMMDD_nnn
     try {
@@ -300,7 +316,7 @@ function saveFileToLocal(sfDate, sfItem, sfFileName, sfFileBody) {
 
     return "";
 
-};
+}; // saveFileToLocal()
 
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;

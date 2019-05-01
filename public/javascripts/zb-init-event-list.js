@@ -44,9 +44,19 @@ function zbLastEventList() {
             event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEvent);
 
             function cbOneEvent(oneEventData) {
-                //console.log("sendGetRequestToServerAsync: oneEventData = " + oneEventData);
 
-                objEventData = JSON.parse(oneEventData);
+                var objEventData = JSON.parse(oneEventData);
+                var pictureURL = window.location.origin + "/images/" +
+                    getFileBaseName(objEventData[0].data.picture.name);
+
+                console.log("sendGetRequestToServerAsync: oneEventData = " +
+                    objEventData[0].date +
+                    "  " +
+                    objEventData[0].item +
+                    "  " +
+                    objEventData[0].data.picture.name);
+
+                console.log("cbOneEvent: window.location.href = " + window.location.href);
 
                 li = ulEventList.append("<li>" +
                     "Picture: " + index.toString() +
@@ -56,14 +66,16 @@ function zbLastEventList() {
                     objEventData[0].item +
                     "  " +
                     objEventData[0].data.picture.name +
+                    "  " +
+                    pictureURL +
                     "</li>");
                 li.addClass("list-group-item");
 
                 return null;
 
-            }
+            } // function cbOneEvent(oneEventData)
 
-        }
+        } // for (let index = 0; index < parEventsData.length; index++)
 
         return null;
 

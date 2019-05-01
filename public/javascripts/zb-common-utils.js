@@ -29,3 +29,15 @@ function sendGetRequestToServerAsync(url, inpParm, callBack) {
 	}
 
 }  
+
+function getFileBaseName(path) {
+  let separator = '/'
+
+  const windowsSeparator = '\\'
+
+  if (path.includes(windowsSeparator)) {
+    separator = windowsSeparator
+  }
+
+  return path.slice(path.lastIndexOf(separator) + 1)
+}
