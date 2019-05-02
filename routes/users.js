@@ -44,22 +44,23 @@ router.get('/', function (req, res, next) {
 
   /*
       var updDate = curDate;
-      var updItem = 15;
+      var updItem = 1;
       Activity.updActivity(req.user.username, updDate, updItem, "ordinary",
         pictName, 'pictText', pictBody,
         attachName, 'attachText', attachBody,
         activityTexts);
   */
 
-  /*
+ 
+/*
   var updDate = 20181201;
   var updItem = 1;
   var langcode = 'EN';
   var descText = 'Preved ! ' + new Date();
   Description.updDescription(req.user.username, updDate, updItem, langcode,
     descText);
-*/
 
+*/
   /*
     var dltDate = 20181201;
     var dltItem = 3;

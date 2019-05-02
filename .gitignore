@@ -129,3 +129,6 @@ typings/
 credentials*
 
 curl.exe
+
+# Pictures
+public/images/20*

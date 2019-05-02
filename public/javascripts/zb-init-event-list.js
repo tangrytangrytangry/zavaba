@@ -36,27 +36,32 @@ function zbLastEventList() {
             let eventDate = parEventsData[index].date.toString();
             let eventNumber = parEventsData[index].item.toString();
 
+            // One event data
             runReportParam = '?report=' + 'oneevent' +
                 '&eventDate=' + eventDate +
                 '&eventNumber=' + eventNumber +
                 '&salt=' + Math.random().toString(36).substr(2, 5);
-
             event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEvent);
+
+            // One event texts
+            runReportParam = '?report=' + 'oneeventdesc' +
+                '&eventDate=' + eventDate +
+                '&eventNumber=' + eventNumber +
+                '&salt=' + Math.random().toString(36).substr(2, 5);
+            event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventDesc);
+
+            function cbOneEventDesc(oneEventTexts) {
+                //console.log("cbOneEventDesc: oneEventTexts = " + oneEventTexts);
+
+                return null;
+            }
 
             function cbOneEvent(oneEventData) {
 
+                //console.log("cbOneEvent: oneEventData = " + oneEventData);
                 var objEventData = JSON.parse(oneEventData);
-                var pictureURL = window.location.origin + "/images/" +
-                    getFileBaseName(objEventData[0].data.picture.name);
-
-                console.log("sendGetRequestToServerAsync: oneEventData = " +
-                    objEventData[0].date +
-                    "  " +
-                    objEventData[0].item +
-                    "  " +
-                    objEventData[0].data.picture.name);
-
-                console.log("cbOneEvent: window.location.href = " + window.location.href);
+                //console.log("cbOneEvent: objEventData = " + objEventData);
+                var pictureURL = window.location.origin + objEventData[0].data.picture.lurl;
 
                 li = ulEventList.append("<li>" +
                     "Picture: " + index.toString() +

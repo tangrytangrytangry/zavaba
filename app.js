@@ -340,6 +340,16 @@ app.get('/reports', function (req, res) {
             });
             break;
 
+            case "oneeventdesc":
+
+            data = reports.oneEventDesc(req, res, function name(repData) {
+                //console.log("server app.js/reports/oneeventdesc: repData = " + repData);
+                res.end(repData);
+                return;
+
+            });
+            break;
+
         default:
             break;
     }

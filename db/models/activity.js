@@ -229,8 +229,8 @@ activitySchema.static('updActivity',
 
 
                 let fileFolder2 = path.join(FILEROORDIR, "/" + parActivity.date.toString() + "_" + parActivity.item.toString());
-                let pict_URL2 = path.join(fileFolder, "/" + path.basename(parActivity.data.picture.name));
-                let attach_URL2 = path.join(fileFolder, "/" + path.basename(parActivity.data.attachment.name));
+                let pict_URL2 = path.join(fileFolder2, "/" + path.basename(parActivity.data.picture.name));
+                let attach_URL2 = path.join(fileFolder2, "/" + path.basename(parActivity.data.attachment.name));
 
                 // Save files to local file system
                 saveFileToLocal(parActivity.date, parActivity.item,
@@ -290,9 +290,6 @@ function saveFileToLocal(sfDate, sfItem, sfFileName, sfFileBody, fileURL) {
         sfFileName === undefined || sfFileBody === undefined) {
         return "";
     }
-
-    //var FULLROOT = __dirname + "/../../public";
-    //var FILEROORDIR = "/images";
 
     fileDir = path.join(FULLROOT, FILEROORDIR + "/" + sfDate.toString() + "_" + sfItem.toString());
     fileNameFull = path.join(FULLROOT, fileURL);
