@@ -16,25 +16,29 @@ function zbLastEventList() {
     function cbListAll(eventsData) {
         //console.log("sendGetRequestToServerAsync: eventsData = " + eventsData);
 
-        var parEventsData = JSON.parse(eventsData);
+        var paramEventsData = JSON.parse(eventsData);
 
         var divEventList = $("#div_event_list");
         divEventList.empty();
 
         ulEventList = divEventList.append("<ul></ul>").addClass("list-group");
-        for (let index = 0; index < parEventsData.length; index++) {
+
+        // Show event data
+        for (let index = 0; index < paramEventsData.length; index++) {
+
+            let eventDate = paramEventsData[index].date.toString();
+            let eventNumber = paramEventsData[index].item.toString();
 
             li = ulEventList.append("<li>" +
                 "Event # " + index.toString() +
                 "  " +
-                parEventsData[index].date +
+                paramEventsData[index].date +
                 "  " +
-                parEventsData[index].item +
+                paramEventsData[index].item +
                 "</li>");
             li.addClass("list-group-item");
-
-            let eventDate = parEventsData[index].date.toString();
-            let eventNumber = parEventsData[index].item.toString();
+            $("#div_event_list :last-child")
+                .attr("id", getEventId(paramEventsData[index].date, paramEventsData[index].item));
 
             // One event data
             runReportParam = '?report=' + 'oneevent' +
@@ -54,7 +58,7 @@ function zbLastEventList() {
                 //console.log("cbOneEventDesc: oneEventTexts = " + oneEventTexts);
 
                 return null;
-            }
+            } // cbOneEventDesc()
 
             function cbOneEvent(oneEventData) {
 
@@ -76,16 +80,30 @@ function zbLastEventList() {
                     "</li>");
                 li.addClass("list-group-item");
 
+                // Show event picture
+                let currId = getEventId(objEventData[0].date, objEventData[0].item);
+                let currEvent = $("#" + currId);
+                currEvent.append("<img></img>");
+                $("#" + currId + " :last-child")
+                    .attr({
+                        src: pictureURL,
+                        alt: objEventData[0].data.picture.text
+                    });
+
                 return null;
 
-            } // function cbOneEvent(oneEventData)
+            } // function cbOneEvent()
 
-        } // for (let index = 0; index < parEventsData.length; index++)
+        } // for (let index = 0; index < paramEventsData.length; index++)
 
         return null;
 
-    }
+    } // cbListAll()
+
+    function getEventId(evDate, evItem) {
+        return "home_event_" + evDate.toString() + "_" + evItem.toString();
+    } // getEventId()
 
     return null;
 
-}
+} // zbLastEventList()
