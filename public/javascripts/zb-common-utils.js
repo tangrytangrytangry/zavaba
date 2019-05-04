@@ -28,7 +28,7 @@ function sendGetRequestToServerAsync(url, inpParm, callBack) {
 		callBack(this.responseText);
 	}
 
-}  
+} // sendGetRequestToServerAsync()  
 
 function getFileBaseName(path) {
   let separator = '/'
@@ -40,4 +40,19 @@ function getFileBaseName(path) {
   }
 
   return path.slice(path.lastIndexOf(separator) + 1)
-}
+} // getFileBaseName()
+
+// For home screen
+function getListEventId(evDate, evItem) {
+	return "home_list_event_" + evDate.toString() + "_" + evItem.toString();
+} // getListEventId()
+
+// For home screen
+function getSideEventId(evDate, evItem) {
+	return "home_side_event_" + evDate.toString() + "_" + evItem.toString();
+} // getSideEventId()
+
+// For home screen
+function getSidePeriodId(perYear, perMonth) {
+	return "home_side_period_" + perYear.toString() + "_" + perMonth.toString();
+} // getSidePeriodId()
