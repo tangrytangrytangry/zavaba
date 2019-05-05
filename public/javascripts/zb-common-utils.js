@@ -42,6 +42,21 @@ function getFileBaseName(path) {
   return path.slice(path.lastIndexOf(separator) + 1)
 } // getFileBaseName()
 
+// Create HTTP element
+function crtHTTPElem(tag, main, cls, name, disp, txt) {
+	var el = document.createElement(tag);
+	if (tag == 'ul') {el.type = 'none';}
+	main.appendChild(el);
+	if (cls) {el.className = cls;}
+	if (name) {
+		el.name = name;
+		el.id = name;
+	}
+	if (disp) {el.style.display = 'none';}
+	if (txt) {el.innerHTML = txt;}
+	return el;
+} // crtHTTPElem()
+
 // For home screen
 function getListEventId(evDate, evItem) {
 	return "home_list_event_" + evDate.toString() + "_" + evItem.toString();

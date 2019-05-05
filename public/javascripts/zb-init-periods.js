@@ -16,6 +16,7 @@ function zbPeriodList() {
         //console.log("sendGetRequestToServerAsync: periodsData = " + periodsData);
 
         let li;
+        let liCurrPeriodListId;
 
         var parDataObj = JSON.parse(periodsData);
 
@@ -27,36 +28,27 @@ function zbPeriodList() {
 
         for (let index = 0; index < parDataObj.length; index++) {
 
-            li = ulPeriodList.append("<li>" +
-                "Period # " + index.toString() +
-                "  " +
-                parDataObj[index]._id.year +
-                "  " +
-                parDataObj[index]._id.month +
-                "  " +
-                parDataObj[index].count +
-                "</li>");
+            liCurrPeriodListId = getSidePeriodId(parDataObj[index]._id.year, parDataObj[index]._id.month);
+
+            li = $("#" + idDivPeriodList + " :last-child").
+                append("<li>" +
+                    "Period # " + index.toString() +
+                    "  " +
+                    parDataObj[index]._id.year +
+                    "  " +
+                    parDataObj[index]._id.month +
+                    "  " +
+                    parDataObj[index].count +
+                    "</li>");
             li.addClass("list-group-item");
+
             $("#" + idDivPeriodList + " :last-child")
-                .attr("id", getSidePeriodId(parDataObj[index]._id.year,
-                    parDataObj[index]._id.month));
-            //$("#" + getSidePeriodId(
-            //    parDataObj[index]._id.year,
-            //    parDataObj[index]._id.month)).
-            //    append("<ul></ul>").addClass("list-group");
+                .attr("id", liCurrPeriodListId);
+
+            let liCurrPeriodList = document.getElementById(liCurrPeriodListId);
+            let currUl = crtHTTPElem('ul', liCurrPeriodList, '', '', '', '');
 
         } // for (let index = 0; index < parDataObj.length; index++)
-
-
-        for (let idx = 0; idx < parDataObj.length; idx++) {
-
-            $("#" + getSidePeriodId(
-                parDataObj[idx]._id.year,
-                parDataObj[idx]._id.month) 
-                ).
-                append("<ul></ul>").addClass("list-group");
-
-        } // for (let idx = 0; idx < parDataObj.length; idx++)
 
     } // cbPeriodList(periodsData) 
 
