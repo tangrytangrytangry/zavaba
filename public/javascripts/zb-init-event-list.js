@@ -6,23 +6,30 @@ function zbLastEventList() {
     var event = "";
     var ulEventList = "";
     var li = "";
+    var elText = "";
+    var elID = "";
+
+    var divEventList, currUl;
 
     runReportParam = '?report=' + 'eventlist' +
         '&deepListMonths=' + globalEventHistoryMonthsDeep.toString() +
         '&salt=' + Math.random().toString(36).substr(2, 5);
 
-    events = sendGetRequestToServerAsync('reports', runReportParam, cbListAll);
+    events = sendGetRequestToServerAsync('reports', runReportParam, cbListAllEvents);
 
-    function cbListAll(eventsData) {
+    function cbListAllEvents(eventsData) {
         //console.log("sendGetRequestToServerAsync: eventsData = " + eventsData);
 
         var paramEventsData = JSON.parse(eventsData);
 
         var idDivEventList = "div_event_list";
-        var divEventList = $("#" + idDivEventList);
+        divEventList = $("#" + idDivEventList);
         divEventList.empty();
 
-        ulEventList = divEventList.append("<ul></ul>").addClass("list-group");
+        //ulEventList = divEventList.append("<ul></ul>").addClass("list-group");
+
+        divEventList = document.getElementById(idDivEventList);
+        currUl = crtHTTPElem('ul', divEventList, "list-group", '', '', '');
 
         // Show event data
         for (let index = 0; index < paramEventsData.length; index++) {
@@ -30,28 +37,39 @@ function zbLastEventList() {
             let eventDate = paramEventsData[index].date.toString();
             let eventNumber = paramEventsData[index].item.toString();
 
-            li = ulEventList.append("<li>" +
-                "Event # " + index.toString() +
+            /*  li = ulEventList.append("<li>" +
+                     "Event # " + index.toString() +
+                     "  " +
+                     paramEventsData[index].date +
+                     "  " +
+                     paramEventsData[index].item +
+                     "</li>");
+                     li.addClass("list-group-item");
+                     $("#" + idDivEventList + " :last-child")
+                     .attr("id", getListEventId(paramEventsData[index].date,
+                     paramEventsData[index].item));
+            */
+
+            elText = "Event # " + index.toString() +
                 "  " +
                 paramEventsData[index].date +
                 "  " +
-                paramEventsData[index].item +
-                "</li>");
-            li.addClass("list-group-item");
-            $("#" + idDivEventList + " :last-child")
-                .attr("id", getListEventId(paramEventsData[index].date,
-                    paramEventsData[index].item));
+                paramEventsData[index].item;
+            elID = getListEventId(paramEventsData[index].date,
+                paramEventsData[index].item);
+
+            li = crtHTTPElem('li', currUl, "list-group-item", '', '', elText, elID);
 
             // Add event to the period side bar        
-            addEventToSideBar(paramEventsData[index].date,
-                paramEventsData[index].item);
+            //addEventToSideBar(paramEventsData[index].date,
+            //    paramEventsData[index].item);
 
             // One event data
             runReportParam = '?report=' + 'oneevent' +
                 '&eventDate=' + eventDate +
                 '&eventNumber=' + eventNumber +
                 '&salt=' + Math.random().toString(36).substr(2, 5);
-            event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEvent);
+            event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventData);
 
             // One event texts
             runReportParam = '?report=' + 'oneeventdesc' +
@@ -66,14 +84,19 @@ function zbLastEventList() {
                 return null;
             } // cbOneEventDesc()
 
-            function cbOneEvent(oneEventData) {
+            function cbOneEventData(oneEventData) {
 
                 //console.log("cbOneEvent: oneEventData = " + oneEventData);
-                var objEventData = JSON.parse(oneEventData);
+                let objEventData = JSON.parse(oneEventData);
                 //console.log("cbOneEvent: objEventData = " + objEventData);
-                var pictureURL = window.location.origin + objEventData[0].data.picture.lurl;
+                let pictureURL = window.location.origin + objEventData[0].data.picture.lurl;
 
-                li = ulEventList.append("<li>" +
+                let currEventId = getListEventId(objEventData[0].date, objEventData[0].item);
+                let currEvent = $("#" + currEventId);
+
+                let currLi = document.getElementById(currEventId);
+
+                /*li = ulEventList.append("<li>" +
                     "Picture: " + index.toString() +
                     "  " +
                     objEventData[0].date +
@@ -85,10 +108,9 @@ function zbLastEventList() {
                     pictureURL +
                     "</li>");
                 li.addClass("list-group-item");
+*/
 
                 // Show event picture
-                let currEventId = getListEventId(objEventData[0].date, objEventData[0].item);
-                let currEvent = $("#" + currEventId);
                 currEvent.append("<img></img>");
                 $("#" + currEventId + " :last-child")
                     .attr({
@@ -98,13 +120,13 @@ function zbLastEventList() {
 
                 return null;
 
-            } // function cbOneEvent()
+            } // function cbOneEventData()
 
         } // for (let index = 0; index < paramEventsData.length; index++)
 
         return null;
 
-    } // cbListAll()
+    } // cbListAllEvents()
 
     // Add event to the period side bar        
     function addEventToSideBar(evDate, evItem) {

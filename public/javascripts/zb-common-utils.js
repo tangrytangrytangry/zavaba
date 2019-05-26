@@ -43,7 +43,7 @@ function getFileBaseName(path) {
 } // getFileBaseName()
 
 // Create HTTP element
-function crtHTTPElem(tag, main, cls, name, disp, txt) {
+function crtHTTPElem(tag, main, cls, name, disp, txt, id) {
 	var el = document.createElement(tag);
 	if (tag == 'ul') {el.type = 'none';}
 	main.appendChild(el);
@@ -54,6 +54,7 @@ function crtHTTPElem(tag, main, cls, name, disp, txt) {
 	}
 	if (disp) {el.style.display = 'none';}
 	if (txt) {el.innerHTML = txt;}
+	if (id) {el.id = id;}
 	return el;
 } // crtHTTPElem()
 
