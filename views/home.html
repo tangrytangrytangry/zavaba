@@ -3,89 +3,38 @@
 
 <br>
 
-<!-- Breadcrumbs BEGIN -->
-
-<!--
-<ol class="breadcrumb">
-        <li class="breadcrumb-item active">Home</li>
-</ol>
-<ol class="breadcrumb">
-        <li class="breadcrumb-item">
-                <a href="#">Home</a>
-        </li>
-        <li class="breadcrumb-item active">Library</li>
-</ol>
-<ol class="breadcrumb">
-        <li class="breadcrumb-item">
-                <a href="#">Home</a>
-        </li>
-        <li class="breadcrumb-item">
-                <a href="#">Library</a>
-        </li>
-        <li class="breadcrumb-item active">Data</li>
-</ol>
-
-<br>
--->
-<!-- Breadcrumbs END -->
-
 <br>
 
-<!-- SIDEBAR BEGIN -->
+<!-- ALL EVENTS BEGIN -->
 
 <div class="container-fluid text-center">
         <div class="row content">
+
+                <!-- SIDEBAR BEGIN -->
                 <div class="col-sm-2 sidenav">
 
-                        <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button"
-                                        data-toggle="dropdown">Dropdown
-                                        Example
-                                        <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                        <li><a href="#">2019</a></li>
-                                        <li><a href="#">2018</a></li>
-                                        <li><a href="#">2017</a></li>
-                                </ul>
-                        </div>
-
                         <div id="div_period_list" class="container">
-                                <h2>List Group With Badges</h2>
-                                <ul class="list-group">
-                                        <li class="list-group-item">New <span class="badge">12</span></li>
-                                        <li class="list-group-item">Deleted <span class="badge">5</span></li>
-                                        <li class="list-group-item">Warnings <span class="badge">3</span></li>
-                                        <a href="#" class="list-group-item">First item</a>
-                                        <a href="#" class="list-group-item">Second item</a>
-                                        <a href="#" class="list-group-item">Third item</a>
-                                        <a href="#" class="list-group-item active">First item</a>
-                                        <a href="#" class="list-group-item">Second item</a>
-                                        <a href="#" class="list-group-item">Third item</a>
-                                        <li class="list-group-item list-group-item-success">First item</li>
-                                        <li class="list-group-item list-group-item-info">Second item</li>
-                                        <li class="list-group-item list-group-item-warning">Third item</li>
-                                        <li class="list-group-item list-group-item-danger">Fourth item</li>
+                                <ul id="ul_period_list" class="list-group">
                                 </ul>
-                                <div class="list-group">
-                                        <a href="#" class="list-group-item">First item</a>
-                                        <a href="#" class="list-group-item">Second item</a>
-                                        <a href="#" class="list-group-item">Third item</a>
-                                </div>
-
                         </div>
-
-                        <p>
-                                <a href="#">Link</a>
-                        </p>
                 </div>
+                <!-- SIDEBAR END -->
+
+                <!-- EVENT LIST BEGIN -->
                 <div class="col-sm-8 text-left">
                         <h1>Welcome</h1>
                         <p>Lorem ipsum dolor sit ... </p>
                         <hr>
                         <h3>Test</h3>
                         <div id="div_event_list" class="container">
+                                <ul id="ul_event_list" class="list-group">
+                                </ul>
+
                         </div>
                 </div>
+                <!-- EVENT LIST END -->
+
+                <!-- ADVERTISING LIST BEGIN -->
                 <div class="col-sm-2 sidenav">
                         <div class="well">
                                 <p>ADS</p>
@@ -94,53 +43,33 @@
                                 <p>ADS</p>
                         </div>
                 </div>
+                <!-- ADVERTISING LIST END -->
+
         </div>
 </div>
 
+<!-- ALL EVENTS END -->
 
-<!-- SIDEBAR END -->
+<br>
 
-<!-- BUTTONBAR BEGIN -->
-
-<!--
-<div class="btn-group-vertical" data-toggle="buttons">
-        <button type="button" class="btn btn-primary">Button</button>
-        <button type="button" class="btn btn-primary">Button</button>
-        <button type="button" class="btn btn-primary">Button</button>
-        <button type="button" class="btn btn-primary">Button</button>
-        <button type="button" class="btn btn-primary">Button</button>
-        <button type="button" class="btn btn-primary">Button</button>
+<!-- PAGINATION BEGIN -->
+<div class="container">
+        <h2>Pagination - Active State</h2>
+        <p>Add class .active to let the user know which page he/she is on:</p>
+        <ul id="ul_ev_list_pagination" class="pagination justify-content-center" style="margin:20px 0">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
 </div>
--->
+<!-- PAGINATION END -->
 
 <br>
 
 <!-- BUTTONBAR END -->
 
-<!--
-<br>
-<ul class="nav nav-pills flex-column">
-        <li class="nav-item">
-                <a class="nav-link active" href="#">Active</a>
-        </li>
-        <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
-                </div>
-        </li>
-        <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-</ul>
--->
 
 <p>end views/home.html</p>
 

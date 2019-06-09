@@ -1,5 +1,5 @@
 // Load last events from server to screen
-function zbLastEventList() {
+function zbLastEventList(mode = 'INIT') {
 
     var runReportParam = "";
     var events = "";
@@ -9,7 +9,10 @@ function zbLastEventList() {
     var elText = "";
     var elID = "";
 
-    var divEventList, currUl;
+    var divEventList, $divEventList, idDivEventList;
+    var ulEventList, $divEventList, $ulEventList, ulEventList;
+    var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
+    var liPagination, $liPagination, idLiPagination;
 
     runReportParam = '?report=' + 'eventlist' +
         '&deepListMonths=' + globalEventHistoryMonthsDeep.toString() +
@@ -22,47 +25,70 @@ function zbLastEventList() {
 
         var paramEventsData = JSON.parse(eventsData);
 
-        var idDivEventList = "div_event_list";
-        divEventList = $("#" + idDivEventList);
-        divEventList.empty();
+        var currentPageNumber = 1, currentEventNumberOnPage = 0;
 
-        //ulEventList = divEventList.append("<ul></ul>").addClass("list-group");
+        idDivEventList = "div_event_list";
+        idUlEventList = "ul_event_list";
+        idUlEvListPagination = "ul_ev_list_pagination";
+
+        $divEventList = $("#" + idDivEventList);
+        if (mode === 'INIT') {
+            $divEventList.data({
+                currentScreenPage: 1
+            });
+        }
+        var currentScreenPage = $divEventList.data().currentScreenPage;
+
+        $ulEventList = $("#" + idUlEventList);
+        $ulEventList.empty();
+
+        $ulEvListPagination = $("#" + idUlEvListPagination);
+        //$ulEvListPagination.empty();
 
         divEventList = document.getElementById(idDivEventList);
-        currUl = crtHTTPElem('ul', divEventList, "list-group", '', '', '');
+        ulEventList = document.getElementById(idUlEventList);
+        ulEvListPagination = document.getElementById(idUlEvListPagination);
+
+        elID = currentScreenPage.toString();
+        elText = '<a class="page-link" href="#">Previous</a>';
+        liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
 
         // Show event data
         for (let index = 0; index < paramEventsData.length; index++) {
 
+            currentEventNumberOnPage = currentEventNumberOnPage + 1;
+
+            if (currentEventNumberOnPage > globalNumberEventsOnPage) {
+                currentEventNumberOnPage = 1;
+                currentPageNumber = currentPageNumber + 1;
+            }
+
             let eventDate = paramEventsData[index].date.toString();
             let eventNumber = paramEventsData[index].item.toString();
-
-            /*  li = ulEventList.append("<li>" +
-                     "Event # " + index.toString() +
-                     "  " +
-                     paramEventsData[index].date +
-                     "  " +
-                     paramEventsData[index].item +
-                     "</li>");
-                     li.addClass("list-group-item");
-                     $("#" + idDivEventList + " :last-child")
-                     .attr("id", getListEventId(paramEventsData[index].date,
-                     paramEventsData[index].item));
-            */
+            let eventActive = paramEventsData[index].active;
 
             elText = "Event # " + index.toString() +
                 "  " +
                 paramEventsData[index].date +
                 "  " +
-                paramEventsData[index].item;
+                paramEventsData[index].item +
+                "  " +
+                eventActive +
+                "  page=" +
+                currentPageNumber;
             elID = getListEventId(paramEventsData[index].date,
                 paramEventsData[index].item);
 
-            li = crtHTTPElem('li', currUl, "list-group-item", '', '', elText, elID);
+            li = crtHTTPElem('li', ulEventList, "list-group-item", '', '', elText, elID);
+            $("#" + elID).data({ pagenumber: currentPageNumber });
 
-            // Add event to the period side bar        
-            //addEventToSideBar(paramEventsData[index].date,
-            //    paramEventsData[index].item);
+            if (currentScreenPage != currentPageNumber) {
+                li.style.display = "none";
+                continue;
+            }
+            else {
+                li.style.display = "block";
+            }
 
             // One event data
             runReportParam = '?report=' + 'oneevent' +
@@ -95,20 +121,6 @@ function zbLastEventList() {
                 let currEvent = $("#" + currEventId);
 
                 let currLi = document.getElementById(currEventId);
-
-                /*li = ulEventList.append("<li>" +
-                    "Picture: " + index.toString() +
-                    "  " +
-                    objEventData[0].date +
-                    "  " +
-                    objEventData[0].item +
-                    "  " +
-                    objEventData[0].data.picture.name +
-                    "  " +
-                    pictureURL +
-                    "</li>");
-                li.addClass("list-group-item");
-*/
 
                 // Show event picture
                 currEvent.append("<img></img>");

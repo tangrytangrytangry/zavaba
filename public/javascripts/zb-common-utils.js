@@ -1,24 +1,24 @@
 
 //Send GET-request to the server synchronously
 function sendGetRequestToServerSync(url, inpParm) {
-    var xhr = new XMLHttpRequest();
-    url = encodeURIComponent(url);
-    inpParm = (inpParm) ? '/' + inpParm : '';
-    xhr.open('GET', url + inpParm, false);
-    xhr.send();
-    return xhr.responseText;
-}  
+	var xhr = new XMLHttpRequest();
+	url = encodeURIComponent(url);
+	inpParm = (inpParm) ? '/' + inpParm : '';
+	xhr.open('GET', url + inpParm, false);
+	xhr.send();
+	return xhr.responseText;
+}
 
 //Send GET-request to the server asynchronously
 function sendGetRequestToServerAsync(url, inpParm, callBack) {
 	var xhr = new XMLHttpRequest();
 	url = encodeURIComponent(url);
-	
+
 	inpParm = (inpParm) ? '/' + inpParm : '/';
 	xhr.open('GET', url + inpParm, true);
 	xhr.send();
 
-	xhr.onreadystatechange = function() {
+	xhr.onreadystatechange = function () {
 		if (this.readyState != 4) return;
 		if (this.status != 200) {
 			// Process error
@@ -31,30 +31,27 @@ function sendGetRequestToServerAsync(url, inpParm, callBack) {
 } // sendGetRequestToServerAsync()  
 
 function getFileBaseName(path) {
-  let separator = '/'
+	let separator = '/'
 
-  const windowsSeparator = '\\'
+	const windowsSeparator = '\\'
 
-  if (path.includes(windowsSeparator)) {
-    separator = windowsSeparator
-  }
+	if (path.includes(windowsSeparator)) {
+		separator = windowsSeparator
+	}
 
-  return path.slice(path.lastIndexOf(separator) + 1)
+	return path.slice(path.lastIndexOf(separator) + 1)
 } // getFileBaseName()
 
 // Create HTTP element
 function crtHTTPElem(tag, main, cls, name, disp, txt, id) {
 	var el = document.createElement(tag);
-	if (tag == 'ul') {el.type = 'none';}
+	if (tag == 'ul') { el.type = 'none'; }
 	main.appendChild(el);
-	if (cls) {el.className = cls;}
-	if (name) {
-		el.name = name;
-		el.id = name;
-	}
-	if (disp) {el.style.display = 'none';}
-	if (txt) {el.innerHTML = txt;}
-	if (id) {el.id = id;}
+	if (cls) { el.className = cls; }
+	if (name) { el.name = name; }
+	if (disp) { el.style.display = 'none'; }
+	if (txt) { el.innerHTML = txt; }
+	if (id) { el.id = id; }
 	return el;
 } // crtHTTPElem()
 

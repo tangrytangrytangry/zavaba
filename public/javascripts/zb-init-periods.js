@@ -1,5 +1,5 @@
 // Load all periods from server to screen
-function zbPeriodList() {
+function zbPeriodList(mode='INIT') {
 
     var runReportParam = "";
 
@@ -15,38 +15,35 @@ function zbPeriodList() {
     function cbPeriodList(periodsData) {
         //console.log("sendGetRequestToServerAsync: periodsData = " + periodsData);
 
-        let li;
+        let li, elText = "";;
         let liCurrPeriodListId;
 
         var parDataObj = JSON.parse(periodsData);
 
         var idDivPeriodList = "div_period_list";
-        var divPeriodList = $("#" + idDivPeriodList);
-        divPeriodList.empty();
+        var idUlPeriodList = "ul_period_list";
 
-        var ulPeriodList = divPeriodList.append("<ul></ul>").addClass("list-group");
+        var $divPeriodList = $("#" + idDivPeriodList);
+        var $ulPeriodList = $("#" + idUlPeriodList);
+        $ulPeriodList.empty();
+
+        divPeriodList = document.getElementById(idDivPeriodList);
+        ulPeriodList = document.getElementById(idUlPeriodList);
 
         for (let index = 0; index < parDataObj.length; index++) {
 
             liCurrPeriodListId = getSidePeriodId(parDataObj[index]._id.year, parDataObj[index]._id.month);
 
-            li = $("#" + idDivPeriodList + " :last-child").
-                append("<li>" +
-                    "Period # " + index.toString() +
-                    "  " +
-                    parDataObj[index]._id.year +
-                    "  " +
-                    parDataObj[index]._id.month +
-                    "  " +
-                    parDataObj[index].count +
-                    "</li>");
-            li.addClass("list-group-item");
+            elText = "Period # " + index.toString() +
+                "  " +
+                parDataObj[index]._id.year +
+                "  " +
+                parDataObj[index]._id.month +
+                "  " +
+                parDataObj[index].count +
+                "</li>";
 
-            $("#" + idDivPeriodList + " :last-child")
-                .attr("id", liCurrPeriodListId);
-
-            let liCurrPeriodList = document.getElementById(liCurrPeriodListId);
-            let currUl = crtHTTPElem('ul', liCurrPeriodList, '', '', '', '');
+            li = crtHTTPElem('li', ulPeriodList, "list-group-item", '', '', elText, liCurrPeriodListId);
 
         } // for (let index = 0; index < parDataObj.length; index++)
 
