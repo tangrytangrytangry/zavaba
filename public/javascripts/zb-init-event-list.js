@@ -9,6 +9,8 @@ function zbLastEventList(mode = 'INIT') {
     var elText = "";
     var elID = "";
 
+    var currentScreenPage = 0, evData = {};
+
     var divEventList, $divEventList, idDivEventList;
     var ulEventList, $divEventList, $ulEventList, ulEventList;
     var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
@@ -25,7 +27,9 @@ function zbLastEventList(mode = 'INIT') {
 
         var paramEventsData = JSON.parse(eventsData);
 
-        var currentPageNumber = 1, currentEventNumberOnPage = 0;
+        var currentPageNumber = 1,
+            maxPageNumber = 1,
+            currentEventNumberOnPage = 0;
 
         idDivEventList = "div_event_list";
         idUlEventList = "ul_event_list";
@@ -33,27 +37,42 @@ function zbLastEventList(mode = 'INIT') {
 
         $divEventList = $("#" + idDivEventList);
         if (mode === 'INIT') {
+
+            divEventList = document.getElementById(idDivEventList);
+            ulEventList = document.getElementById(idUlEventList);
+            ulEvListPagination = document.getElementById(idUlEvListPagination);
+
             $divEventList.data({
-                currentScreenPage: 1
+                currentscreenpage: 1,
+                maxpagenumber: 1
             });
+
+            // In pagination changed page number by mouse click
+            //ulEvListPagination.addEventListener('mouseup', function (ev) {
+            $("#" + idUlEvListPagination).on("click", "li", function (ev) {
+                changeCurrentScreenPage(ev);
+            });
+
         }
-        var currentScreenPage = $divEventList.data().currentScreenPage;
+        currentScreenPage = $divEventList.data().currentscreenpage;
 
         $ulEventList = $("#" + idUlEventList);
         $ulEventList.empty();
 
+        // Start pagination
         $ulEvListPagination = $("#" + idUlEvListPagination);
-        //$ulEvListPagination.empty();
+        $ulEvListPagination.empty();
 
-        divEventList = document.getElementById(idDivEventList);
-        ulEventList = document.getElementById(idUlEventList);
-        ulEvListPagination = document.getElementById(idUlEvListPagination);
-
-        elID = currentScreenPage.toString();
-        elText = '<a class="page-link" href="#">Previous</a>';
+        elID = getPaginationId(-1);
+        elText = '<span class="page-link">Previous</span>';
         liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
 
-        // Show event data
+        elID = getPaginationId(currentPageNumber);
+        elText = '<span class="page-link">' + currentPageNumber.toString() + '</span>';
+        liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
+        $("#" + elID).data({ pagenumber: currentPageNumber });
+
+        // Show all event data
         for (let index = 0; index < paramEventsData.length; index++) {
 
             currentEventNumberOnPage = currentEventNumberOnPage + 1;
@@ -61,6 +80,12 @@ function zbLastEventList(mode = 'INIT') {
             if (currentEventNumberOnPage > globalNumberEventsOnPage) {
                 currentEventNumberOnPage = 1;
                 currentPageNumber = currentPageNumber + 1;
+                maxPageNumber = currentPageNumber;
+
+                elID = getPaginationId(currentPageNumber);
+                elText = '<span class="page-link">' + currentPageNumber.toString() + '</span>';
+                liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
+                $("#" + elID).data({ pagenumber: currentPageNumber });
             }
 
             let eventDate = paramEventsData[index].date.toString();
@@ -80,14 +105,24 @@ function zbLastEventList(mode = 'INIT') {
                 paramEventsData[index].item);
 
             li = crtHTTPElem('li', ulEventList, "list-group-item", '', '', elText, elID);
-            $("#" + elID).data({ pagenumber: currentPageNumber });
+            evData = {
+                pagenumber: currentPageNumber,
+                evdate: eventDate,
+                evnumber: eventNumber,
+                evactive: eventActive
+            };
+            $("#" + elID).data(evData);
 
-            if (currentScreenPage != currentPageNumber) {
-                li.style.display = "none";
-                continue;
+            if (currentScreenPage == currentPageNumber) {
+                li.style.display = "block";
+                evData.evloaded = 'Y';
+                $("#" + elID).data(evData);
             }
             else {
-                li.style.display = "block";
+                li.style.display = "none";
+                evData.evloaded = 'N';
+                $("#" + elID).data(evData);
+                continue;
             }
 
             // One event data
@@ -135,6 +170,27 @@ function zbLastEventList(mode = 'INIT') {
             } // function cbOneEventData()
 
         } // for (let index = 0; index < paramEventsData.length; index++)
+
+        // End pagination
+        elID = getPaginationId(0);
+        elText = '<span class="page-link">Next</span>';
+        liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
+
+        // Show active screen page number in pagination
+        $("#" + getPaginationId(currentScreenPage)).addClass('active');
+
+        // Disable "Previous" if it is the first page
+        if (currentScreenPage === 1) {
+            $("#" + getPaginationId(-1)).addClass('disabled');
+        }
+
+        // Disable "Next" if it is the last page
+        if (currentScreenPage === maxPageNumber) {
+            $("#" + getPaginationId(0)).addClass('disabled');
+        }
+        evData = $divEventList.data();
+        evData.maxpagenumber = maxPageNumber;
+        evData = $divEventList.data(evData);
 
         return null;
 
@@ -197,6 +253,77 @@ function zbLastEventList(mode = 'INIT') {
     */
 
     } // addEventToSideBar()
+
+
+    // In pagination changed page number by mouse click
+    function changeCurrentScreenPage(event) {
+
+        let idPagination;
+
+        if (event.target.parentElement.tagName === 'UL') {
+            idPagination = event.target.id;
+        } else {
+            idPagination = event.target.parentElement.id;
+        }
+
+        currentScreenPage = $divEventList.data().currentscreenpage;
+        maxPageNumber = $divEventList.data().maxpagenumber;
+
+        // Calculate screen page number to show
+        switch (idPagination) {
+
+            // Prevous number
+            case getPaginationId(-1):
+
+                if (currentScreenPage <= 1) {
+                    return null;
+                } else {
+                    currentScreenPage = currentScreenPage - 1;
+                }
+                break;
+
+            // Next number
+            case getPaginationId(0):
+
+                if (currentScreenPage >= maxPageNumber) {
+                    return null;
+                } else {
+                    currentScreenPage = currentScreenPage + 1;
+                }
+                break;
+
+                break;
+
+            // Specific number
+            default:
+
+                evData = $("#" + idPagination).data();
+
+                if (currentScreenPage === evData.pagenumber) {
+                    return null;
+                } else {
+                    currentScreenPage = evData.pagenumber;
+                }
+
+                break;
+        }
+
+        // Save current screen page
+        evData = $divEventList.data();
+        evData.currentscreenpage = currentScreenPage;
+        $("#" + idPagination).data(evData);
+
+        // Show current screen page
+        showCurrentScreenPage();
+
+        return null;
+
+    } // changeCurrentScreenPage()
+
+    // Show current screen page
+    function showCurrentScreenPage() {
+
+    } // showCurrentScreenPage()
 
     return null;
 

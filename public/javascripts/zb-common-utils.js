@@ -69,3 +69,8 @@ function getSideEventId(evDate, evItem) {
 function getSidePeriodId(perYear, perMonth) {
 	return "home_side_period_" + perYear.toString() + "_" + perMonth.toString();
 } // getSidePeriodId()
+
+// For home screen
+function getPaginationId(pageNumber) {
+	return "home_pagination_" + pageNumber.toString().trim();
+} // getSidePeriodId()
