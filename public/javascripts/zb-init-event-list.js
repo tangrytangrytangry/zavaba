@@ -9,10 +9,10 @@ function zbLastEventList(mode = 'INIT') {
     var elText = "";
     var elID = "";
 
-    var currentScreenPage = 0, evData = {};
+    var currentScreenPage = 0, evData = {}, maxPageNumber = 1;
 
     var divEventList, $divEventList, idDivEventList;
-    var ulEventList, $divEventList, $ulEventList, ulEventList;
+    var ulEventList, $ulEventList, idUlEventList;
     var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
     var liPagination, $liPagination, idLiPagination;
 
@@ -28,7 +28,6 @@ function zbLastEventList(mode = 'INIT') {
         var paramEventsData = JSON.parse(eventsData);
 
         var currentPageNumber = 1,
-            maxPageNumber = 1,
             currentEventNumberOnPage = 0;
 
         idDivEventList = "div_event_list";
@@ -77,6 +76,7 @@ function zbLastEventList(mode = 'INIT') {
 
             currentEventNumberOnPage = currentEventNumberOnPage + 1;
 
+            // Add pagination elemet for the new page
             if (currentEventNumberOnPage > globalNumberEventsOnPage) {
                 currentEventNumberOnPage = 1;
                 currentPageNumber = currentPageNumber + 1;
@@ -125,49 +125,8 @@ function zbLastEventList(mode = 'INIT') {
                 continue;
             }
 
-            // One event data
-            runReportParam = '?report=' + 'oneevent' +
-                '&eventDate=' + eventDate +
-                '&eventNumber=' + eventNumber +
-                '&salt=' + Math.random().toString(36).substr(2, 5);
-            event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventData);
-
-            // One event texts
-            runReportParam = '?report=' + 'oneeventdesc' +
-                '&eventDate=' + eventDate +
-                '&eventNumber=' + eventNumber +
-                '&salt=' + Math.random().toString(36).substr(2, 5);
-            event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventDesc);
-
-            function cbOneEventDesc(oneEventTexts) {
-                //console.log("cbOneEventDesc: oneEventTexts = " + oneEventTexts);
-
-                return null;
-            } // cbOneEventDesc()
-
-            function cbOneEventData(oneEventData) {
-
-                //console.log("cbOneEvent: oneEventData = " + oneEventData);
-                let objEventData = JSON.parse(oneEventData);
-                //console.log("cbOneEvent: objEventData = " + objEventData);
-                let pictureURL = window.location.origin + objEventData[0].data.picture.lurl;
-
-                let currEventId = getListEventId(objEventData[0].date, objEventData[0].item);
-                let currEvent = $("#" + currEventId);
-
-                let currLi = document.getElementById(currEventId);
-
-                // Show event picture
-                currEvent.append("<img></img>");
-                $("#" + currEventId + " :last-child")
-                    .attr({
-                        src: pictureURL,
-                        alt: objEventData[0].data.picture.text
-                    });
-
-                return null;
-
-            } // function cbOneEventData()
+            // All one event data to screen
+            showOneEventData(eventDate, eventNumber);
 
         } // for (let index = 0; index < paramEventsData.length; index++)
 
@@ -176,84 +135,17 @@ function zbLastEventList(mode = 'INIT') {
         elText = '<span class="page-link">Next</span>';
         liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
 
-        // Show active screen page number in pagination
-        $("#" + getPaginationId(currentScreenPage)).addClass('active');
-
-        // Disable "Previous" if it is the first page
-        if (currentScreenPage === 1) {
-            $("#" + getPaginationId(-1)).addClass('disabled');
-        }
-
-        // Disable "Next" if it is the last page
-        if (currentScreenPage === maxPageNumber) {
-            $("#" + getPaginationId(0)).addClass('disabled');
-        }
+        // Save the maximum page number
         evData = $divEventList.data();
         evData.maxpagenumber = maxPageNumber;
         evData = $divEventList.data(evData);
 
+        // Show current screen page
+        showCurrentScreenPage();
+
         return null;
 
     } // cbListAllEvents()
-
-    // Add event to the period side bar        
-    function addEventToSideBar(evDate, evItem) {
-
-        let eventDateStr;
-        let eventDate;
-        let eventYear;
-        let eventMonth;
-        let periodId;
-        let eventId;
-
-        eventDateStr = evDate.toString();
-        eventDateStr = eventDateStr.substr(0, 4) + "-" +
-            eventDateStr.substr(4, 2) + "-" +
-            eventDateStr.substr(6, 2);
-        eventDate = new Date(eventDateStr);
-        //console.log("addEventToSideBar: eventDate = " + eventDate);
-
-        eventYear = eventDate.getFullYear();
-        eventMonth = eventDate.getMonth() + 1;
-        //console.log("addEventToSideBar: eventYear = " + eventYear);
-        //console.log("addEventToSideBar: eventMonth = " + eventMonth);
-
-        periodId = getSidePeriodId(eventYear, eventMonth);
-        //console.log("addEventToSideBar: periodId = " + periodId);
-        eventId = getSideEventId(evDate, evItem)
-        //console.log("addEventToSideBar: eventId = " + eventId);
-
-        /*
-        $("#" + periodId)
-
-        li = ulEventList.append("<li>" +
-        "Picture: " + index.toString() +
-        "  " +
-        objEventData[0].date +
-        "  " +
-        objEventData[0].item +
-        "  " +
-        objEventData[0].data.picture.name +
-        "  " +
-        pictureURL +
-        "</li>");
-    li.addClass("list-group-item");
-
-    // Show event picture
-    let currEventId = getListEventId(objEventData[0].date, objEventData[0].item);
-    let currEvent = $("#" + currEventId);
-    currEvent.append("<img></img>");
-    $("#" + currEventId + " :last-child")
-        .attr({
-            src: pictureURL,
-            alt: objEventData[0].data.picture.text
-        });
-
-    return null;
-    */
-
-    } // addEventToSideBar()
-
 
     // In pagination changed page number by mouse click
     function changeCurrentScreenPage(event) {
@@ -311,7 +203,6 @@ function zbLastEventList(mode = 'INIT') {
         // Save current screen page
         evData = $divEventList.data();
         evData.currentscreenpage = currentScreenPage;
-        $("#" + idPagination).data(evData);
 
         // Show current screen page
         showCurrentScreenPage();
@@ -323,7 +214,102 @@ function zbLastEventList(mode = 'INIT') {
     // Show current screen page
     function showCurrentScreenPage() {
 
+        // Show active screen page number in pagination
+        $("#" + idUlEvListPagination).children().removeClass("active");
+        $("#" + getPaginationId(currentScreenPage)).addClass('active');
+
+        // Disable "Previous" if it is the first page
+        $("#" + idUlEvListPagination).children().removeClass("disabled");
+        if (currentScreenPage === 1) {
+            $("#" + getPaginationId(-1)).addClass('disabled');
+        }
+
+        // Disable "Next" if it is the last page
+        if (currentScreenPage === maxPageNumber) {
+            $("#" + getPaginationId(0)).addClass('disabled');
+        }
+
+        // Read all events
+        //$divEventList = $("#" + idDivEventList).children();//.data().pagenumber;
+        $ulEventList = $("#" + idUlEventList).children();
+
+        for (let i = 0; i < $ulEventList.length; i++) {
+            let elId = $ulEventList[i].id;
+            let elData = $("#" + elId).data();
+            let li = document.getElementById(elId);
+
+            if (elData.pagenumber === currentScreenPage) {
+                li.style.display = "block";
+                if (elData.evloaded != 'Y') {
+
+                    elData.evloaded = 'Y';
+                    $("#" + elID).data(elData);
+    
+                    // All one event data to screen
+                    showOneEventData(elData.evdate, elData.evnumber);
+
+                }
+            }
+            else {
+                li.style.display = "none";
+                continue;
+            }
+
+        }
+
     } // showCurrentScreenPage()
+
+    // All one event data to screen
+    function showOneEventData(evDate, evNumber) {
+
+        // One event data
+        runReportParam = '?report=' + 'oneevent' +
+            '&eventDate=' + evDate +
+            '&eventNumber=' + evNumber +
+            '&salt=' + Math.random().toString(36).substr(2, 5);
+        event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventData);
+
+        // One event texts
+        runReportParam = '?report=' + 'oneeventdesc' +
+            '&eventDate=' + evDate +
+            '&eventNumber=' + evNumber +
+            '&salt=' + Math.random().toString(36).substr(2, 5);
+        event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventDesc);
+
+    }
+
+    // Load to screen descriptions for one event
+    function cbOneEventDesc(oneEventTexts) {
+        //console.log("cbOneEventDesc: oneEventTexts = " + oneEventTexts);
+
+        return null;
+    } // cbOneEventDesc()
+
+    // Load to screen pictures for one event
+    function cbOneEventData(oneEventData) {
+
+        //console.log("cbOneEvent: oneEventData = " + oneEventData);
+        let objEventData = JSON.parse(oneEventData);
+        //console.log("cbOneEvent: objEventData = " + objEventData);
+        let pictureURL = window.location.origin + objEventData[0].data.picture.lurl;
+
+        let currEventId = getListEventId(objEventData[0].date, objEventData[0].item);
+        let currEvent = $("#" + currEventId);
+
+        let currLi = document.getElementById(currEventId);
+
+        // Show event picture
+        currEvent.append("<img></img>");
+        $("#" + currEventId + " :last-child")
+            .attr({
+                src: pictureURL,
+                alt: objEventData[0].data.picture.text
+            });
+
+        return null;
+
+    } // function cbOneEventData()
+
 
     return null;
 
