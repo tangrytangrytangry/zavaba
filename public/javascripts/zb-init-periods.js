@@ -1,7 +1,10 @@
 // Load all periods from server to screen
-function zbPeriodList(mode='INIT') {
+function zbPeriodList(mode = 'INIT') {
 
     var runReportParam = "";
+
+    var divPeriodList, $divPeriodList, idDivPeriodList;
+    var ulPeriodList, $ulPeriodList, idUlPeriodList;
 
     var periods = "";
     // periods = sendGetRequestToServerSync('periodlist');
@@ -18,23 +21,33 @@ function zbPeriodList(mode='INIT') {
         let li, elText = "";;
         let liCurrPeriodListId;
 
+        if (mode === 'INIT') {
+
+            idDivPeriodList = "div_period_list";
+            idUlPeriodList = "ul_period_list";
+
+            $divPeriodList = $("#" + idDivPeriodList);
+            $ulPeriodList = $("#" + idUlPeriodList);
+            $ulPeriodList.empty();
+
+            divPeriodList = document.getElementById(idDivPeriodList);
+            ulPeriodList = document.getElementById(idUlPeriodList);
+
+            // In pertiod list changed period by mouse click
+            $("#" + idUlPeriodList).on("click", "li", function (ev) {
+                changeCurrentScreenPeriod(ev);
+            });
+
+        }
+
         var parDataObj = JSON.parse(periodsData);
-
-        var idDivPeriodList = "div_period_list";
-        var idUlPeriodList = "ul_period_list";
-
-        var $divPeriodList = $("#" + idDivPeriodList);
-        var $ulPeriodList = $("#" + idUlPeriodList);
-        $ulPeriodList.empty();
-
-        divPeriodList = document.getElementById(idDivPeriodList);
-        ulPeriodList = document.getElementById(idUlPeriodList);
 
         for (let index = 0; index < parDataObj.length; index++) {
 
             liCurrPeriodListId = getSidePeriodId(parDataObj[index]._id.year, parDataObj[index]._id.month);
 
-            elText = "Period # " + index.toString() +
+            elText = '<a href="#section1">' +
+                "Period # " + index.toString() +
                 "  " +
                 parDataObj[index]._id.year +
                 "  " +
@@ -44,10 +57,67 @@ function zbPeriodList(mode='INIT') {
                 "</li>";
 
             li = crtHTTPElem('li', ulPeriodList, "list-group-item", '', '', elText, liCurrPeriodListId);
+            $("#" + liCurrPeriodListId).data({
+                periodyear: parDataObj[index]._id.year,
+                periodmonth: parDataObj[index]._id.month
+            });
 
         } // for (let index = 0; index < parDataObj.length; index++)
 
-    } // cbPeriodList(periodsData) 
+    } // cbPeriodList() 
+
+    // In pertiod list changed period by mouse click
+    function changeCurrentScreenPeriod(event) {
+
+        let idPeriod = "";
+        let periodData = {};
+        let periodYear = 0;
+        let periodMonth = 0;
+        let pageNumber = 1;
+        let evData = {};
+        let elId = "", elData = {}, dateObj = {};
+
+        if (event.target.parentElement.tagName === 'UL') {
+            idPeriod = event.target.id;
+        } else {
+            idPeriod = event.target.parentElement.id;
+        }
+
+        periodData = $("#" + idPeriod).data();
+
+        periodYear = periodData.periodyear;
+        periodMonth = periodData.periodmonth;
+
+
+        // Read all events and find on which page
+        // this period appears 
+        $ulEventList = $("#" + idUlEventList).children();
+
+        for (let i = 0; i < $ulEventList.length; i++) {
+            elId = $ulEventList[i].id;
+            elData = $("#" + elId).data();
+
+            dateObj = cvtCharDate8ToObj(elData.evdate);
+
+            if (dateObj.yyyy == periodYear && dateObj.mm == periodMonth) {
+                pageNumber = elData.pagenumber;
+                break;
+            }
+
+        }
+
+        // Save new current screen page number
+        evData = $divEventList.data();
+        evData.currentscreenpage = pageNumber;
+        $divEventList.data(evData);
+        currentScreenPage = pageNumber;
+
+        // Show current screen page
+        showCurrentScreenPage();
+
+        return null;
+
+    } // changeCurrentScreenPeriod()
 
     return;
 

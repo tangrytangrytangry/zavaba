@@ -1,3 +1,11 @@
+
+
+var divEventList, $divEventList, idDivEventList;
+var ulEventList, $ulEventList, idUlEventList;
+var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
+var liPagination, $liPagination, idLiPagination;
+var currentScreenPage = 0, maxPageNumber = 0;
+
 // Load last events from server to screen
 function zbLastEventList(mode = 'INIT') {
 
@@ -9,12 +17,9 @@ function zbLastEventList(mode = 'INIT') {
     var elText = "";
     var elID = "";
 
-    var currentScreenPage = 0, evData = {}, maxPageNumber = 1;
-
-    var divEventList, $divEventList, idDivEventList;
-    var ulEventList, $ulEventList, idUlEventList;
-    var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
-    var liPagination, $liPagination, idLiPagination;
+    var evData = {};
+    currentScreenPage = 0;
+    maxPageNumber = 1;
 
     runReportParam = '?report=' + 'eventlist' +
         '&deepListMonths=' + globalEventHistoryMonthsDeep.toString() +
@@ -138,7 +143,7 @@ function zbLastEventList(mode = 'INIT') {
         // Save the maximum page number
         evData = $divEventList.data();
         evData.maxpagenumber = maxPageNumber;
-        evData = $divEventList.data(evData);
+        $divEventList.data(evData);
 
         // Show current screen page
         showCurrentScreenPage();
@@ -203,6 +208,7 @@ function zbLastEventList(mode = 'INIT') {
         // Save current screen page
         evData = $divEventList.data();
         evData.currentscreenpage = currentScreenPage;
+        $divEventList.data(evData);
 
         // Show current screen page
         showCurrentScreenPage();
@@ -211,106 +217,109 @@ function zbLastEventList(mode = 'INIT') {
 
     } // changeCurrentScreenPage()
 
-    // Show current screen page
-    function showCurrentScreenPage() {
-
-        // Show active screen page number in pagination
-        $("#" + idUlEvListPagination).children().removeClass("active");
-        $("#" + getPaginationId(currentScreenPage)).addClass('active');
-
-        // Disable "Previous" if it is the first page
-        $("#" + idUlEvListPagination).children().removeClass("disabled");
-        if (currentScreenPage === 1) {
-            $("#" + getPaginationId(-1)).addClass('disabled');
-        }
-
-        // Disable "Next" if it is the last page
-        if (currentScreenPage === maxPageNumber) {
-            $("#" + getPaginationId(0)).addClass('disabled');
-        }
-
-        // Read all events
-        //$divEventList = $("#" + idDivEventList).children();//.data().pagenumber;
-        $ulEventList = $("#" + idUlEventList).children();
-
-        for (let i = 0; i < $ulEventList.length; i++) {
-            let elId = $ulEventList[i].id;
-            let elData = $("#" + elId).data();
-            let li = document.getElementById(elId);
-
-            if (elData.pagenumber === currentScreenPage) {
-                li.style.display = "block";
-                if (elData.evloaded != 'Y') {
-
-                    elData.evloaded = 'Y';
-                    $("#" + elID).data(elData);
-    
-                    // All one event data to screen
-                    showOneEventData(elData.evdate, elData.evnumber);
-
-                }
-            }
-            else {
-                li.style.display = "none";
-                continue;
-            }
-
-        }
-
-    } // showCurrentScreenPage()
-
-    // All one event data to screen
-    function showOneEventData(evDate, evNumber) {
-
-        // One event data
-        runReportParam = '?report=' + 'oneevent' +
-            '&eventDate=' + evDate +
-            '&eventNumber=' + evNumber +
-            '&salt=' + Math.random().toString(36).substr(2, 5);
-        event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventData);
-
-        // One event texts
-        runReportParam = '?report=' + 'oneeventdesc' +
-            '&eventDate=' + evDate +
-            '&eventNumber=' + evNumber +
-            '&salt=' + Math.random().toString(36).substr(2, 5);
-        event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventDesc);
-
-    }
-
-    // Load to screen descriptions for one event
-    function cbOneEventDesc(oneEventTexts) {
-        //console.log("cbOneEventDesc: oneEventTexts = " + oneEventTexts);
-
-        return null;
-    } // cbOneEventDesc()
-
-    // Load to screen pictures for one event
-    function cbOneEventData(oneEventData) {
-
-        //console.log("cbOneEvent: oneEventData = " + oneEventData);
-        let objEventData = JSON.parse(oneEventData);
-        //console.log("cbOneEvent: objEventData = " + objEventData);
-        let pictureURL = window.location.origin + objEventData[0].data.picture.lurl;
-
-        let currEventId = getListEventId(objEventData[0].date, objEventData[0].item);
-        let currEvent = $("#" + currEventId);
-
-        let currLi = document.getElementById(currEventId);
-
-        // Show event picture
-        currEvent.append("<img></img>");
-        $("#" + currEventId + " :last-child")
-            .attr({
-                src: pictureURL,
-                alt: objEventData[0].data.picture.text
-            });
-
-        return null;
-
-    } // function cbOneEventData()
-
 
     return null;
 
 } // zbLastEventList()
+
+// Show current screen page
+function showCurrentScreenPage() {
+
+    var elId;
+    var elData;
+    var li;
+
+    // Show active screen page number in pagination
+    $("#" + idUlEvListPagination).children().removeClass("active");
+    $("#" + getPaginationId(currentScreenPage)).addClass('active');
+
+    // Disable "Previous" if it is the first page
+    $("#" + idUlEvListPagination).children().removeClass("disabled");
+    if (currentScreenPage === 1) {
+        $("#" + getPaginationId(-1)).addClass('disabled');
+    }
+
+    // Disable "Next" if it is the last page
+    if (currentScreenPage === maxPageNumber) {
+        $("#" + getPaginationId(0)).addClass('disabled');
+    }
+
+    // Read all events
+    $ulEventList = $("#" + idUlEventList).children();
+
+    for (let i = 0; i < $ulEventList.length; i++) {
+        elId = $ulEventList[i].id;
+        elData = $("#" + elId).data();
+        li = document.getElementById(elId);
+
+        if (elData.pagenumber === currentScreenPage) {
+            li.style.display = "block";
+            if (elData.evloaded != 'Y') {
+
+                elData.evloaded = 'Y';
+                $("#" + elId).data(elData);
+
+                // All one event data to screen
+                showOneEventData(elData.evdate, elData.evnumber);
+
+            }
+        }
+        else {
+            li.style.display = "none";
+            continue;
+        }
+
+    }
+
+} // showCurrentScreenPage()
+
+// All one event data to screen
+function showOneEventData(evDate, evNumber) {
+
+    // One event data
+    runReportParam = '?report=' + 'oneevent' +
+        '&eventDate=' + evDate +
+        '&eventNumber=' + evNumber +
+        '&salt=' + Math.random().toString(36).substr(2, 5);
+    event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventData);
+
+    // One event texts
+    runReportParam = '?report=' + 'oneeventdesc' +
+        '&eventDate=' + evDate +
+        '&eventNumber=' + evNumber +
+        '&salt=' + Math.random().toString(36).substr(2, 5);
+    event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventDesc);
+
+}
+
+// Load to screen pictures for one event
+function cbOneEventData(oneEventData) {
+
+    //console.log("cbOneEvent: oneEventData = " + oneEventData);
+    let objEventData = JSON.parse(oneEventData);
+    //console.log("cbOneEvent: objEventData = " + objEventData);
+    let pictureURL = window.location.origin + objEventData[0].data.picture.lurl;
+
+    let currEventId = getListEventId(objEventData[0].date, objEventData[0].item);
+    let currEvent = $("#" + currEventId);
+
+    let currLi = document.getElementById(currEventId);
+
+    // Show event picture
+    currEvent.append("<img></img>");
+    $("#" + currEventId + " :last-child")
+        .attr({
+            src: pictureURL,
+            alt: objEventData[0].data.picture.text
+        });
+
+    return null;
+
+} // function cbOneEventData()
+
+// Load to screen descriptions for one event
+function cbOneEventDesc(oneEventTexts) {
+    //console.log("cbOneEventDesc: oneEventTexts = " + oneEventTexts);
+
+    return null;
+} // cbOneEventDesc()

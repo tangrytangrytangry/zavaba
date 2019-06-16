@@ -74,3 +74,20 @@ function getSidePeriodId(perYear, perMonth) {
 function getPaginationId(pageNumber) {
 	return "home_pagination_" + pageNumber.toString().trim();
 } // getSidePeriodId()
+
+// Convert char date "YYYYMMDD" to { yyyy: YYYY, mm: MM, dd: DD }
+function cvtCharDate8ToObj(p_CharDate8) {
+
+	let obj = { yyyy: 0, mm: 0, dd: 0 };
+
+	try { 
+
+		obj.yyyy = Number(p_CharDate8.substr(0, 4));
+		obj.mm = Number(p_CharDate8.substr(4, 2));
+		obj.dd = Number(p_CharDate8.substr(6, 2));
+
+	} catch (error) { }
+
+	return obj;
+
+} // cvtCharDate8ToObj()
