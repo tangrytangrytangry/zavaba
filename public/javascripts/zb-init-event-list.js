@@ -1,5 +1,4 @@
 
-
 var divEventList, $divEventList, idDivEventList;
 var ulEventList, $ulEventList, idUlEventList;
 var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
@@ -52,7 +51,7 @@ function zbLastEventList(mode = 'INIT') {
             });
 
             // In pagination changed page number by mouse click
-            //ulEvListPagination.addEventListener('mouseup', function (ev) {
+            // ulEvListPagination.addEventListener('mouseup', function (ev) {
             $("#" + idUlEvListPagination).on("click", "li", function (ev) {
                 changeCurrentScreenPage(ev);
             });
@@ -67,10 +66,12 @@ function zbLastEventList(mode = 'INIT') {
         $ulEvListPagination = $("#" + idUlEvListPagination);
         $ulEvListPagination.empty();
 
+        // Pagination - previous page 
         elID = getPaginationId(-1);
         elText = '<span class="page-link">Previous</span>';
         liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
 
+        // Pagination - current page
         elID = getPaginationId(currentPageNumber);
         elText = '<span class="page-link">' + currentPageNumber.toString() + '</span>';
         liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
@@ -169,7 +170,7 @@ function zbLastEventList(mode = 'INIT') {
         // Calculate screen page number to show
         switch (idPagination) {
 
-            // Prevous number
+            // Previous number
             case getPaginationId(-1):
 
                 if (currentScreenPage <= 1) {
@@ -211,7 +212,7 @@ function zbLastEventList(mode = 'INIT') {
         $divEventList.data(evData);
 
         // Show current screen page
-        showCurrentScreenPage();
+        showCurrentScreenPage("CHANGE_PAGE");
 
         return null;
 
@@ -223,11 +224,12 @@ function zbLastEventList(mode = 'INIT') {
 } // zbLastEventList()
 
 // Show current screen page
-function showCurrentScreenPage() {
+function showCurrentScreenPage(parChangeMode) {
 
     var elId;
     var elData;
     var li;
+    var navPeriodIsActive = false, dateObj = {};
 
     // Show active screen page number in pagination
     $("#" + idUlEvListPagination).children().removeClass("active");
@@ -247,6 +249,7 @@ function showCurrentScreenPage() {
     // Read all events
     $ulEventList = $("#" + idUlEventList).children();
 
+    // Show only events from current page
     for (let i = 0; i < $ulEventList.length; i++) {
         elId = $ulEventList[i].id;
         elData = $("#" + elId).data();
@@ -254,6 +257,16 @@ function showCurrentScreenPage() {
 
         if (elData.pagenumber === currentScreenPage) {
             li.style.display = "block";
+
+            // Show active period on side bar navigator
+            if (!navPeriodIsActive) {
+                if (parChangeMode === "CHANGE_PAGE") {
+                    navPeriodIsActive = true;
+                    dateObj = cvtCharDate8ToObj(elData.evdate);
+                    activateNavBarPeriod(dateObj.yyyy, dateObj.mm);
+                }
+            }
+
             if (elData.evloaded != 'Y') {
 
                 elData.evloaded = 'Y';

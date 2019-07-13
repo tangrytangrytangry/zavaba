@@ -1,10 +1,11 @@
+
+var divPeriodList, $divPeriodList, idDivPeriodList;
+var ulPeriodList, $ulPeriodList, idUlPeriodList;
+
 // Load all periods from server to screen
 function zbPeriodList(mode = 'INIT') {
 
     var runReportParam = "";
-
-    var divPeriodList, $divPeriodList, idDivPeriodList;
-    var ulPeriodList, $ulPeriodList, idUlPeriodList;
 
     var periods = "";
     // periods = sendGetRequestToServerSync('periodlist');
@@ -62,6 +63,10 @@ function zbPeriodList(mode = 'INIT') {
                 periodmonth: parDataObj[index]._id.month
             });
 
+            if (index == 0) {
+                $("#" + liCurrPeriodListId).addClass('active');
+            }
+
         } // for (let index = 0; index < parDataObj.length; index++)
 
     } // cbPeriodList() 
@@ -88,7 +93,6 @@ function zbPeriodList(mode = 'INIT') {
         periodYear = periodData.periodyear;
         periodMonth = periodData.periodmonth;
 
-
         // Read all events and find on which page
         // this period appears 
         $ulEventList = $("#" + idUlEventList).children();
@@ -112,12 +116,24 @@ function zbPeriodList(mode = 'INIT') {
         $divEventList.data(evData);
         currentScreenPage = pageNumber;
 
+        // Show active period on side bar navigator
+        activateNavBarPeriod(periodYear, periodMonth);
+
         // Show current screen page
         showCurrentScreenPage();
 
         return null;
 
     } // changeCurrentScreenPeriod()
+
+    return;
+
+}
+// Activate period on navigation period side bar
+function activateNavBarPeriod(parPerYear, parPerMonth) {
+    
+    $("#" + idUlPeriodList).children().removeClass("active");
+    $("#" + getSidePeriodId(parPerYear, parPerMonth)).addClass('active');
 
     return;
 
