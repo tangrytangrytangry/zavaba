@@ -4,6 +4,7 @@ var ulEventList, $ulEventList, idUlEventList;
 var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
 var liPagination, $liPagination, idLiPagination;
 var currentScreenPage = 0, maxPageNumber = 0;
+var currPageLang = "";
 
 // Load last events from server to screen
 function zbLastEventList(mode = 'INIT') {
@@ -40,6 +41,8 @@ function zbLastEventList(mode = 'INIT') {
 
         $divEventList = $("#" + idDivEventList);
         if (mode === 'INIT') {
+
+            currPageLang = document.getElementById("main-select-lang").lang.toUpperCase();
 
             divEventList = document.getElementById(idDivEventList);
             ulEventList = document.getElementById(idUlEventList);
@@ -98,7 +101,7 @@ function zbLastEventList(mode = 'INIT') {
             let eventNumber = paramEventsData[index].item.toString();
             let eventActive = paramEventsData[index].active;
 
-            elText = "Event # " + index.toString() +
+            elText = "Event # " + (paramEventsData.length - index).toString() +
                 "  " +
                 paramEventsData[index].date +
                 "  " +
@@ -333,6 +336,49 @@ function cbOneEventData(oneEventData) {
 // Load to screen descriptions for one event
 function cbOneEventDesc(oneEventTexts) {
     //console.log("cbOneEventDesc: oneEventTexts = " + oneEventTexts);
+    var oneEventTextsObj = JSON.parse(oneEventTexts);
+
+    /*    
+    [
+       {
+            "data": {
+                "text": "English description"
+            },
+            "log": {
+                "usernamecrt": "q",
+                "created": "2019-07-14T10:31:26.500Z"
+            },
+            "_id": "5d2b047ef06ed82db8e58823",
+            "date": 20190714,
+            "item": 3,
+            "langcode": "EN",
+            "active": "Y",
+            "__v": 0
+        }
+    ]
+    */
+
+    for (let index = 0; index < oneEventTextsObj.length; index++) {
+        const langText = oneEventTextsObj[index];
+        //console.log("langText = " + langText.date + " " + langText.item + " " +
+        //    langText.active + " : " + langText.langcode + " - " + langText.data.text);
+
+        if (currPageLang == langText.langcode) {
+
+
+            let currEventId = getListEventId(langText.date, langText.item);
+            let currEvent = $("#" + currEventId);
+
+            let currLi = document.getElementById(currEventId);
+
+            // Show event picture
+            currEvent.append("<p>" +
+                langText.langcode + " - " +
+                langText.data.text +
+                "</p>");
+        }
+
+    }
 
     return null;
 } // cbOneEventDesc()
