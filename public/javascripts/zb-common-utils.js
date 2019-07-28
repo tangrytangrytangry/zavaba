@@ -75,6 +75,21 @@ function getPaginationId(pageNumber) {
 	return "home_pagination_" + pageNumber.toString().trim();
 } // getSidePeriodId()
 
+// For home screen
+function getTextId(lang) {
+	return "text" + lang.trim().toLowerCase();
+} // getTextId()
+
+// For home screen
+function getPictureId() {
+	return "picturetext";
+} // getPictureId()
+
+// For home screen
+function getAttachmentId() {
+	return "attachmenttext";
+} // getAttachmentId()
+
 // Convert char date "YYYYMMDD" to { yyyy: YYYY, mm: MM, dd: DD }
 function cvtCharDate8ToObj(p_CharDate8) {
 

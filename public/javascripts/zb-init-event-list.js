@@ -6,6 +6,8 @@ var liPagination, $liPagination, idLiPagination;
 var currentScreenPage = 0, maxPageNumber = 0;
 var currPageLang = "";
 
+var idInputSearchMain = "searchMain", inputSearchMain, $inputSearchMain, searchMainValue = "";
+
 // Load last events from server to screen
 function zbLastEventList(mode = 'INIT') {
 
@@ -20,6 +22,21 @@ function zbLastEventList(mode = 'INIT') {
     var evData = {};
     currentScreenPage = 0;
     maxPageNumber = 1;
+
+    inputSearchMain = document.getElementById(idInputSearchMain);
+
+    // Init main page search value
+    if (inputSearchMain.value) {
+
+        if (inputSearchMain.value != "") {
+            searchMainValue = inputSearchMain.value;
+        } else {
+            searchMainValue = "";
+        }
+
+    } else {
+        searchMainValue = "";
+    }
 
     runReportParam = '?report=' + 'eventlist' +
         '&deepListMonths=' + globalEventHistoryMonthsDeep.toString() +
@@ -43,6 +60,9 @@ function zbLastEventList(mode = 'INIT') {
         if (mode === 'INIT') {
 
             currPageLang = document.getElementById("main-select-lang").lang.toUpperCase();
+
+            inputSearchMain.value = "";
+            searchMainValue = "";
 
             divEventList = document.getElementById(idDivEventList);
             ulEventList = document.getElementById(idUlEventList);
@@ -306,12 +326,15 @@ function showOneEventData(evDate, evNumber) {
         '&salt=' + Math.random().toString(36).substr(2, 5);
     event = sendGetRequestToServerAsync('reports', runReportParam, cbOneEventDesc);
 
-}
+} // showOneEventData()
 
 // Load to screen pictures for one event
 function cbOneEventData(oneEventData) {
 
     //console.log("cbOneEvent: oneEventData = " + oneEventData);
+
+    var evData = {};
+
     let objEventData = JSON.parse(oneEventData);
     //console.log("cbOneEvent: objEventData = " + objEventData);
     let pictureURL = window.location.origin + objEventData[0].data.picture.lurl;
@@ -329,6 +352,11 @@ function cbOneEventData(oneEventData) {
             alt: objEventData[0].data.picture.text
         });
 
+    evData = $("#" + currEventId).data();
+    evData[getPictureId()] = objEventData[0].data.picture.text.trim();
+    evData[getAttachmentId()] = objEventData[0].data.attachment.text.trim();
+    $("#" + currEventId).data(evData);
+
     return null;
 
 } // function cbOneEventData()
@@ -336,6 +364,8 @@ function cbOneEventData(oneEventData) {
 // Load to screen descriptions for one event
 function cbOneEventDesc(oneEventTexts) {
     //console.log("cbOneEventDesc: oneEventTexts = " + oneEventTexts);
+
+    var evData = {}, currEventId = "", currLi, currEvent;
     var oneEventTextsObj = JSON.parse(oneEventTexts);
 
     /*    
@@ -363,22 +393,52 @@ function cbOneEventDesc(oneEventTexts) {
         //console.log("langText = " + langText.date + " " + langText.item + " " +
         //    langText.active + " : " + langText.langcode + " - " + langText.data.text);
 
+        currEventId = getListEventId(langText.date, langText.item);
+
+        evData = $("#" + currEventId).data();
+        evData[getTextId(langText.langcode)] = langText.data.text.trim();
+        $("#" + currEventId).data(evData);
+
         if (currPageLang == langText.langcode) {
 
+            currEvent = $("#" + currEventId);
+            currLi = document.getElementById(currEventId);
 
-            let currEventId = getListEventId(langText.date, langText.item);
-            let currEvent = $("#" + currEventId);
-
-            let currLi = document.getElementById(currEventId);
-
-            // Show event picture
+            // Show event description in proper language
             currEvent.append("<p>" +
                 langText.langcode + " - " +
                 langText.data.text +
                 "</p>");
-        }
 
+        }
     }
+
+    /*
+        elID = getListEventId(paramEventsData[index].date,
+            paramEventsData[index].item);
+    
+        li = crtHTTPElem('li', ulEventList, "list-group-item", '', '', elText, elID);
+        evData = {
+            pagenumber: currentPageNumber,
+            evdate: eventDate,
+            evnumber: eventNumber,
+            evactive: eventActive
+        };
+        $("#" + elID).data(evData);
+    
+        if (currentScreenPage == currentPageNumber) {
+            li.style.display = "block";
+            evData.evloaded = 'Y';
+            $("#" + elID).data(evData);
+        }
+        else {
+            li.style.display = "none";
+            evData.evloaded = 'N';
+            $("#" + elID).data(evData);
+            continue;
+        }
+    
+    */
 
     return null;
 } // cbOneEventDesc()
