@@ -129,6 +129,7 @@ typings/
 credentials*
 
 curl.exe
+.vscode
 
 # Pictures
 public/images/20*

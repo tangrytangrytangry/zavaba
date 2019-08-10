@@ -5,8 +5,10 @@ var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
 var liPagination, $liPagination, idLiPagination;
 var currentScreenPage = 0, maxPageNumber = 0;
 var currPageLang = "";
+var screenMode = ""; // INIT or SEARCH
 
 var idInputSearchMain = "searchMain", inputSearchMain, $inputSearchMain, searchMainValue = "";
+var idInputSearchButton = "searchMainButton", inputSearchMainButton, $inputSearchMainButton, searchMainValueButton = "";
 
 // Load last events from server to screen
 function zbLastEventList(mode = 'INIT') {
@@ -23,19 +25,26 @@ function zbLastEventList(mode = 'INIT') {
     currentScreenPage = 0;
     maxPageNumber = 1;
 
-    inputSearchMain = document.getElementById(idInputSearchMain);
-
     // Init main page search value
-    if (inputSearchMain.value) {
+    if (mode == 'INIT') {
 
-        if (inputSearchMain.value != "") {
-            searchMainValue = inputSearchMain.value;
+        inputSearchMain = document.getElementById(idInputSearchMain);
+
+        screenMode = mode;
+        $inputSearchMain = $("#" + idInputSearchMain);
+        $inputSearchMain.data({ "screenmode": screenMode });
+
+        if (inputSearchMain.value) {
+
+            if (inputSearchMain.value != "") {
+                searchMainValue = inputSearchMain.value;
+            } else {
+                searchMainValue = "";
+            }
+
         } else {
             searchMainValue = "";
         }
-
-    } else {
-        searchMainValue = "";
     }
 
     runReportParam = '?report=' + 'eventlist' +
@@ -43,138 +52,6 @@ function zbLastEventList(mode = 'INIT') {
         '&salt=' + Math.random().toString(36).substr(2, 5);
 
     events = sendGetRequestToServerAsync('reports', runReportParam, cbListAllEvents);
-
-    function cbListAllEvents(eventsData) {
-        //console.log("sendGetRequestToServerAsync: eventsData = " + eventsData);
-
-        var paramEventsData = JSON.parse(eventsData);
-
-        var currentPageNumber = 1,
-            currentEventNumberOnPage = 0;
-
-        idDivEventList = "div_event_list";
-        idUlEventList = "ul_event_list";
-        idUlEvListPagination = "ul_ev_list_pagination";
-
-        $divEventList = $("#" + idDivEventList);
-        if (mode === 'INIT') {
-
-            currPageLang = document.getElementById("main-select-lang").lang.toUpperCase();
-
-            inputSearchMain.value = "";
-            searchMainValue = "";
-
-            divEventList = document.getElementById(idDivEventList);
-            ulEventList = document.getElementById(idUlEventList);
-            ulEvListPagination = document.getElementById(idUlEvListPagination);
-
-            $divEventList.data({
-                currentscreenpage: 1,
-                maxpagenumber: 1
-            });
-
-            // In pagination changed page number by mouse click
-            // ulEvListPagination.addEventListener('mouseup', function (ev) {
-            $("#" + idUlEvListPagination).on("click", "li", function (ev) {
-                changeCurrentScreenPage(ev);
-            });
-
-        }
-        currentScreenPage = $divEventList.data().currentscreenpage;
-
-        $ulEventList = $("#" + idUlEventList);
-        $ulEventList.empty();
-
-        // Start pagination
-        $ulEvListPagination = $("#" + idUlEvListPagination);
-        $ulEvListPagination.empty();
-
-        // Pagination - previous page 
-        elID = getPaginationId(-1);
-        elText = '<span class="page-link">Previous</span>';
-        liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
-
-        // Pagination - current page
-        elID = getPaginationId(currentPageNumber);
-        elText = '<span class="page-link">' + currentPageNumber.toString() + '</span>';
-        liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
-        $("#" + elID).data({ pagenumber: currentPageNumber });
-
-        // Show all event data
-        for (let index = 0; index < paramEventsData.length; index++) {
-
-            currentEventNumberOnPage = currentEventNumberOnPage + 1;
-
-            // Add pagination elemet for the new page
-            if (currentEventNumberOnPage > globalNumberEventsOnPage) {
-                currentEventNumberOnPage = 1;
-                currentPageNumber = currentPageNumber + 1;
-                maxPageNumber = currentPageNumber;
-
-                elID = getPaginationId(currentPageNumber);
-                elText = '<span class="page-link">' + currentPageNumber.toString() + '</span>';
-                liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
-                $("#" + elID).data({ pagenumber: currentPageNumber });
-            }
-
-            let eventDate = paramEventsData[index].date.toString();
-            let eventNumber = paramEventsData[index].item.toString();
-            let eventActive = paramEventsData[index].active;
-
-            elText = "Event # " + (paramEventsData.length - index).toString() +
-                "  " +
-                paramEventsData[index].date +
-                "  " +
-                paramEventsData[index].item +
-                "  " +
-                eventActive +
-                "  page=" +
-                currentPageNumber;
-            elID = getListEventId(paramEventsData[index].date,
-                paramEventsData[index].item);
-
-            li = crtHTTPElem('li', ulEventList, "list-group-item", '', '', elText, elID);
-            evData = {
-                pagenumber: currentPageNumber,
-                evdate: eventDate,
-                evnumber: eventNumber,
-                evactive: eventActive
-            };
-            $("#" + elID).data(evData);
-
-            if (currentScreenPage == currentPageNumber) {
-                li.style.display = "block";
-                evData.evloaded = 'Y';
-                $("#" + elID).data(evData);
-            }
-            else {
-                li.style.display = "none";
-                evData.evloaded = 'N';
-                $("#" + elID).data(evData);
-                continue;
-            }
-
-            // All one event data to screen
-            showOneEventData(eventDate, eventNumber);
-
-        } // for (let index = 0; index < paramEventsData.length; index++)
-
-        // End pagination
-        elID = getPaginationId(0);
-        elText = '<span class="page-link">Next</span>';
-        liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
-
-        // Save the maximum page number
-        evData = $divEventList.data();
-        evData.maxpagenumber = maxPageNumber;
-        $divEventList.data(evData);
-
-        // Show current screen page
-        showCurrentScreenPage();
-
-        return null;
-
-    } // cbListAllEvents()
 
     // In pagination changed page number by mouse click
     function changeCurrentScreenPage(event) {
@@ -442,3 +319,167 @@ function cbOneEventDesc(oneEventTexts) {
 
     return null;
 } // cbOneEventDesc()
+
+// Show events to screen - call back function
+function cbListAllEvents(eventsData) {
+    //console.log("sendGetRequestToServerAsync: eventsData = " + eventsData);
+
+    var paramEventsData = JSON.parse(eventsData);
+
+    var currentPageNumber = 1,
+        currentEventNumberOnPage = 0;
+
+    idDivEventList = "div_event_list";
+    idUlEventList = "ul_event_list";
+    idUlEvListPagination = "ul_ev_list_pagination";
+
+    $divEventList = $("#" + idDivEventList);
+    if (screenMode == 'INIT' || screenMode == 'SEARCH') {
+
+        currPageLang = document.getElementById("main-select-lang").lang.toUpperCase();
+
+        inputSearchMain.value = "";
+        searchMainValue = "";
+
+        divEventList = document.getElementById(idDivEventList);
+        ulEventList = document.getElementById(idUlEventList);
+        ulEvListPagination = document.getElementById(idUlEvListPagination);
+
+        $divEventList.data({
+            currentscreenpage: 1,
+            maxpagenumber: 1
+        });
+
+        // In pagination changed page number by mouse click
+        // ulEvListPagination.addEventListener('mouseup', function (ev) {
+        $("#" + idUlEvListPagination).on("click", "li", function (ev) {
+            changeCurrentScreenPage(ev);
+        });
+
+        // Refresh screen screen when <Search> field changed
+        searchMain.addEventListener('mouseup', function (ev) {
+            searchFieldChanged(ev);
+            return;
+        });
+
+        // Refresh screen screen when <Search> button pressed
+        searchMainButton.addEventListener('mouseup', function (ev) {
+            searchButtonPessed(ev);
+            return;
+        });
+
+    }
+    currentScreenPage = $divEventList.data().currentscreenpage;
+
+    $ulEventList = $("#" + idUlEventList);
+    $ulEventList.empty();
+
+    // Start pagination
+    $ulEvListPagination = $("#" + idUlEvListPagination);
+    $ulEvListPagination.empty();
+
+    // Pagination - previous page 
+    elID = getPaginationId(-1);
+    elText = '<span class="page-link">Previous</span>';
+    liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
+
+    // Pagination - current page
+    elID = getPaginationId(currentPageNumber);
+    elText = '<span class="page-link">' + currentPageNumber.toString() + '</span>';
+    liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
+    $("#" + elID).data({ pagenumber: currentPageNumber });
+
+    // Show all event data
+    for (let index = 0; index < paramEventsData.length; index++) {
+
+        currentEventNumberOnPage = currentEventNumberOnPage + 1;
+
+        // Add pagination elemet for the new page
+        if (currentEventNumberOnPage > globalNumberEventsOnPage) {
+            currentEventNumberOnPage = 1;
+            currentPageNumber = currentPageNumber + 1;
+            maxPageNumber = currentPageNumber;
+
+            elID = getPaginationId(currentPageNumber);
+            elText = '<span class="page-link">' + currentPageNumber.toString() + '</span>';
+            liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
+            $("#" + elID).data({ pagenumber: currentPageNumber });
+        }
+
+        let eventDate = paramEventsData[index].date.toString();
+        let eventNumber = paramEventsData[index].item.toString();
+        let eventActive = paramEventsData[index].active;
+
+        elText = "Event # " + (paramEventsData.length - index).toString() +
+            "  " +
+            paramEventsData[index].date +
+            "  " +
+            paramEventsData[index].item +
+            "  " +
+            eventActive +
+            "  page=" +
+            currentPageNumber;
+        elID = getListEventId(paramEventsData[index].date,
+            paramEventsData[index].item);
+
+        li = crtHTTPElem('li', ulEventList, "list-group-item", '', '', elText, elID);
+        evData = {
+            pagenumber: currentPageNumber,
+            evdate: eventDate,
+            evnumber: eventNumber,
+            evactive: eventActive
+        };
+        $("#" + elID).data(evData);
+
+        if (currentScreenPage == currentPageNumber) {
+            li.style.display = "block";
+            evData.evloaded = 'Y';
+            $("#" + elID).data(evData);
+        }
+        else {
+            li.style.display = "none";
+            evData.evloaded = 'N';
+            $("#" + elID).data(evData);
+            continue;
+        }
+
+        // All one event data to screen
+        showOneEventData(eventDate, eventNumber);
+
+    } // for (let index = 0; index < paramEventsData.length; index++)
+
+    // End pagination
+    elID = getPaginationId(0);
+    elText = '<span class="page-link">Next</span>';
+    liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
+
+    // Save the maximum page number
+    evData = $divEventList.data();
+    evData.maxpagenumber = maxPageNumber;
+    $divEventList.data(evData);
+
+    // Show current screen page
+    showCurrentScreenPage();
+
+    return null;
+
+} // cbListAllEvents()
+
+// Refresh screen screen when <Search> field changed
+function searchFieldChanged(ev) {
+
+
+    return;
+
+} // searchFieldChanged()
+
+// Refresh screen screen when <Search> button pressed
+function searchButtonPessed(ev) {
+
+    screenMode = "SEARCH";
+    $inputSearchMain.data({ "screenmode": screenMode });
+    zbLastEventList("SEARCH");
+
+    return;
+
+} // searchButtonPessed()
