@@ -60,7 +60,8 @@ function zbPeriodList(mode = 'INIT') {
             li = crtHTTPElem('li', ulPeriodList, "list-group-item", '', '', elText, liCurrPeriodListId);
             $("#" + liCurrPeriodListId).data({
                 periodyear: parDataObj[index]._id.year,
-                periodmonth: parDataObj[index]._id.month
+                periodmonth: parDataObj[index]._id.month,
+                periodcount: parDataObj[index].count
             });
 
             if (index == 0) {

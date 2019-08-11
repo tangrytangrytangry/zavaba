@@ -5,8 +5,8 @@ var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
 var liPagination, $liPagination, idLiPagination;
 var currentScreenPage = 0, maxPageNumber = 0;
 var currPageLang = "";
-var screenMode = ""; // INIT or SEARCH
 
+var screenSearchMode = {};
 var idInputSearchMain = "searchMain", inputSearchMain, $inputSearchMain, searchMainValue = "";
 var idInputSearchButton = "searchMainButton", inputSearchMainButton, $inputSearchMainButton, searchMainValueButton = "";
 
@@ -25,26 +25,18 @@ function zbLastEventList(mode = 'INIT') {
     currentScreenPage = 0;
     maxPageNumber = 1;
 
+    inputSearchMain = document.getElementById(idInputSearchMain);
+    screenSearchMode = JSON.parse(sessionStorage.getItem('screenSearchMode'));
+
     // Init main page search value
-    if (mode == 'INIT') {
-
-        inputSearchMain = document.getElementById(idInputSearchMain);
-
-        screenMode = mode;
-        $inputSearchMain = $("#" + idInputSearchMain);
-        $inputSearchMain.data({ "screenmode": screenMode });
-
-        if (inputSearchMain.value) {
-
-            if (inputSearchMain.value != "") {
-                searchMainValue = inputSearchMain.value;
-            } else {
-                searchMainValue = "";
-            }
-
-        } else {
-            searchMainValue = "";
-        }
+    if (screenSearchMode) {
+        inputSearchMain.value = screenSearchMode.searchtext;
+    }
+    else {
+        screenSearchMode = {};
+        screenSearchMode.searchmode = mode;
+        screenSearchMode.searchtext = "";
+        sessionStorage.setItem('screenSearchMode', JSON.stringify(screenSearchMode));
     }
 
     runReportParam = '?report=' + 'eventlist' +
@@ -52,72 +44,6 @@ function zbLastEventList(mode = 'INIT') {
         '&salt=' + Math.random().toString(36).substr(2, 5);
 
     events = sendGetRequestToServerAsync('reports', runReportParam, cbListAllEvents);
-
-    // In pagination changed page number by mouse click
-    function changeCurrentScreenPage(event) {
-
-        let idPagination;
-
-        if (event.target.parentElement.tagName === 'UL') {
-            idPagination = event.target.id;
-        } else {
-            idPagination = event.target.parentElement.id;
-        }
-
-        currentScreenPage = $divEventList.data().currentscreenpage;
-        maxPageNumber = $divEventList.data().maxpagenumber;
-
-        // Calculate screen page number to show
-        switch (idPagination) {
-
-            // Previous number
-            case getPaginationId(-1):
-
-                if (currentScreenPage <= 1) {
-                    return null;
-                } else {
-                    currentScreenPage = currentScreenPage - 1;
-                }
-                break;
-
-            // Next number
-            case getPaginationId(0):
-
-                if (currentScreenPage >= maxPageNumber) {
-                    return null;
-                } else {
-                    currentScreenPage = currentScreenPage + 1;
-                }
-                break;
-
-                break;
-
-            // Specific number
-            default:
-
-                evData = $("#" + idPagination).data();
-
-                if (currentScreenPage === evData.pagenumber) {
-                    return null;
-                } else {
-                    currentScreenPage = evData.pagenumber;
-                }
-
-                break;
-        }
-
-        // Save current screen page
-        evData = $divEventList.data();
-        evData.currentscreenpage = currentScreenPage;
-        $divEventList.data(evData);
-
-        // Show current screen page
-        showCurrentScreenPage("CHANGE_PAGE");
-
-        return null;
-
-    } // changeCurrentScreenPage()
-
 
     return null;
 
@@ -334,12 +260,9 @@ function cbListAllEvents(eventsData) {
     idUlEvListPagination = "ul_ev_list_pagination";
 
     $divEventList = $("#" + idDivEventList);
-    if (screenMode == 'INIT' || screenMode == 'SEARCH') {
+    if (screenSearchMode.searchmode == 'INIT' || screenSearchMode.searchmode == 'SEARCH') {
 
         currPageLang = document.getElementById("main-select-lang").lang.toUpperCase();
-
-        inputSearchMain.value = "";
-        searchMainValue = "";
 
         divEventList = document.getElementById(idDivEventList);
         ulEventList = document.getElementById(idUlEventList);
@@ -357,7 +280,7 @@ function cbListAllEvents(eventsData) {
         });
 
         // Refresh screen screen when <Search> field changed
-        searchMain.addEventListener('mouseup', function (ev) {
+        searchMain.addEventListener('keyup', function (ev) {
             searchFieldChanged(ev);
             return;
         });
@@ -465,9 +388,86 @@ function cbListAllEvents(eventsData) {
 
 } // cbListAllEvents()
 
+// In pagination changed page number by mouse click
+function changeCurrentScreenPage(event) {
+
+    let idPagination;
+
+    if (event.target.parentElement.tagName === 'UL') {
+        idPagination = event.target.id;
+    } else {
+        idPagination = event.target.parentElement.id;
+    }
+
+    currentScreenPage = $divEventList.data().currentscreenpage;
+    maxPageNumber = $divEventList.data().maxpagenumber;
+
+    // Calculate screen page number to show
+    switch (idPagination) {
+
+        // Previous number
+        case getPaginationId(-1):
+
+            if (currentScreenPage <= 1) {
+                return null;
+            } else {
+                currentScreenPage = currentScreenPage - 1;
+            }
+            break;
+
+        // Next number
+        case getPaginationId(0):
+
+            if (currentScreenPage >= maxPageNumber) {
+                return null;
+            } else {
+                currentScreenPage = currentScreenPage + 1;
+            }
+            break;
+
+            break;
+
+        // Specific number
+        default:
+
+            evData = $("#" + idPagination).data();
+
+            if (currentScreenPage === evData.pagenumber) {
+                return null;
+            } else {
+                currentScreenPage = evData.pagenumber;
+            }
+
+            break;
+    }
+
+    // Save current screen page
+    evData = $divEventList.data();
+    evData.currentscreenpage = currentScreenPage;
+    $divEventList.data(evData);
+
+    // Show current screen page
+    showCurrentScreenPage("CHANGE_PAGE");
+
+    return null;
+
+} // changeCurrentScreenPage()
+
 // Refresh screen screen when <Search> field changed
 function searchFieldChanged(ev) {
 
+    screenSearchMode = JSON.parse(sessionStorage.getItem('screenSearchMode'));
+
+    if (inputSearchMain.value.trim() != screenSearchMode.searchtext) {
+        screenSearchMode.searchtext = inputSearchMain.value.trim();
+
+        if (screenSearchMode.searchtext !="") {
+            screenSearchMode.searchmode = "SEARCH";
+        } else {
+            screenSearchMode.searchmode = "INIT";
+        }
+        sessionStorage.setItem('screenSearchMode', JSON.stringify(screenSearchMode));
+    }
 
     return;
 
@@ -476,9 +476,10 @@ function searchFieldChanged(ev) {
 // Refresh screen screen when <Search> button pressed
 function searchButtonPessed(ev) {
 
-    screenMode = "SEARCH";
-    $inputSearchMain.data({ "screenmode": screenMode });
-    zbLastEventList("SEARCH");
+    screenSearchMode.searchmode = "SEARCH";
+    screenSearchMode.searchtext = inputSearchMain.value.trim();
+    sessionStorage.setItem('screenSearchMode', JSON.stringify(screenSearchMode));
+    zbLastEventList(screenSearchMode.searchmode);
 
     return;
 
