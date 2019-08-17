@@ -41,6 +41,7 @@ function zbLastEventList(mode = 'INIT') {
 
     runReportParam = '?report=' + 'eventlist' +
         '&deepListMonths=' + globalEventHistoryMonthsDeep.toString() +
+        '&filterObject=' + JSON.stringify(screenSearchMode) +
         '&salt=' + Math.random().toString(36).substr(2, 5);
 
     events = sendGetRequestToServerAsync('reports', runReportParam, cbListAllEvents);
