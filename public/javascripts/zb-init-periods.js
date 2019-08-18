@@ -1,6 +1,6 @@
 
-var divPeriodList, $divPeriodList, idDivPeriodList;
-var ulPeriodList, $ulPeriodList, idUlPeriodList;
+var divPeriodList, $divPeriodList, idDivPeriodList = "div_period_list";
+var ulPeriodList, $ulPeriodList, idUlPeriodList = "ul_period_list";
 
 // Load all periods from server to screen
 function zbPeriodList(mode = 'INIT') {
@@ -16,6 +16,7 @@ function zbPeriodList(mode = 'INIT') {
 
     periods = sendGetRequestToServerAsync('reports', runReportParam, cbPeriodList);
 
+    // Show all periods to screen
     function cbPeriodList(periodsData) {
         //console.log("sendGetRequestToServerAsync: periodsData = " + periodsData);
 
@@ -23,9 +24,6 @@ function zbPeriodList(mode = 'INIT') {
         let liCurrPeriodListId;
 
         if (mode === 'INIT') {
-
-            idDivPeriodList = "div_period_list";
-            idUlPeriodList = "ul_period_list";
 
             $divPeriodList = $("#" + idDivPeriodList);
             $ulPeriodList = $("#" + idUlPeriodList);
@@ -132,7 +130,7 @@ function zbPeriodList(mode = 'INIT') {
 }
 // Activate period on navigation period side bar
 function activateNavBarPeriod(parPerYear, parPerMonth) {
-    
+
     $("#" + idUlPeriodList).children().removeClass("active");
     $("#" + getSidePeriodId(parPerYear, parPerMonth)).addClass('active');
 

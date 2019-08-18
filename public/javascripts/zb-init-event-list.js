@@ -29,6 +29,8 @@ function zbLastEventList(mode = 'INIT') {
     screenSearchMode = JSON.parse(sessionStorage.getItem('screenSearchMode'));
 
     // Init main page search value
+
+
     if (screenSearchMode) {
         inputSearchMain.value = screenSearchMode.searchtext;
     }
@@ -288,7 +290,7 @@ function cbListAllEvents(eventsData) {
 
         // Refresh screen screen when <Search> button pressed
         searchMainButton.addEventListener('mouseup', function (ev) {
-            searchButtonPessed(ev);
+            searchButtonPressed(ev);
             return;
         });
 
@@ -385,6 +387,9 @@ function cbListAllEvents(eventsData) {
     // Show current screen page
     showCurrentScreenPage();
 
+    // On the sidebar hide periods, which are not presented in the event list
+    hideInactivePeriods();
+
     return null;
 
 } // cbListAllEvents()
@@ -462,7 +467,7 @@ function searchFieldChanged(ev) {
     if (inputSearchMain.value.trim() != screenSearchMode.searchtext) {
         screenSearchMode.searchtext = inputSearchMain.value.trim();
 
-        if (screenSearchMode.searchtext !="") {
+        if (screenSearchMode.searchtext != "") {
             screenSearchMode.searchmode = "SEARCH";
         } else {
             screenSearchMode.searchmode = "INIT";
@@ -475,7 +480,7 @@ function searchFieldChanged(ev) {
 } // searchFieldChanged()
 
 // Refresh screen screen when <Search> button pressed
-function searchButtonPessed(ev) {
+function searchButtonPressed(ev) {
 
     screenSearchMode.searchmode = "SEARCH";
     screenSearchMode.searchtext = inputSearchMain.value.trim();
@@ -484,4 +489,18 @@ function searchButtonPessed(ev) {
 
     return;
 
-} // searchButtonPessed()
+} // searchButtonPressed()
+
+// On the sidebar hide periods, which are not presented in the event list
+function hideInactivePeriods() {
+
+    var arrPeriods = ulPeriodList.getElementsByTagName('li');
+    var period, periodData={};
+
+    for (let index = 0; index < arrPeriods.length; index++) {
+        period = arrPeriods[index];
+        periodData=$("#" + period.id).data();
+
+    }
+
+} // hideInactivePeriods()
