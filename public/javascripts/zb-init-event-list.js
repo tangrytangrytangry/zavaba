@@ -464,15 +464,18 @@ function searchFieldChanged(ev) {
 
     screenSearchMode = JSON.parse(sessionStorage.getItem('screenSearchMode'));
 
-    if (inputSearchMain.value.trim() != screenSearchMode.searchtext) {
+    if (inputSearchMain.value.trim() != screenSearchMode.searchtext.trim()) {
         screenSearchMode.searchtext = inputSearchMain.value.trim();
 
         if (screenSearchMode.searchtext != "") {
             screenSearchMode.searchmode = "SEARCH";
+            sessionStorage.setItem('screenSearchMode', JSON.stringify(screenSearchMode));
         } else {
+            // If search field was cleared then refresh screen
             screenSearchMode.searchmode = "INIT";
+            sessionStorage.setItem('screenSearchMode', JSON.stringify(screenSearchMode));
+            zbLastEventList(screenSearchMode.searchmode);
         }
-        sessionStorage.setItem('screenSearchMode', JSON.stringify(screenSearchMode));
     }
 
     return;
@@ -495,12 +498,40 @@ function searchButtonPressed(ev) {
 function hideInactivePeriods() {
 
     var arrPeriods = ulPeriodList.getElementsByTagName('li');
-    var period, periodData={};
+    var period, periodData = {};
+
+    var arrEvents = ulEventList.getElementsByTagName('li');
+    var event, eventData = {}, eventDateObj = {};
+
+    var foundEventForPeriod = false;
 
     for (let index = 0; index < arrPeriods.length; index++) {
         period = arrPeriods[index];
-        periodData=$("#" + period.id).data();
+        periodData = $("#" + period.id).data();
+        // periodData = {periodyear: 2019, periodmonth: 7, periodcount: 12}
+        foundEventForPeriod = false;
 
-    }
+        for (let index2 = 0; index2 < arrEvents.length; index2++) {
+            event = arrEvents[index2];
+            eventData = $("#" + event.id).data();
+            // eventData = {pagenumber: 1, evdate: "20190714", evnumber: "3", evactive: "Y", evloaded: "Y"}
+
+            eventDateObj = cvtCharDate8ToObj(eventData.evdate);
+            // eventDateObj = {yyyy: 2019, mm: 7, dd: 14}
+
+            if (periodData.periodyear == eventDateObj.yyyy &&
+                periodData.periodmonth == eventDateObj.mm) {
+                foundEventForPeriod = true;
+                break;
+            }
+        } // for (let index2 = 0; index2 < arrEvents.length; index2++)
+
+        // Hide sidebar period which does not have events
+        if (!foundEventForPeriod) {
+            let liPeriod = document.getElementById(period.id);
+            liPeriod.style.display = "none";
+        } // if (!foundEventForPeriod)
+
+    } // for (let index = 0; index < arrPeriods.length; index++) 
 
 } // hideInactivePeriods()

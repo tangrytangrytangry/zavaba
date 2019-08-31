@@ -15,7 +15,8 @@
                 "login": "Login",
                 "logout": "Logout",
                 "users": "Users",
-                "about": "About"
+                "about": "About",
+                "search": "Search"
             },
             "login": {
                 "hello": "Hello!",

@@ -15,7 +15,8 @@
                 "login": "Identificarse",
                 "logout": "Salir",
                 "users": "Usuarios",
-                "about": "Sobre nosotros"
+                "about": "Sobre nosotros",
+                "search": "Buscar"
             },
             "login": {
                 "hello": "Hola!",
