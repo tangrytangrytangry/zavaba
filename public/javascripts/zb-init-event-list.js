@@ -144,14 +144,24 @@ function cbOneEventData(oneEventData) {
     let objEventData = JSON.parse(oneEventData);
     //console.log("cbOneEvent: objEventData = " + objEventData);
     let pictureURL = window.location.origin + objEventData[0].data.picture.lurl;
+    let attachmentURL = window.location.origin + objEventData[0].data.attachment.lurl;
 
     let currEventId = getListEventId(objEventData[0].date, objEventData[0].item);
     let currEvent = $("#" + currEventId);
 
     let currLi = document.getElementById(currEventId);
 
+    // Show event attachment
+    let divAttaId = getEventTableDivAttId(objEventData[0].date, objEventData[0].item);
+    let divAtta = $("#" + divAttaId);
+    divAtta.append('<p><a href="' + attachmentURL + '" target="_blank"> ' +
+        objEventData[0].data.attachment.text.trim() +
+        '</a></p>');
+
     // Show event picture
-    currEvent.append("<img></img>");
+    let divPictId = getEventTableDivPicId(objEventData[0].date, objEventData[0].item);
+    let divPict = $("#" + divPictId);
+    divPict.append("<img></img>");
     $("#" + currEventId + " :last-child")
         .attr({
             src: pictureURL,
@@ -207,11 +217,10 @@ function cbOneEventDesc(oneEventTexts) {
 
         if (currPageLang == langText.langcode) {
 
-            currEvent = $("#" + currEventId);
-            currLi = document.getElementById(currEventId);
-
             // Show event description in proper language
-            currEvent.append("<p>" +
+            let divTextId = getEventTableDivTxtId(langText.date, langText.item);
+            let divText = $("#" + divTextId);
+            divText.append("<p>" +
                 langText.langcode + " - " +
                 langText.data.text +
                 "</p>");
@@ -336,6 +345,7 @@ function cbListAllEvents(eventsData) {
         let eventNumber = paramEventsData[index].item.toString();
         let eventActive = paramEventsData[index].active;
 
+        /*
         elText = "Event # " + (paramEventsData.length - index).toString() +
             "  " +
             paramEventsData[index].date +
@@ -345,6 +355,8 @@ function cbListAllEvents(eventsData) {
             eventActive +
             "  page=" +
             currentPageNumber;
+        */
+        elText = "";
         elID = getListEventId(paramEventsData[index].date,
             paramEventsData[index].item);
 
@@ -356,6 +368,11 @@ function cbListAllEvents(eventsData) {
             evactive: eventActive
         };
         $("#" + elID).data(evData);
+
+        // Draw table with one even data
+        let $li = $("#" + elID);
+        $li.append(getEventTable(paramEventsData[index].date,
+            paramEventsData[index].item));
 
         if (currentScreenPage == currentPageNumber) {
             li.style.display = "block";
@@ -393,6 +410,38 @@ function cbListAllEvents(eventsData) {
     return null;
 
 } // cbListAllEvents()
+
+// Draw <table> of one event data to show in the event list
+function getEventTable(evDate, evNumber) {
+
+    var tableText = "";
+
+    tableText =
+        '<table style="width:80%">' +
+        ' <tr>' +
+        '  <td rowspan="3">' +
+        '   <div id="' + getEventTableDivPicId(evDate, evNumber) + '">' + '</div>' +
+        '  </td>' +
+        '  <td>' + evDate + '-' + evNumber + '</td>' +
+        '  <td>Bill Gates 2</td>' +
+        ' </tr>' +
+        ' <tr>' +
+        '  <td colspan="2">' +
+        '   <div id="' + getEventTableDivTxtId(evDate, evNumber) + '">' + '</div>' +
+        '  </td>' +
+        ' </tr>' +
+        ' <tr>' +
+        '  <td>Attachment:</td>' +
+        '  <td>' +
+        '   <div id="' + getEventTableDivAttId(evDate, evNumber) + '">' + '</div>' +
+        '  </td>' +
+        ' </tr>' +
+        '</table>' +
+        '</div>'
+
+    return tableText;
+
+} // changeCurrentScreenPage(getEventTable)
 
 // In pagination changed page number by mouse click
 function changeCurrentScreenPage(event) {

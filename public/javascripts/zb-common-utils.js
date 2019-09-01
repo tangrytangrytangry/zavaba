@@ -106,3 +106,18 @@ function cvtCharDate8ToObj(p_CharDate8) {
 	return obj;
 
 } // cvtCharDate8ToObj()
+
+// For home screen get id for the <div> of the event picture
+function getEventTableDivPicId(evDate, evItem) {
+	return "home_ev_tbl_div_pic_" + evDate.toString() + "_" + evItem.toString();
+} // getEventTableDivPicId()
+
+// For home screen get id for the <div> of the event description text
+function getEventTableDivTxtId(evDate, evItem) {
+	return "home_ev_tbl_div_txt_" + evDate.toString() + "_" + evItem.toString();
+} // getEventTableDivTxtId()
+
+// For home screen get id for the <div> of the event attachement
+function getEventTableDivAttId(evDate, evItem) {
+	return "home_ev_tbl_div_att_" + evDate.toString() + "_" + evItem.toString();
+} // getEventTableDivAttId()
