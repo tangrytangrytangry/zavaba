@@ -358,6 +358,11 @@ app.get('/reports', function (req, res) {
 
 });
 
+// Get user info
+app.get('/getUserInfo', function (req, res) {
+    res.end(JSON.stringify(req.user)); 
+});
+
 // custom 404 page
 app.use(function (req, res, next) {
     res.type('text/plain');

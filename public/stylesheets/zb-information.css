@@ -1,0 +1,40 @@
+
+/*----------------------------------------------*/
+/* Information BEGIN */
+
+#Information {
+	margin-top:5px;
+	width: 900px;
+}
+
+.alertBody {
+	padding:5px 10px;
+	margin-bottom:5px;
+	transition-property: all;
+    transition-duration: .3s;
+	font-size:16px;
+	font-weight:500;
+	border-radius: 4px;
+}
+
+.alert-success {
+	border: 1px solid #D6E9C6;
+	background:#dff0d8;
+	color: #3C763D;
+}
+
+.alert-warning {
+	border: 1px solid #FAEBCC;
+	background:#FCF8E3;
+	color:#8A6D3B;
+}
+
+.alert-error {
+	border: 1px solid #EBCCD1;
+	background:#F2DEDE;
+	color:#AD4842;
+}
+
+/* Information END */
+/*----------------------------------------------*/
+    

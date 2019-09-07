@@ -6,6 +6,9 @@ var liPagination, $liPagination, idLiPagination;
 var currentScreenPage = 0, maxPageNumber = 0;
 var currPageLang = "";
 
+var userInfoStr = "";
+var userInfoObj = {};
+
 var screenSearchMode = {};
 var idInputSearchMain = "searchMain", inputSearchMain, $inputSearchMain, searchMainValue = "";
 var idInputSearchButton = "searchMainButton", inputSearchMainButton, $inputSearchMainButton, searchMainValueButton = "";
@@ -28,8 +31,16 @@ function zbLastEventList(mode = 'INIT') {
     inputSearchMain = document.getElementById(idInputSearchMain);
     screenSearchMode = JSON.parse(sessionStorage.getItem('screenSearchMode'));
 
-    // Init main page search value
+    // Get user info
 
+    userInfoStr = sendGetRequestToServerAsync('getUserInfo', "",
+        function (userData) {
+            userInfoStr = userData;
+            try { userInfoObj = JSON.parse(userInfoStr); }
+            catch (error) { userInfoObj = {}; }
+        });
+
+    // Init main page search value
 
     if (screenSearchMode) {
         inputSearchMain.value = screenSearchMode.searchtext;
@@ -151,13 +162,6 @@ function cbOneEventData(oneEventData) {
 
     let currLi = document.getElementById(currEventId);
 
-    // Show event attachment
-    let divAttaId = getEventTableDivAttId(objEventData[0].date, objEventData[0].item);
-    let divAtta = $("#" + divAttaId);
-    divAtta.append('<p><a href="' + attachmentURL + '" target="_blank"> ' +
-        objEventData[0].data.attachment.text.trim() +
-        '</a></p>');
-
     // Show event picture
     let divPictId = getEventTableDivPicId(objEventData[0].date, objEventData[0].item);
     let divPict = $("#" + divPictId);
@@ -168,6 +172,14 @@ function cbOneEventData(oneEventData) {
             alt: objEventData[0].data.picture.text
         });
 
+    // Show event attachment
+    let divAttaId = getEventTableDivAttId(objEventData[0].date, objEventData[0].item);
+    let divAtta = $("#" + divAttaId);
+    divAtta.append('<p><a href="' + attachmentURL + '" target="_blank"> ' +
+        objEventData[0].data.attachment.text.trim() +
+        '</a></p>');
+
+    // Save event data    
     evData = $("#" + currEventId).data();
     evData[getPictureId()] = objEventData[0].data.picture.text.trim();
     evData[getAttachmentId()] = objEventData[0].data.attachment.text.trim();
@@ -415,9 +427,16 @@ function cbListAllEvents(eventsData) {
 function getEventTable(evDate, evNumber) {
 
     var tableText = "";
+    // +-------------------------------------------+
+    // |            |   date-item   |   icons      |  
+    // |            |------------------------------|
+    // |   picture  |   Text                       |  
+    // |            |------------------------------|
+    // |            |   Comment     |   some.doc   |  
+    // +-------------------------------------------+
 
     tableText =
-        '<table style="width:80%">' +
+        '<table style="width:100%">' +
         ' <tr>' +
         '  <td rowspan="3">' +
         '   <div id="' + getEventTableDivPicId(evDate, evNumber) + '">' + '</div>' +

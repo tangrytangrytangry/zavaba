@@ -18,6 +18,7 @@
         <link href="stylesheets/zb-login.css" rel="stylesheet">
         <link href="stylesheets/zb-signup.css" rel="stylesheet">
         <link href="stylesheets/zb-modal-rtv-password.css" rel="stylesheet">
+        <link href="stylesheets/zb-information.css" rel="stylesheet">
         <!-- ZABAVACSS END -->
 
 </head>
@@ -30,42 +31,27 @@
 
         <h1>{{ title }}</h1>
 
-        <br> {% if user %}
+        <br>
+
+        {% if user %}
         <h4>main.html: User = {{ user }}</h4>
-        {% endif %} {% if error %}
+        {% endif %}
+
+        {% if error %}
         <h4>main.html: Error = {{ error }}</h4>
-        {% endif %} {% if user %}
-        <h4>main.html: username = {% if user.personalData.name %} {{ user.personalData.name }} {% else %} {{ user.username }}
+        {% endif %}
+
+        {% if user %}
+        <h4>main.html: username =
+                {% if user.personalData.name %}
+                {{ user.personalData.name }}
+                {% else %}
+                {{ user.username }}
                 {% endif %}</h4>
+
         {% endif %}
 
         <br>
-
-        <!-- Breadcrumbs BEGIN -->
-
-        <!--
-        <ol class="breadcrumb">
-                <li class="breadcrumb-item active">Home</li>
-        </ol>
-        <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                        <a href="#">Home</a>
-                </li>
-                <li class="breadcrumb-item active">Library</li>
-        </ol>
-        <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                        <a href="#">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                        <a href="#">Library</a>
-                </li>
-                <li class="breadcrumb-item active">Data</li>
-        </ol>
-
-        <br>
-        -->
-        <!-- Breadcrumbs END -->
 
         <br>
 
@@ -73,10 +59,13 @@
 </header>
 
 <body>
+        {# INFORMATION BEGIN #} {% include "partials/information.html" %} {# INFORMATION END #}
 
-        {% block body %} {% endblock body %}
+        {# HOME BEGIN #} {% block body %} {% endblock body %} {# HOME END #}
 
-        <br> {# FOOTER BEGIN #} {% include "partials/footer.html" %} {# FOOTER END #}
+        <br>
+
+        {# FOOTER BEGIN #} {% include "partials/footer.html" %} {# FOOTER END #}
 
 </body>
 

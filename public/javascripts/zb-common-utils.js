@@ -55,6 +55,31 @@ function crtHTTPElem(tag, main, cls, name, disp, txt, id) {
 	return el;
 } // crtHTTPElem()
 
+// Show error info on the top of the screen
+function SetInfo(str, type) {
+	type = type.toUpperCase();
+	var el = document.createElement('div');
+
+	console.log(type + ': ' + str);
+
+	if (type == 'SUCCESS') { el.className = 'alertBody alert-success'; }
+	else if (type == 'WARNING') { el.className = 'alertBody alert-warning'; }
+	else if (type == 'ERROR') { el.className = 'alertBody alert-error'; }
+	el.innerHTML = str;
+
+	$(el).click(function () {
+		el.parentNode.removeChild(el);
+	});
+
+	setTimeout(function () {
+		if (el.parentNode) { el.parentNode.removeChild(el); }
+	}, 10000);
+
+	Information.insertBefore(el, Information.firstChild);
+
+	return;
+}
+
 // For home screen
 function getListEventId(evDate, evItem) {
 	return "home_list_event_" + evDate.toString() + "_" + evItem.toString();
