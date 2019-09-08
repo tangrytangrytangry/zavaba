@@ -18,7 +18,12 @@
                 "about": "Sobre nosotros",
                 "search": "Buscar"
             },
-            "login": {
+            "home": {
+                "new": "Añadir",
+                "edit": "Corregir",
+                "deactivate": "Desactivar"
+            },
+           "login": {
                 "hello": "Hola!",
                 "enteraccount": "Por Favor, Inicie Sesión En Su Cuenta:",
                 "username": "Nombre de usuario",

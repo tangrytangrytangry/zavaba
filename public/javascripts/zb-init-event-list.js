@@ -4,7 +4,10 @@ var ulEventList, $ulEventList, idUlEventList;
 var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
 var liPagination, $liPagination, idLiPagination;
 var currentScreenPage = 0, maxPageNumber = 0;
+
 var currPageLang = "";
+var currLangDataStr = "";
+var currLangDataObj = "";
 
 var userInfoStr = "";
 var userInfoObj = {};
@@ -33,12 +36,29 @@ function zbLastEventList(mode = 'INIT') {
 
     // Get user info
 
-    userInfoStr = sendGetRequestToServerAsync('getUserInfo', "",
-        function (userData) {
-            userInfoStr = userData;
-            try { userInfoObj = JSON.parse(userInfoStr); }
-            catch (error) { userInfoObj = {}; }
-        });
+    //userInfoStr = sendGetRequestToServerAsync('getUserInfo', "",
+    //    function (userData) {
+    //        userInfoStr = userData;
+    //        try { userInfoObj = JSON.parse(userInfoStr); }
+    //        catch (error) { userInfoObj = {}; }
+    //        console.log("userInfoObj=", JSON.stringify(userInfoObj));
+    //    });
+
+    try {
+        userInfoStr = sendGetRequestToServerSync('getUserInfo', "");
+        userInfoObj = JSON.parse(userInfoStr);
+    }
+    catch (error) { userInfoObj = {}; }
+    //console.log("userInfoObj=", JSON.stringify(userInfoObj));
+
+    // Get current language data
+
+    try {
+        currLangDataStr = sendGetRequestToServerSync('getLanguageData', "");
+        currLangDataObj = JSON.parse(currLangDataStr);
+    }
+    catch (error) { currLangDataObj = {}; }
+    //console.log("currLangDataObj=", JSON.stringify(currLangDataObj));
 
     // Init main page search value
 
@@ -316,6 +336,10 @@ function cbListAllEvents(eventsData) {
         });
 
     }
+
+    if (!divEventList) { return;}
+    if (!ulEventList) { return;}
+
     currentScreenPage = $divEventList.data().currentscreenpage;
 
     $ulEventList = $("#" + idUlEventList);
@@ -384,7 +408,7 @@ function cbListAllEvents(eventsData) {
         // Draw table with one even data
         let $li = $("#" + elID);
         $li.append(getEventTable(paramEventsData[index].date,
-            paramEventsData[index].item));
+            paramEventsData[index].item, paramEventsData[index].active));
 
         if (currentScreenPage == currentPageNumber) {
             li.style.display = "block";
@@ -424,7 +448,7 @@ function cbListAllEvents(eventsData) {
 } // cbListAllEvents()
 
 // Draw <table> of one event data to show in the event list
-function getEventTable(evDate, evNumber) {
+function getEventTable(evDate, evNumber, evActive) {
 
     var tableText = "";
     // +-------------------------------------------+
@@ -436,31 +460,51 @@ function getEventTable(evDate, evNumber) {
     // +-------------------------------------------+
 
     tableText =
-        '<table style="width:100%">' +
-        ' <tr>' +
-        '  <td rowspan="3">' +
-        '   <div id="' + getEventTableDivPicId(evDate, evNumber) + '">' + '</div>' +
-        '  </td>' +
-        '  <td>' + evDate + '-' + evNumber + '</td>' +
-        '  <td>Bill Gates 2</td>' +
-        ' </tr>' +
-        ' <tr>' +
-        '  <td colspan="2">' +
-        '   <div id="' + getEventTableDivTxtId(evDate, evNumber) + '">' + '</div>' +
-        '  </td>' +
-        ' </tr>' +
-        ' <tr>' +
-        '  <td>Attachment:</td>' +
-        '  <td>' +
-        '   <div id="' + getEventTableDivAttId(evDate, evNumber) + '">' + '</div>' +
-        '  </td>' +
-        ' </tr>' +
-        '</table>' +
-        '</div>'
+        '<div>' +
+        ' <table style="width:100%">' +
+        '  <tr>' +
+        '   <td rowspan="3">' +
+        '    <div id="' + getEventTableDivPicId(evDate, evNumber) + '">' + '</div>' +
+        '   </td>' +
+        '   <td>' + evDate + '-' + evNumber + '</td>' +
+        '   <td>' + getEventIcons(evDate, evNumber, evActive) + '</td>' +
+        '  </tr>' +
+        '  <tr>' +
+        '   <td colspan="2">' +
+        '    <div id="' + getEventTableDivTxtId(evDate, evNumber) + '">' + '</div>' +
+        '   </td>' +
+        '  </tr>' +
+        '  <tr>' +
+        '   <td>Attachment:</td>' +
+        '   <td>' +
+        '    <div id="' + getEventTableDivAttId(evDate, evNumber) + '">' + '</div>' +
+        '   </td>' +
+        '  </tr>' +
+        ' </table>' +
+        '</div>';
 
     return tableText;
 
-} // changeCurrentScreenPage(getEventTable)
+} // getEventTable(evDate, evNumber, evActive)
+
+// Draw icons of one event in the event table
+function getEventIcons(evDate, evNumber, evActive) {
+
+    var eventIcons = "";
+
+    eventIcons =
+        '<div style="float:right;">' +
+        ' <a class="btn btn-warning btn-sm" href="#">' +
+        '  <i class="fa fa-pencil-square-o fa-lg"></i> ' + currLangDataObj.html.page.home.edit +
+        ' </a>' +
+        ' <a class="btn btn-danger btn-sm" href="#">' +
+        '  <i class="fa fa-trash-o fa-lg"></i> ' + currLangDataObj.html.page.home.deactivate +
+        ' </a>' +
+        '</div>';
+
+    return eventIcons;
+
+} // getEventIcons(evDate, evNumber, evActive)
 
 // In pagination changed page number by mouse click
 function changeCurrentScreenPage(event) {

@@ -7,6 +7,12 @@ function zbPeriodList(mode = 'INIT') {
 
     var runReportParam = "";
 
+    divPeriodList = document.getElementById(idDivPeriodList);
+    ulPeriodList = document.getElementById(idUlPeriodList);
+
+    if (!divPeriodList) { return; }
+    if (!ulPeriodList ) { return; }
+
     var periods = "";
     // periods = sendGetRequestToServerSync('periodlist');
     // console.log("sendGetRequestToServerSync: periods = " + periods);
@@ -28,9 +34,6 @@ function zbPeriodList(mode = 'INIT') {
             $divPeriodList = $("#" + idDivPeriodList);
             $ulPeriodList = $("#" + idUlPeriodList);
             $ulPeriodList.empty();
-
-            divPeriodList = document.getElementById(idDivPeriodList);
-            ulPeriodList = document.getElementById(idUlPeriodList);
 
             // In pertiod list changed period by mouse click
             $("#" + idUlPeriodList).on("click", "li", function (ev) {

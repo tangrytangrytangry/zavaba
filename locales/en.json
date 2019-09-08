@@ -18,6 +18,11 @@
                 "about": "About",
                 "search": "Search"
             },
+            "home": {
+                "new": "NEW",
+                "edit": "EDIT",
+                "deactivate": "DEACTIVATE"
+            },
             "login": {
                 "hello": "Hello!",
                 "enteraccount": "Please Login To Your Account:",
