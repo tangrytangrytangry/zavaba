@@ -21,7 +21,10 @@
             "home": {
                 "new": "Añadir",
                 "edit": "Corregir",
-                "deactivate": "Desactivar"
+                "deactivate": "Desactivar",
+                "activate": "Activar",
+                "previous": "ANTERIOR",
+                "next": "SIGUIENTE"
             },
            "login": {
                 "hello": "Hola!",

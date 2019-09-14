@@ -60,6 +60,14 @@ function zbLastEventList(mode = 'INIT') {
     catch (error) { currLangDataObj = {}; }
     //console.log("currLangDataObj=", JSON.stringify(currLangDataObj));
 
+    // For admin user show more options
+    let buttonHomeNew = document.getElementById(getButtonNewId());
+    if (userInfoObj.admin == true) {
+        buttonHomeNew.style.display = "block";
+    } else {
+        buttonHomeNew.style.display = "none";
+    }
+
     // Init main page search value
 
     if (screenSearchMode) {
@@ -260,33 +268,6 @@ function cbOneEventDesc(oneEventTexts) {
         }
     }
 
-    /*
-        elID = getListEventId(paramEventsData[index].date,
-            paramEventsData[index].item);
-    
-        li = crtHTTPElem('li', ulEventList, "list-group-item", '', '', elText, elID);
-        evData = {
-            pagenumber: currentPageNumber,
-            evdate: eventDate,
-            evnumber: eventNumber,
-            evactive: eventActive
-        };
-        $("#" + elID).data(evData);
-    
-        if (currentScreenPage == currentPageNumber) {
-            li.style.display = "block";
-            evData.evloaded = 'Y';
-            $("#" + elID).data(evData);
-        }
-        else {
-            li.style.display = "none";
-            evData.evloaded = 'N';
-            $("#" + elID).data(evData);
-            continue;
-        }
-    
-    */
-
     return null;
 } // cbOneEventDesc()
 
@@ -337,8 +318,8 @@ function cbListAllEvents(eventsData) {
 
     }
 
-    if (!divEventList) { return;}
-    if (!ulEventList) { return;}
+    if (!divEventList) { return; }
+    if (!ulEventList) { return; }
 
     currentScreenPage = $divEventList.data().currentscreenpage;
 
@@ -351,7 +332,7 @@ function cbListAllEvents(eventsData) {
 
     // Pagination - previous page 
     elID = getPaginationId(-1);
-    elText = '<span class="page-link">Previous</span>';
+    elText = '<span class="page-link">' + currLangDataObj.html.page.home.previous + '</span>';
     liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
 
     // Pagination - current page
@@ -422,6 +403,16 @@ function cbListAllEvents(eventsData) {
             continue;
         }
 
+        // For admin user show more options
+        let divEventIcons = document.getElementById(
+            getDivEventIconsId(paramEventsData[index].date,
+                paramEventsData[index].item));
+        if (userInfoObj.admin == true) {
+            divEventIcons.style.display = "block";
+        } else {
+            divEventIcons.style.display = "none";
+        }
+
         // All one event data to screen
         showOneEventData(eventDate, eventNumber);
 
@@ -429,7 +420,7 @@ function cbListAllEvents(eventsData) {
 
     // End pagination
     elID = getPaginationId(0);
-    elText = '<span class="page-link">Next</span>';
+    elText = '<span class="page-link">' + currLangDataObj.html.page.home.next + '</span>';
     liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
 
     // Save the maximum page number
@@ -467,7 +458,9 @@ function getEventTable(evDate, evNumber, evActive) {
         '    <div id="' + getEventTableDivPicId(evDate, evNumber) + '">' + '</div>' +
         '   </td>' +
         '   <td>' + evDate + '-' + evNumber + '</td>' +
-        '   <td>' + getEventIcons(evDate, evNumber, evActive) + '</td>' +
+        '   <td>' +
+        '    <div id="' + getDivEventIconsId(evDate, evNumber) + '">' + getEventIcons(evDate, evNumber, evActive) + '</div>' +
+        '   </td>' +
         '  </tr>' +
         '  <tr>' +
         '   <td colspan="2">' +
@@ -492,14 +485,32 @@ function getEventIcons(evDate, evNumber, evActive) {
 
     var eventIcons = "";
 
+    var btn_Edit = ' <a id="' + getButtonEditId(evDate, evNumber) + '" ' +
+        'class="btn btn-warning btn-sm" href="#">' +
+        '<i class="fa fa-pencil-square-o fa-lg"></i> ' + currLangDataObj.html.page.home.edit +
+        '</a>';
+
+    var btn_Deactivate = ' <a id="' + getButtonDeactivateId(evDate, evNumber) + '" ' +
+        'class="btn btn-danger btn-sm" href="#">' +
+        '<i class="fa fa-trash-o fa-lg"></i> ' + currLangDataObj.html.page.home.deactivate +
+        '</a>';
+
+    var btn_Activate = ' <a id="' + getButtonActivateId(evDate, evNumber) + '" ' +
+        'class="btn btn-info btn-sm" href="#">' +
+        '<i class="fa fa-undo fa-lg"></i> ' + currLangDataObj.html.page.home.activate +
+        '</a>';
+
+    if (evActive == 'Y') {
+        btn_Activate = '';
+    } else {
+        btn_Deactivate = '';
+    }
+
     eventIcons =
         '<div style="float:right;">' +
-        ' <a class="btn btn-warning btn-sm" href="#">' +
-        '  <i class="fa fa-pencil-square-o fa-lg"></i> ' + currLangDataObj.html.page.home.edit +
-        ' </a>' +
-        ' <a class="btn btn-danger btn-sm" href="#">' +
-        '  <i class="fa fa-trash-o fa-lg"></i> ' + currLangDataObj.html.page.home.deactivate +
-        ' </a>' +
+        btn_Edit +
+        btn_Deactivate +
+        btn_Activate +
         '</div>';
 
     return eventIcons;

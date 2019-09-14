@@ -21,7 +21,10 @@
             "home": {
                 "new": "NEW",
                 "edit": "EDIT",
-                "deactivate": "DEACTIVATE"
+                "deactivate": "DEACTIVATE",
+                "activate": "ACTIVATE",
+                "previous": "Previous",
+                "next": "Next"
             },
             "login": {
                 "hello": "Hello!",

@@ -120,7 +120,7 @@ function cvtCharDate8ToObj(p_CharDate8) {
 
 	let obj = { yyyy: 0, mm: 0, dd: 0 };
 
-	try { 
+	try {
 
 		obj.yyyy = Number(p_CharDate8.substr(0, 4));
 		obj.mm = Number(p_CharDate8.substr(4, 2));
@@ -146,3 +146,28 @@ function getEventTableDivTxtId(evDate, evItem) {
 function getEventTableDivAttId(evDate, evItem) {
 	return "home_ev_tbl_div_att_" + evDate.toString() + "_" + evItem.toString();
 } // getEventTableDivAttId()
+
+// For home screen get id for the <button> NEW
+function getButtonNewId() {
+	return "home_button_new_event";
+} // getButtonNewId()
+
+// For home screen get id for the <div> of event icons
+function getDivEventIconsId(evDate, evItem) {
+	return "home_div_icons_event_" + evDate.toString() + "_" + evItem.toString();
+} // getDivEventIconsId()
+
+// For home screen get id for the <button> EDIT
+function getButtonEditId(evDate, evItem) {
+	return "home_button_edit_event_" + evDate.toString() + "_" + evItem.toString();
+} // getButtonEditId()
+
+// For home screen get id for the <button> DEACTIVATE
+function getButtonDeactivateId(evDate, evItem) {
+	return "home_button_deactivate_event_" + evDate.toString() + "_" + evItem.toString();
+} // getButtonDeactivateId()
+
+// For home screen get id for the <button> ACTIVATE
+function getButtonActivateId(evDate, evItem) {
+	return "home_button_activate_event_" + evDate.toString() + "_" + evItem.toString();
+} // getButtonActivateId()

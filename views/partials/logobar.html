@@ -8,7 +8,9 @@
 			</a>
 		</div>
 		<div class="col-sm-3 w3-border-right grid-separator-color">
-			<a href="tel: +7 (495) 78-888-78">+7 (495) 78-888-78</a>
+			<a href="tel: +7 (495) 78-888-78">
+				<i class="fa fa-phone fa-lg"></i> +7 (495) 78-888-78
+			</a>
 			<br>
 			<!--
 					<a ajaxform="1" class="callback" href="#" js_max_width="600" section="278">Request a call back</a>
@@ -16,6 +18,8 @@
 		</div>
 		<div class="col-sm-3 w3-border-right grid-separator-color">
 			<div id="main-div-lang" class="div-lang">
+				<i class="fa fa-language fa-lg"></i>
+				<span style="padding-left:20px"></span>
 				<select id="main-select-lang" class="select-lang" lang="{{main.currentLang}}">
 					<option value="en">English</option>
 					<option value="es">Espanol</option>
@@ -25,13 +29,22 @@
 			<br>
 			<div id="main-user-div">{{ main.iam }}:
 				<a id="main-user-name">{{ user.username }}</a>
-				<a href="/logout">({{ main.signout }})</a>
+				<a href="/logout">
+					<span style="padding-left:20px"></span>
+					<i class="fa fa-sign-out fa-lg"></i> {{ main.signout }}
+				</a>
 			</div>
 			<div id="main-nouser-div">
-				<a href="/login">{{ main.signin }}</a>
+				<a href="/login"><i class="fa fa-sign-in fa-lg"></i> {{ main.signin }}</a>
 			</div>
 		</div>
-		<div class="col-sm-3">.col-sm-3 4</div>
+		<div class="col-sm-3">
+			<i class="fa fa-location-arrow fa-lg"></i>
+			<span style="padding-left:20px"></span>
+			<i class="fa fa-map-marker fa-lg"></i>
+			<span style="padding-left:20px"></span>
+			.col-sm-3 4
+		</div>
 	</div>
 </div>
 </div>
