@@ -363,11 +363,18 @@ app.get('/getUserInfo', function (req, res) {
     res.end(JSON.stringify(req.user)); 
 });
 
-
 // Get current language data
 app.get('/getLanguageData', function (req, res) {
     res.end(JSON.stringify(req.currentLangData)); 
 });
+
+
+// Cоздать заявку на изменение состава доступных юнитов (.post)
+app.post('/deactivateEventPost', function (req, res) {
+
+
+    
+}); // app.post('/deactivateEventPost')
 
 // custom 404 page
 app.use(function (req, res, next) {

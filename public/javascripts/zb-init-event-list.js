@@ -5,6 +5,8 @@ var ulEvListPagination, $ulEvListPagination, idUlEvListPagination;
 var liPagination, $liPagination, idLiPagination;
 var currentScreenPage = 0, maxPageNumber = 0;
 
+var buttonEvent;
+
 var currPageLang = "";
 var currLangDataStr = "";
 var currLangDataObj = "";
@@ -67,6 +69,13 @@ function zbLastEventList(mode = 'INIT') {
     } else {
         buttonHomeNew.style.display = "none";
     }
+
+    // Button <New> pressed on the home screen
+    buttonEvent = document.getElementById(getButtonNewId());
+    buttonEvent.addEventListener('mouseup', function (ev) {
+        buttonEventNewPressed(ev);
+        return;
+    });
 
     // Init main page search value
 
@@ -143,6 +152,34 @@ function showCurrentScreenPage(parChangeMode) {
                 // All one event data to screen
                 showOneEventData(elData.evdate, elData.evnumber);
 
+            }
+
+            // Add listeners for the <Edit>, <Deactivate> and <Activate> of the event buttons
+            if (elData.evlisteners != 'Y') {
+
+                elData.evlisteners = 'Y';
+                $("#" + elId).data(elData);
+
+                // Button <Edit> pressed on specific event on home screen
+                buttonEvent = document.getElementById(getButtonEditId(elData.evdate, elData.evnumber));
+                buttonEvent.addEventListener('mouseup', function (ev) {
+                    buttonEventEditPressed(ev);
+                    return;
+                });
+
+                // Button <Deactivate> pressed on specific event on home screen
+                buttonEvent = document.getElementById(getButtonDeactivateId(elData.evdate, elData.evnumber));
+                buttonEvent.addEventListener('mouseup', function (ev) {
+                    buttonEventDeactivatePressed(ev);
+                    return;
+                });
+
+                // Button <Activate> pressed on specific event on home screen
+                buttonEvent = document.getElementById(getButtonActivateId(elData.evdate, elData.evnumber));
+                buttonEvent.addEventListener('mouseup', function (ev) {
+                    buttonEventActivatePressed(ev);
+                    return;
+                });
             }
         }
         else {
@@ -382,7 +419,8 @@ function cbListAllEvents(eventsData) {
             pagenumber: currentPageNumber,
             evdate: eventDate,
             evnumber: eventNumber,
-            evactive: eventActive
+            evactive: eventActive,
+            evlisteners: "N"
         };
         $("#" + elID).data(evData);
 
@@ -483,28 +521,31 @@ function getEventTable(evDate, evNumber, evActive) {
 // Draw icons of one event in the event table
 function getEventIcons(evDate, evNumber, evActive) {
 
-    var eventIcons = "";
+    var eventIcons = "",
+        hideStyleActivate = 'style="display:none;"',
+        hideStyleDeactivate = 'style="display:none;"';
+
+    // Show <Deactivate> button for the active event and upsidedown     
+    if (evActive == "Y") {
+        hideStyleDeactivate = '';
+    } else {
+        hideStyleActivate = '';
+    }
 
     var btn_Edit = ' <a id="' + getButtonEditId(evDate, evNumber) + '" ' +
         'class="btn btn-warning btn-sm" href="#">' +
         '<i class="fa fa-pencil-square-o fa-lg"></i> ' + currLangDataObj.html.page.home.edit +
         '</a>';
 
-    var btn_Deactivate = ' <a id="' + getButtonDeactivateId(evDate, evNumber) + '" ' +
+    var btn_Deactivate = ' <a ' + hideStyleDeactivate + ' id="' + getButtonDeactivateId(evDate, evNumber) + '" ' +
         'class="btn btn-danger btn-sm" href="#">' +
         '<i class="fa fa-trash-o fa-lg"></i> ' + currLangDataObj.html.page.home.deactivate +
         '</a>';
 
-    var btn_Activate = ' <a id="' + getButtonActivateId(evDate, evNumber) + '" ' +
+    var btn_Activate = ' <a ' + hideStyleActivate + 'id="' + getButtonActivateId(evDate, evNumber) + '" ' +
         'class="btn btn-info btn-sm" href="#">' +
         '<i class="fa fa-undo fa-lg"></i> ' + currLangDataObj.html.page.home.activate +
         '</a>';
-
-    if (evActive == 'Y') {
-        btn_Activate = '';
-    } else {
-        btn_Deactivate = '';
-    }
 
     eventIcons =
         '<div style="float:right;">' +
@@ -658,3 +699,32 @@ function hideInactivePeriods() {
     } // for (let index = 0; index < arrPeriods.length; index++) 
 
 } // hideInactivePeriods()
+
+// Button <New> pressed on the home screen
+function buttonEventNewPressed(mouseEvent) {
+
+    alert("New!");
+
+} // buttonEventNewPressed()
+
+// Button <Edit> pressed on specific event on home screen
+function buttonEventEditPressed(mouseEvent) {
+
+    alert("Edit!");
+
+} // buttonEventEditPressed()
+
+// Button <Activate> pressed on specific event on home screen
+function buttonEventActivatePressed(mouseEvent) {
+
+    alert("Activate!");
+
+} // buttonEventActivatePressed()
+
+// Button <Deactivate> pressed on specific event on home screen
+function buttonEventDeactivatePressed(mouseEvent) {
+
+    alert("Deactivate! " + mouseEvent.target.id + '   ' +
+        JSON.stringify(getEventObjectFromId(mouseEvent.target.id)));
+
+} // buttonEventDeactivatePressed()

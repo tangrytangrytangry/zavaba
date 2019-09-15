@@ -132,6 +132,24 @@ function cvtCharDate8ToObj(p_CharDate8) {
 
 } // cvtCharDate8ToObj()
 
+// Get event object Id from screen element Id :  "sometext_YYYYMMDD_NNN" -> { evdate: YYYYMMDD, evitem: NNN }  
+function getEventObjectFromId(parm_Id) {
+
+	var eventObject = {}, arrWords = [];
+
+	try {
+		arrWords = parm_Id.split('_');
+		if (arrWords.length > 1) {
+			eventObject.evdate = Number(arrWords[arrWords.length - 2]);
+			eventObject.evitem = Number(arrWords[arrWords.length - 1]);
+		}
+	} catch (error) {
+		eventObject = {};
+	}
+
+	return eventObject;
+} // getEventObjectFromId()
+
 // For home screen get id for the <div> of the event picture
 function getEventTableDivPicId(evDate, evItem) {
 	return "home_ev_tbl_div_pic_" + evDate.toString() + "_" + evItem.toString();
@@ -157,17 +175,17 @@ function getDivEventIconsId(evDate, evItem) {
 	return "home_div_icons_event_" + evDate.toString() + "_" + evItem.toString();
 } // getDivEventIconsId()
 
-// For home screen get id for the <button> EDIT
+// For home screen get id for the <button> EDIT of the event
 function getButtonEditId(evDate, evItem) {
 	return "home_button_edit_event_" + evDate.toString() + "_" + evItem.toString();
 } // getButtonEditId()
 
-// For home screen get id for the <button> DEACTIVATE
+// For home screen get id for the <button> DEACTIVATE of the event
 function getButtonDeactivateId(evDate, evItem) {
 	return "home_button_deactivate_event_" + evDate.toString() + "_" + evItem.toString();
 } // getButtonDeactivateId()
 
-// For home screen get id for the <button> ACTIVATE
+// For home screen get id for the <button> ACTIVATE of the event
 function getButtonActivateId(evDate, evItem) {
 	return "home_button_activate_event_" + evDate.toString() + "_" + evItem.toString();
 } // getButtonActivateId()
