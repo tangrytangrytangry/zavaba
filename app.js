@@ -33,6 +33,8 @@ var i18Ext = require("./config/config-i18n");
 var winston = require('winston');
 var winstonExt = require("./config/config-winston");
 
+const Activity = require('./db/models/activity');
+
 var app = express();
 
 // Configure i18n
@@ -330,7 +332,7 @@ app.get('/reports', function (req, res) {
             });
             break;
 
-            case "oneevent":
+        case "oneevent":
 
             data = reports.oneEvent(req, res, function name(repData) {
                 //console.log("server app.js/reports/oneevent: repData = " + repData);
@@ -340,7 +342,7 @@ app.get('/reports', function (req, res) {
             });
             break;
 
-            case "oneeventdesc":
+        case "oneeventdesc":
 
             data = reports.oneEventDesc(req, res, function name(repData) {
                 //console.log("server app.js/reports/oneeventdesc: repData = " + repData);
@@ -360,20 +362,25 @@ app.get('/reports', function (req, res) {
 
 // Get user info
 app.get('/getUserInfo', function (req, res) {
-    res.end(JSON.stringify(req.user)); 
+    res.end(JSON.stringify(req.user));
 });
 
 // Get current language data
 app.get('/getLanguageData', function (req, res) {
-    res.end(JSON.stringify(req.currentLangData)); 
+    res.end(JSON.stringify(req.currentLangData));
 });
 
-
-// Cоздать заявку на изменение состава доступных юнитов (.post)
+// Deactivate event
 app.post('/deactivateEventPost', function (req, res) {
 
+    var inReqContent = req.body;
+    var dltDate = inReqContent.evdate;
+    var dltItem = inReqContent.evitem;
 
-    
+    Activity.dltActivity(req.user.username, dltDate, dltItem);
+
+    res.end("{}");
+
 }); // app.post('/deactivateEventPost')
 
 // custom 404 page

@@ -227,6 +227,15 @@ function cbOneEventData(oneEventData) {
 
     let currLi = document.getElementById(currEventId);
 
+    // For admin user show more options
+    let divEventIcons = document.getElementById(
+        getDivEventIconsId(objEventData[0].date, objEventData[0].item));
+    if (userInfoObj.admin == true) {
+        divEventIcons.style.display = "block";
+    } else {
+        divEventIcons.style.display = "none";
+    }
+
     // Show event picture
     let divPictId = getEventTableDivPicId(objEventData[0].date, objEventData[0].item);
     let divPict = $("#" + divPictId);
@@ -308,7 +317,7 @@ function cbOneEventDesc(oneEventTexts) {
     return null;
 } // cbOneEventDesc()
 
-// Show events to screen - call back function
+// Show all events to screen - call back function
 function cbListAllEvents(eventsData) {
     //console.log("sendGetRequestToServerAsync: eventsData = " + eventsData);
 
@@ -381,6 +390,17 @@ function cbListAllEvents(eventsData) {
     // Show all event data
     for (let index = 0; index < paramEventsData.length; index++) {
 
+        let eventDate = paramEventsData[index].date.toString();
+        let eventNumber = paramEventsData[index].item.toString();
+        let eventActive = paramEventsData[index].active;
+
+        // Not admin user can see only not deleted events
+        if (userInfoObj.admin != true) {
+            if (eventActive != "Y") {
+                continue;
+            }
+        }
+
         currentEventNumberOnPage = currentEventNumberOnPage + 1;
 
         // Add pagination elemet for the new page
@@ -394,10 +414,6 @@ function cbListAllEvents(eventsData) {
             liPagination = crtHTTPElem('li', ulEvListPagination, 'page-item', '', '', elText, elID);
             $("#" + elID).data({ pagenumber: currentPageNumber });
         }
-
-        let eventDate = paramEventsData[index].date.toString();
-        let eventNumber = paramEventsData[index].item.toString();
-        let eventActive = paramEventsData[index].active;
 
         /*
         elText = "Event # " + (paramEventsData.length - index).toString() +
@@ -439,16 +455,6 @@ function cbListAllEvents(eventsData) {
             evData.evloaded = 'N';
             $("#" + elID).data(evData);
             continue;
-        }
-
-        // For admin user show more options
-        let divEventIcons = document.getElementById(
-            getDivEventIconsId(paramEventsData[index].date,
-                paramEventsData[index].item));
-        if (userInfoObj.admin == true) {
-            divEventIcons.style.display = "block";
-        } else {
-            divEventIcons.style.display = "none";
         }
 
         // All one event data to screen
@@ -717,14 +723,72 @@ function buttonEventEditPressed(mouseEvent) {
 // Button <Activate> pressed on specific event on home screen
 function buttonEventActivatePressed(mouseEvent) {
 
-    alert("Activate!");
+    //alert("Activate! " + mouseEvent.target.id + '   ' +
+    //    JSON.stringify(getEventObjectFromId(mouseEvent.target.id)));
+
+    var reqContentObj = {};
+    var elID = "";
+    var elData = {};
+    var buttonDeactivate, buttonDeactivateId;
+    var buttonActivate, buttonActivateId;
+
+    reqContentObj = getEventObjectFromId(mouseEvent.target.id);
+
+    elID = getListEventId(reqContentObj.evdate, reqContentObj.evitem);
+    elData = $("#" + elID).data();
+    elData.evactive = 'Y';
+    $("#" + elID).data(elData);
+
+    buttonDeactivateId = getButtonDeactivateId(reqContentObj.evdate, reqContentObj.evitem);
+    buttonDeactivate = document.getElementById(buttonDeactivateId);
+    buttonDeactivate.style.display = "inline-block";
+
+    buttonActivateId = getButtonActivateId(reqContentObj.evdate, reqContentObj.evitem);
+    buttonActivate = document.getElementById(buttonActivateId);
+    buttonActivate.style.display = "none";
 
 } // buttonEventActivatePressed()
 
 // Button <Deactivate> pressed on specific event on home screen
 function buttonEventDeactivatePressed(mouseEvent) {
 
-    alert("Deactivate! " + mouseEvent.target.id + '   ' +
-        JSON.stringify(getEventObjectFromId(mouseEvent.target.id)));
+    //alert("Deactivate! " + mouseEvent.target.id + '   ' +
+    //    JSON.stringify(getEventObjectFromId(mouseEvent.target.id)));
+
+    var reqContentObj = {};
+    var elID = "";
+    var elData = {};
+    var buttonDeactivate, buttonDeactivateId;
+    var buttonActivate, buttonActivateId;
+
+    reqContentObj = getEventObjectFromId(mouseEvent.target.id);
+
+    postData('deactivateEventPost', reqContentObj)
+        .then(function (res) {
+            if (res.error) {
+                showError("Ошибка создания заявки на изменение: " + res.error, false);
+            } else {
+                // Redraw current screen page
+                reqContentObj = getEventObjectFromId(mouseEvent.target.id);
+                elID = getListEventId(reqContentObj.evdate, reqContentObj.evitem);
+                elData = $("#" + elID).data();
+                elData.evactive = 'N';
+                $("#" + elID).data(elData);
+
+                buttonDeactivateId = getButtonDeactivateId(reqContentObj.evdate, reqContentObj.evitem);
+                buttonDeactivate = document.getElementById(buttonDeactivateId);
+                buttonDeactivate.style.display = "none";
+
+                buttonActivateId = getButtonActivateId(reqContentObj.evdate, reqContentObj.evitem);
+                buttonActivate = document.getElementById(buttonActivateId);
+                buttonActivate.style.display = "inline-block";
+
+            }
+        })
+        .catch(function (error) {
+            showError("Ошибка создания заявки на изменение: " + error, false);
+            return;
+        });
+
 
 } // buttonEventDeactivatePressed()
