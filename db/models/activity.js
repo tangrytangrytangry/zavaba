@@ -39,6 +39,7 @@ var activitySchema = mongoose.Schema({
     }
 });
 
+// Create activity
 activitySchema.static('crtNewActivity',
     function (user, date = undefined, kind = "ordinary",
         pict_Name, pict_Text, pict_Body,
@@ -129,6 +130,7 @@ activitySchema.static('crtNewActivity',
 
 ); // activitySchema.static('crtNewActivity') 
 
+// Update activity
 activitySchema.static('updActivity',
     function (user, date = undefined, item = undefined, kind = "ordinary",
         pict_Name, pict_Text, pict_Body,
@@ -245,17 +247,24 @@ activitySchema.static('updActivity',
 
 ); // activitySchema.static('updActivity') 
 
+// Deactivate activity
 activitySchema.static('dltActivity',
-    function (user, date, item) {
+    function (user, date, item, cbDltActivity) {
 
         let searchDate = date;
         let dltItem = item;
 
-        Activity.findOne({ date: searchDate, item: dltItem, active: "Y" }, function (err, thisActivity) {
-            if (err) return handleError(err);
-            deactActivity(thisActivity);
-            Description.dltDescription(user, searchDate, dltItem);
-        });
+        Activity.findOne({ date: searchDate, item: dltItem, active: "Y" },
+            function (err, thisActivity) {
+                if (err) {
+                    cbDltActivity(err);
+                    return;
+                };
+                deactActivity(thisActivity);
+                Description.dltDescription(user, searchDate, dltItem);
+                cbDltActivity({});
+                return;
+            });
 
         // New item number for the date
         // let promiseCount = Activity.countDocuments({ date: searchDate }).exec();
@@ -273,11 +282,48 @@ activitySchema.static('dltActivity',
                 if (err) return console.error(err);
             });
 
-        }; // dltActivity()
+        }; // deactActivity()
 
     } // dltActivity()
 
 ); // activitySchema.static('dltActivity') 
+
+// Activate activity
+activitySchema.static('actActivity',
+    function (user, date, item, cbActActivity) {
+
+        let searchDate = date;
+        let dltItem = item;
+
+        Activity.findOne({ date: searchDate, item: dltItem, active: "N" }, 
+            function (err, thisActivity) {
+                if (err) {
+                    cbActActivity(err);
+                    return;
+                };
+                activateActivity(thisActivity);
+                Description.actDescription(user, searchDate, dltItem);
+                cbActActivity({});
+                return;
+            });
+
+        function activateActivity(parActivity) {
+
+            if (parActivity == null) { return; }
+
+            parActivity.active = "Y";
+            parActivity.log.updated = new Date();
+            parActivity.log.usernameupd = user;
+
+            parActivity.save(function (err, parActivity) {
+                if (err) return console.error(err);
+            });
+
+        }; // activateActivity()
+
+    } // actActivity()
+
+); // activitySchema.static('actActivity') 
 
 // Save file to local file system
 function saveFileToLocal(sfDate, sfItem, sfFileName, sfFileBody, fileURL) {

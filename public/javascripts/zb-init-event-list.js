@@ -734,18 +734,38 @@ function buttonEventActivatePressed(mouseEvent) {
 
     reqContentObj = getEventObjectFromId(mouseEvent.target.id);
 
-    elID = getListEventId(reqContentObj.evdate, reqContentObj.evitem);
-    elData = $("#" + elID).data();
-    elData.evactive = 'Y';
-    $("#" + elID).data(elData);
+    postData('activateEventPost', reqContentObj)
+        .then(function (res) {
+            if (res.error) {
+                SetInfo(res.error.name + ' ' + res.error.message + ' ' +
+                    res.error.stack, 'ERROR');
+                return;
+            } else {
+                // Redraw current screen page
+                //reqContentObj = getEventObjectFromId(mouseEvent.target.id);
+                elID = getListEventId(reqContentObj.evdate, reqContentObj.evitem);
+                elData = $("#" + elID).data();
+                elData.evactive = 'Y';
+                $("#" + elID).data(elData);
 
-    buttonDeactivateId = getButtonDeactivateId(reqContentObj.evdate, reqContentObj.evitem);
-    buttonDeactivate = document.getElementById(buttonDeactivateId);
-    buttonDeactivate.style.display = "inline-block";
+                buttonDeactivateId = getButtonDeactivateId(reqContentObj.evdate, reqContentObj.evitem);
+                buttonDeactivate = document.getElementById(buttonDeactivateId);
+                buttonDeactivate.style.display = "inline-block";
 
-    buttonActivateId = getButtonActivateId(reqContentObj.evdate, reqContentObj.evitem);
-    buttonActivate = document.getElementById(buttonActivateId);
-    buttonActivate.style.display = "none";
+                buttonActivateId = getButtonActivateId(reqContentObj.evdate, reqContentObj.evitem);
+                buttonActivate = document.getElementById(buttonActivateId);
+                buttonActivate.style.display = "none";
+
+                SetInfo('Event ' + reqContentObj.evdate + '-' + reqContentObj.evitem + ' activated.',
+                    'SUCCESS');
+                    return;
+            }
+        })
+        .catch(function (error) {
+            SetInfo(error.name + ' ' + error.message + ' ' +
+                error.stack, 'ERROR');
+            return;
+        });
 
 } // buttonEventActivatePressed()
 
@@ -766,10 +786,12 @@ function buttonEventDeactivatePressed(mouseEvent) {
     postData('deactivateEventPost', reqContentObj)
         .then(function (res) {
             if (res.error) {
-                showError("Ошибка создания заявки на изменение: " + res.error, false);
+                SetInfo(res.error.name + ' ' + res.error.message + ' ' +
+                    res.error.stack, 'ERROR');
+                return;
             } else {
                 // Redraw current screen page
-                reqContentObj = getEventObjectFromId(mouseEvent.target.id);
+                //reqContentObj = getEventObjectFromId(mouseEvent.target.id);
                 elID = getListEventId(reqContentObj.evdate, reqContentObj.evitem);
                 elData = $("#" + elID).data();
                 elData.evactive = 'N';
@@ -783,12 +805,15 @@ function buttonEventDeactivatePressed(mouseEvent) {
                 buttonActivate = document.getElementById(buttonActivateId);
                 buttonActivate.style.display = "inline-block";
 
+                SetInfo('Event ' + reqContentObj.evdate + '-' + reqContentObj.evitem + ' deactivated.',
+                    'SUCCESS');
+                return;
             }
         })
         .catch(function (error) {
-            showError("Ошибка создания заявки на изменение: " + error, false);
+            SetInfo(error.name + ' ' + error.message + ' ' +
+                error.stack, 'ERROR');
             return;
         });
-
 
 } // buttonEventDeactivatePressed()

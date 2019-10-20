@@ -17,6 +17,7 @@ var descriptionSchema = mongoose.Schema({
     }
 });
 
+// Cretae description
 descriptionSchema.static('crtNewDescription',
     function (user, date = undefined, item = undefined, langcode, desc_text) {
 
@@ -75,6 +76,7 @@ descriptionSchema.static('crtNewDescription',
 
 ); // descriptionSchema.static('crtNewDescription') 
 
+// Update description
 descriptionSchema.static('updDescription',
     function (user, date = undefined, item = undefined, langcode, desc_text) {
 
@@ -136,6 +138,7 @@ descriptionSchema.static('updDescription',
 
 ); // descriptionSchema.static('updDescription') 
 
+// Deactivate description
 descriptionSchema.static('dltDescription',
     function (user, date, item, langcode) {
 
@@ -182,6 +185,54 @@ descriptionSchema.static('dltDescription',
     } // dltDescription
 
 ); // descriptionSchema.static('dltDescription') 
+
+// Activate description
+descriptionSchema.static('actDescription',
+    function (user, date, item, langcode) {
+
+        let searchDate = date;
+        let dltItem = item;
+
+        if (langcode == undefined) {
+
+            Description.find({ date: searchDate, item: dltItem, active: "N" },
+                function (err, theseDescriptions) {
+                    if (err) return handleError(err);
+
+                    for (let index = 0; index < theseDescriptions.length; index++) {
+                        const thisDescription = theseDescriptions[index];
+                        activateDescription(thisDescription);
+                    }
+
+                });
+
+        } else {
+
+            Description.findOne({ date: searchDate, item: dltItem, langcode: langcode, active: "N" },
+                function (err, thisDescription) {
+                    if (err) return handleError(err);
+                    activateDescription(thisDescription);
+                });
+
+        }
+
+        function activateDescription(parDescription) {
+
+            if (parDescription == null) { return; }
+
+            parDescription.active = "Y";
+            parDescription.log.updated = new Date();
+            parDescription.log.usernameupd = user;
+
+            parDescription.save(function (err, parDescription) {
+                if (err) return console.error(err);
+            });
+
+        }; // activateDescription
+
+    } // actDescription
+
+); // descriptionSchema.static('actDescription') 
 
 var Description = mongoose.model('Description', descriptionSchema);
 module.exports = Description;

@@ -377,11 +377,42 @@ app.post('/deactivateEventPost', function (req, res) {
     var dltDate = inReqContent.evdate;
     var dltItem = inReqContent.evitem;
 
-    Activity.dltActivity(req.user.username, dltDate, dltItem);
-
-    res.end("{}");
+    Activity.dltActivity(req.user.username, dltDate, dltItem,
+        function (result) {
+            if (result.name) {
+                let err = {};
+                err.error = result;
+                res.end(JSON.stringify(err));
+                return;
+            }
+            else {
+                res.end("{}");
+            }
+        });
 
 }); // app.post('/deactivateEventPost')
+
+// Activate event
+app.post('/activateEventPost', function (req, res) {
+
+    var inReqContent = req.body;
+    var actDate = inReqContent.evdate;
+    var actItem = inReqContent.evitem;
+
+    Activity.actActivity(req.user.username, actDate, actItem,
+        function (result) {
+            if (result.name) {
+                let err = {};
+                err.error = result;
+                res.end(JSON.stringify(err));
+                return;
+            }
+            else {
+                res.end("{}");
+            }
+        });
+
+}); // app.post('/activateEventPost')
 
 // custom 404 page
 app.use(function (req, res, next) {
