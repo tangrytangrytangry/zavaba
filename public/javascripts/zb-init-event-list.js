@@ -709,7 +709,7 @@ function hideInactivePeriods() {
 // Button <New> pressed on the home screen
 function buttonEventNewPressed(mouseEvent) {
 
-    alert("New!");
+    //alert("New!");
 
 } // buttonEventNewPressed()
 

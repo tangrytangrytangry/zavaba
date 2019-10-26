@@ -26,7 +26,8 @@
                         <p>Lorem ipsum dolor sit ... </p>
                         <hr>
                         <div class="d-flex flex-row-reverse">
-                                <a id="home_button_new_event" class="btn btn-lg btn-success" href="#">
+                                <a id="home_button_new_event" class="btn btn-lg btn-success" data-toggle="modal"
+                                        href="#idEditEventModal">
                                         <i class="fa fa-plus"></i> {{ home.new }}</a>
                         </div>
                         <br>
@@ -67,6 +68,77 @@
         </ul>
 </div>
 <!-- PAGINATION END -->
+
+<!-- UPDATE EVENT MODAL WINDOW BEGIN -->
+<div class="modal fade" id="idEditEventModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                                <h2 class="modal-title">Добавление события</h2>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                                <h3>Данные события:</h3>
+                                <br>
+                                <table class="table table-bordered">
+                                        <thead>
+                                                <tr>
+                                                        <th>Свойство</th>
+                                                        <th>Содержание</th>
+                                                        <th>Действие</th>
+                                                </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>Дата события</td>
+                                                        <td>Дата</td>
+                                                        <td></td>
+                                                </tr>
+                                                <tr>
+                                                        <td rowspan="2">Картинка</td>
+                                                        <td>Файл</td>
+                                                        <td rowspan="2">Заменить</td>
+                                                <tr>
+                                                        <td>Краткое описание картинки</td>
+                                                </tr>
+                                                <tr>
+                                                        <td>Описание события на русском</td>
+                                                        <td>Текст</td>
+                                                        <td>Действие</td>
+                                                </tr>
+                                                <tr>
+                                                        <td>Описание события на испанском</td>
+                                                        <td>Текст</td>
+                                                        <td>Действие</td>
+                                                </tr>
+                                                <tr>
+                                                        <td>Описание события на английском</td>
+                                                        <td>Текст</td>
+                                                        <td>Действие</td>
+                                                <tr>
+                                                        <td rowspan="2">Приложенный документ</td>
+                                                        <td>Файл</td>
+                                                        <td rowspan="2">Заменить</td>
+                                                <tr>
+                                                        <td>Краткое описание документа</td>
+                                                </tr>
+                                                </tr>
+                                        </tbody>
+                                </table>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                </div>
+        </div>
+</div><!-- UPDATE EVENT MODAL WINDOW END -->
 
 <br>
 
