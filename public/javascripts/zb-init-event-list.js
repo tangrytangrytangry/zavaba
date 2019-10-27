@@ -18,6 +18,8 @@ var screenSearchMode = {};
 var idInputSearchMain = "searchMain", inputSearchMain, $inputSearchMain, searchMainValue = "";
 var idInputSearchButton = "searchMainButton", inputSearchMainButton, $inputSearchMainButton, searchMainValueButton = "";
 
+var idInputEventDate = "idInputEventDate", inputEventDate;
+
 // Load last events from server to screen
 function zbLastEventList(mode = 'INIT') {
 
@@ -35,6 +37,8 @@ function zbLastEventList(mode = 'INIT') {
 
     inputSearchMain = document.getElementById(idInputSearchMain);
     screenSearchMode = JSON.parse(sessionStorage.getItem('screenSearchMode'));
+
+    inputEventDate = document.getElementById(idInputEventDate);
 
     // Get user info
 
@@ -711,6 +715,9 @@ function buttonEventNewPressed(mouseEvent) {
 
     //alert("New!");
 
+    inputEventDate.value = getCurrentDateISO();
+    //inputEventDate.value = "2001-02-03";
+
 } // buttonEventNewPressed()
 
 // Button <Edit> pressed on specific event on home screen
@@ -758,7 +765,7 @@ function buttonEventActivatePressed(mouseEvent) {
 
                 SetInfo('Event ' + reqContentObj.evdate + '-' + reqContentObj.evitem + ' activated.',
                     'SUCCESS');
-                    return;
+                return;
             }
         })
         .catch(function (error) {

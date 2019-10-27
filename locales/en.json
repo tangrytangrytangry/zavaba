@@ -24,7 +24,18 @@
                 "deactivate": "DEACTIVATE",
                 "activate": "ACTIVATE",
                 "previous": "Previous",
-                "next": "Next"
+                "next": "Next",
+                "addnewevent": "Adding a new event",
+                "eventdata": "Event data:",
+                "eventproperty": "Property",
+                "eventcontent": "Content",
+                "eventdate": "Date of event",
+                "eventimagefile": "Image file",
+                "eventdescriptionru": "Event description in Russian",
+                "eventdescriptiones": "Event description in Spanish",
+                "eventdescriptionen": "Event description in English",
+                "eventattachmentfile": "Attached document",
+                "eventclose": "Close"
             },
             "login": {
                 "hello": "Hello!",

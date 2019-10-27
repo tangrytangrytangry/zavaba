@@ -1,0 +1,98 @@
+<!-- UPDATE EVENT MODAL WINDOW BEGIN -->
+
+<div class="modal fade" id="idEditEventModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                                <h2 class="modal-title">{{ home.addnewevent }}</h2>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                                <h3>{{ home.eventdata }}</h3>
+                                <br>
+                                <table class="table table-bordered">
+                                        <thead>
+                                                <tr>
+                                                        <th>{{ home.eventproperty }}</th>
+                                                        <th>{{ home.eventcontent }}</th>
+                                                </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>{{ home.eventdate }}</td>
+                                                        <td>
+                                                                <input type="date" id="idInputEventDate"
+                                                                        value="2001-02-03">
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td rowspan="2">{{ home.eventimagefile }}</td>
+                                                        <td>
+                                                                <input type="file" accept="image/*"
+                                                                        id="idInputEventPicture">
+                                                        </td>
+                                                <tr>
+                                                        <td>
+                                                                <input type="text" id="idInputPictureText"
+                                                                        placeholder="Picture text" required>
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>{{ home.eventdescriptionru }}</td>
+                                                        <td>
+                                                                <textarea type="text" id="idInputEventTextRU"
+                                                                        class="form-control form-control-lg"
+                                                                        placeholder="Event description" rows="2">
+                                                                </textarea>
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>{{ home.eventdescriptiones }}</td>
+                                                        <td>
+                                                                <textarea type="text" id="idInputEventTextES"
+                                                                        class="form-control form-control-lg"
+                                                                        placeholder="Event description" rows="2">
+                                                                </textarea>
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>{{ home.eventdescriptionen }}</td>
+                                                        <td>
+                                                                <textarea type="text" id="idInputEventTextEN"
+                                                                        class="form-control form-control-lg"
+                                                                        placeholder="Event description" rows="2">
+                                                                </textarea>
+                                                        </td>
+                                                <tr>
+                                                        <td rowspan="2">{{ home.eventattachmentfile }}</td>
+                                                        <td>
+                                                                <input type="file" id="idInputEventAttachment">
+                                                        </td>
+                                                <tr>
+                                                        <td>
+                                                                <input type="text" id="idInputAttachmentText"
+                                                                        placeholder="Attachment text" required>
+                                                        </td>
+                                                </tr>
+
+
+
+
+                                        </tbody>
+                                </table>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                                <button type="button" class="btn btn-danger"
+                                        data-dismiss="modal">{{ home.eventclose }}</button>
+                        </div>
+
+                </div>
+        </div>
+
+        <!-- UPDATE EVENT MODAL WINDOW END -->

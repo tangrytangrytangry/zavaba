@@ -24,7 +24,18 @@
                 "deactivate": "ДЕАКТИВИРОВАТЬ",
                 "activate": "АКТИВИРОВАТЬ",
                 "previous": "ПРЕДЫДУЩАЯ",
-                "next": "СЛЕДУЮЩАЯ"
+                "next": "СЛЕДУЮЩАЯ",
+                "addnewevent": "Добавление нового события",
+                "eventdata": "Данные события:",
+                "eventproperty": "Свойство",
+                "eventcontent": "Содержание",
+                "eventdate": "Дата события",
+                "eventimagefile": "Файл с изображением",
+                "eventdescriptionru": "Описание события на русском языке",
+                "eventdescriptiones": "Описание события на испанском языке",
+                "eventdescriptionen": "Описание события на английском языке",
+                "eventattachmentfile": "Приложенный документ",
+                "eventclose": "Закрыть"
             },
             "login": {
                 "hello": "Привет!",

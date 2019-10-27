@@ -60,8 +60,27 @@ function getFileBaseName(path) {
 		separator = windowsSeparator
 	}
 
-	return path.slice(path.lastIndexOf(separator) + 1)
+	return path.slice(path.lastIndexOf(separator) + 1);
+
 } // getFileBaseName()
+
+// Get current date in *ISO format "YYYY-MM-DD"
+function getCurrentDateISO() {
+
+	let today = new Date();
+
+	let dateYMD = (today.getFullYear() * 10000 +
+		(today.getMonth() + 1) * 100 +
+		today.getDate()).toString();
+
+	let dateISO = dateYMD.substr(0, 4) + "-" +
+		dateYMD.substr(4, 2) + "-" +
+		dateYMD.substr(6, 2);
+
+	return dateISO;
+
+} // getCurrentDateISO()
+
 
 // Create HTTP element
 function crtHTTPElem(tag, main, cls, name, disp, txt, id) {
