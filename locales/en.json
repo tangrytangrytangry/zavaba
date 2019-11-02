@@ -35,7 +35,8 @@
                 "eventdescriptiones": "Event description in Spanish",
                 "eventdescriptionen": "Event description in English",
                 "eventattachmentfile": "Attached document",
-                "eventclose": "Close"
+                "eventclose": "Cancel",
+                "eventsave": "Save"
             },
             "login": {
                 "hello": "Hello!",

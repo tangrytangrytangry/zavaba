@@ -19,9 +19,31 @@ var idInputSearchMain = "searchMain", inputSearchMain, $inputSearchMain, searchM
 var idInputSearchButton = "searchMainButton", inputSearchMainButton, $inputSearchMainButton, searchMainValueButton = "";
 
 var idInputEventDate = "idInputEventDate", inputEventDate;
+var idButtonSaveEvent = "idButtonSaveEvent", buttonSaveEvent;
+var idInputEventPicture = "idInputEventPicture", inputEventPicture, eventPictureSrc = "";
 
 // Load last events from server to screen
 function zbLastEventList(mode = 'INIT') {
+
+    // When event picture selected put its source to a variable 
+    $("#" + idInputEventPicture).change(function (e) {
+
+        eventPictureSrc = "";
+        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+
+            var file = e.originalEvent.srcElement.files[i];
+
+            //var img = document.createElement("img");
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                //img.src = reader.result;
+                eventPictureSrc = reader.result;
+            }
+            reader.readAsArrayBuffer(file);
+            //reader.readAsDataURL(file);
+            //$("input").after(img);
+        }
+    });
 
     var runReportParam = "";
     var events = "";
@@ -39,6 +61,7 @@ function zbLastEventList(mode = 'INIT') {
     screenSearchMode = JSON.parse(sessionStorage.getItem('screenSearchMode'));
 
     inputEventDate = document.getElementById(idInputEventDate);
+    inputEventPicture = document.getElementById(idInputEventPicture);
 
     // Get user info
 
@@ -78,6 +101,13 @@ function zbLastEventList(mode = 'INIT') {
     buttonEvent = document.getElementById(getButtonNewId());
     buttonEvent.addEventListener('mouseup', function (ev) {
         buttonEventNewPressed(ev);
+        return;
+    });
+
+    // Button <Save> pressed on the event edit modal window
+    buttonSaveEvent = document.getElementById(idButtonSaveEvent);
+    buttonSaveEvent.addEventListener('mouseup', function (ev) {
+        buttonSaveEventPressed(ev);
         return;
     });
 
@@ -824,3 +854,25 @@ function buttonEventDeactivatePressed(mouseEvent) {
         });
 
 } // buttonEventDeactivatePressed()
+
+// Button <Save> pressed on the event edit modal window
+function buttonSaveEventPressed(ev) {
+
+    //alert("Button <Save> pressed on the event edit modal window");
+
+    if (inputEventPicture.files.length < 1 ||
+        !inputEventPicture.value ||
+        inputEventPicture.value == "") {
+        alert("Error: no image file selected !");
+        return;
+    }
+    else {
+        alert("Selected file: " + inputEventPicture.value + "   " +
+            inputEventPicture.files[0].name);
+    }
+
+
+} // buttonSaveEventPressed()
+
+
+

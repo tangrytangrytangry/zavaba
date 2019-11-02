@@ -35,7 +35,8 @@
                 "eventdescriptiones": "Descripción del evento en español",
                 "eventdescriptionen": "Descripción del evento en Inglés",
                 "eventattachmentfile": "Documento adjunto",
-                "eventclose": "Cerrar"
+                "eventclose": "Cancelar",
+                "eventsave": "Guardar"
             },
            "login": {
                 "hello": "Hola!",

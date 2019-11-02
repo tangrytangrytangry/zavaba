@@ -35,7 +35,8 @@
                 "eventdescriptiones": "Описание события на испанском языке",
                 "eventdescriptionen": "Описание события на английском языке",
                 "eventattachmentfile": "Приложенный документ",
-                "eventclose": "Закрыть"
+                "eventclose": "Отмена",
+                "eventsave": "Сохранить"
             },
             "login": {
                 "hello": "Привет!",
