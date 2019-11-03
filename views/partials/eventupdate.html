@@ -7,7 +7,7 @@
                         <!-- Modal Header -->
                         <div class="modal-header">
                                 <h2 class="modal-title">{{ home.addnewevent }}</h2>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <button type="button" class="close" id="idButtonCloseModal">&times;</button>
                         </div>
 
                         <!-- Modal body -->
@@ -78,10 +78,6 @@
                                                                         placeholder="Attachment text" required>
                                                         </td>
                                                 </tr>
-
-
-
-
                                         </tbody>
                                 </table>
                         </div>
@@ -90,8 +86,8 @@
                         <div class="modal-footer">
                                 <button type="button" id="idButtonSaveEvent"
                                         class="btn btn-success">{{ home.eventsave }}</button>
-                                <button type="button" id="idButtonCloseEvent" class="btn btn-danger"
-                                        data-dismiss="modal">{{ home.eventclose }}</button>
+                                <button type="button" id="idButtonCloseEvent"
+                                        class="btn btn-danger">{{ home.eventclose }}</button>
                         </div>
 
                 </div>

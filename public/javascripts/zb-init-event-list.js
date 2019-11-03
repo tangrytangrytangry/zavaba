@@ -21,6 +21,10 @@ var idInputSearchButton = "searchMainButton", inputSearchMainButton, $inputSearc
 var idInputEventDate = "idInputEventDate", inputEventDate;
 var idButtonSaveEvent = "idButtonSaveEvent", buttonSaveEvent;
 var idInputEventPicture = "idInputEventPicture", inputEventPicture, eventPictureSrc = "";
+var idButtonCloseModal = "idButtonCloseModal", buttonCloseModal;
+var idButtonCloseEvent = "idButtonCloseEvent", buttonCloseEvent;
+var idEditEventModal = "idEditEventModal", editEventModal;
+var idInputPictureText = "idInputPictureText", inputPictureText;
 
 // Load last events from server to screen
 function zbLastEventList(mode = 'INIT') {
@@ -29,19 +33,30 @@ function zbLastEventList(mode = 'INIT') {
     $("#" + idInputEventPicture).change(function (e) {
 
         eventPictureSrc = "";
+
+        // Remove previous selected picture
+        if ($("#" + idInputEventPicture)[0].previousSibling) {
+            $("#" + idInputEventPicture)[0].previousSibling.remove();
+        }
+
         for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
 
             var file = e.originalEvent.srcElement.files[i];
 
-            //var img = document.createElement("img");
+            var img = document.createElement("img");
             var reader = new FileReader();
             reader.onloadend = function () {
-                //img.src = reader.result;
                 eventPictureSrc = reader.result;
+                img.src = reader.result;
+                img.setAttribute("padding", "5");
+                img.setAttribute("border", "1px solid black");
+                img.setAttribute("alt", "Event picture");
+                img.setAttribute("width", "100");
+                img.setAttribute("height", "100");
             }
-            reader.readAsArrayBuffer(file);
-            //reader.readAsDataURL(file);
-            //$("input").after(img);
+            //reader.readAsArrayBuffer(file);
+            reader.readAsDataURL(file);
+            $("#" + idInputEventPicture).before(img);
         }
     });
 
@@ -62,6 +77,8 @@ function zbLastEventList(mode = 'INIT') {
 
     inputEventDate = document.getElementById(idInputEventDate);
     inputEventPicture = document.getElementById(idInputEventPicture);
+    editEventModal = document.getElementById(idEditEventModal);
+    inputPictureText = document.getElementById(idInputPictureText);
 
     // Get user info
 
@@ -108,6 +125,20 @@ function zbLastEventList(mode = 'INIT') {
     buttonSaveEvent = document.getElementById(idButtonSaveEvent);
     buttonSaveEvent.addEventListener('mouseup', function (ev) {
         buttonSaveEventPressed(ev);
+        return;
+    });
+
+    // Button <Close> pressed on the event edit modal window
+    buttonCloseModal = document.getElementById(idButtonCloseModal);
+    buttonCloseModal.addEventListener('mouseup', function (ev) {
+        buttonCloseModalPressed(ev);
+        return;
+    });
+
+    // Button <Cancel> pressed on the event edit modal window
+    buttonCloseEvent = document.getElementById(idButtonCloseEvent);
+    buttonCloseEvent.addEventListener('mouseup', function (ev) {
+        buttonCloseModalPressed(ev);
         return;
     });
 
@@ -740,23 +771,6 @@ function hideInactivePeriods() {
 
 } // hideInactivePeriods()
 
-// Button <New> pressed on the home screen
-function buttonEventNewPressed(mouseEvent) {
-
-    //alert("New!");
-
-    inputEventDate.value = getCurrentDateISO();
-    //inputEventDate.value = "2001-02-03";
-
-} // buttonEventNewPressed()
-
-// Button <Edit> pressed on specific event on home screen
-function buttonEventEditPressed(mouseEvent) {
-
-    alert("Edit!");
-
-} // buttonEventEditPressed()
-
 // Button <Activate> pressed on specific event on home screen
 function buttonEventActivatePressed(mouseEvent) {
 
@@ -855,6 +869,38 @@ function buttonEventDeactivatePressed(mouseEvent) {
 
 } // buttonEventDeactivatePressed()
 
+// Button <New> pressed on the home screen
+function buttonEventNewPressed(mouseEvent) {
+
+    //alert("New!");
+
+    inputEventPicture.value = "";
+    inputPictureText.value = "";
+    $("#" + idInputEventPicture)[0].previousSibling.remove();
+
+    $("#" + idEditEventModal).modal();
+
+    inputEventDate.value = getCurrentDateISO();
+    //inputEventDate.value = "2001-02-03";
+
+} // buttonEventNewPressed()
+
+// Button <Edit> pressed on specific event on home screen
+function buttonEventEditPressed(mouseEvent) {
+
+    alert("Edit!");
+
+} // buttonEventEditPressed()
+
+// Button <Close> pressed on the event edit modal window
+function buttonCloseModalPressed(ev) {
+
+    //alert("Hide!");
+
+    $("#" + idEditEventModal).modal("hide");
+
+} // buttonCloseModalPressed()
+
 // Button <Save> pressed on the event edit modal window
 function buttonSaveEventPressed(ev) {
 
@@ -867,10 +913,16 @@ function buttonSaveEventPressed(ev) {
         return;
     }
     else {
-        alert("Selected file: " + inputEventPicture.value + "   " +
-            inputEventPicture.files[0].name);
+        //alert("Selected file: " + inputEventPicture.value + "   " +
+        //    inputEventPicture.files[0].name);
     }
 
+    if (inputPictureText.value == "") {
+        alert("Error: no picture text entered !");
+        return;
+    } else {
+
+    }
 
 } // buttonSaveEventPressed()
 
