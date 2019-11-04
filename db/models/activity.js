@@ -44,7 +44,7 @@ activitySchema.static('crtNewActivity',
     function (user, date = undefined, kind = "ordinary",
         pict_Name, pict_Text, pict_Body,
         attach_Name, attach_Text, attach_Body,
-        ...restArgs) {
+        restArgs, cbCrtActivity) {
 
         let searchDate = 0;
         let newItem = 0;
@@ -59,25 +59,30 @@ activitySchema.static('crtNewActivity',
         }
 
         Activity.countDocuments({ date: searchDate }, function (err, docCount) {
-            if (err) return handleError(err);
+            if (err) {
+                console.log("Activity.crtNewActivity countDocuments: " + JSON.stringify(err));
+                cbCrtActivity(err);
+                return;
+            };
             docCount = docCount + 1;
             newItem = docCount;
-            savNewActivity(searchDate, docCount, kind);
+            savNewActivity(searchDate, docCount, kind, cbCrtActivity);
 
-            if (restArgs.length > 0) {
-                for (let index = 0; index < restArgs[0].length; index++) {
+            if (restArgs) {
+                for (let index = 0; index < restArgs.length; index++) {
                     Description.crtNewDescription(user, searchDate, newItem,
-                        restArgs[0][index].langcode,
-                        restArgs[0][index].text);
+                        restArgs[index].langcode,
+                        restArgs[index].text);
                 }
             }
+            return;
         });
 
         // New item number for the date
         // let promiseCount = Activity.countDocuments({ date: searchDate }).exec();
         // promiseCount.then(function (docCount) { savNewActivity(docCount); })
 
-        function savNewActivity(itemDate, docCount, itemKind) {
+        function savNewActivity(itemDate, docCount, itemKind, cbSavActivity) {
 
             let itemYear = Math.trunc(itemDate / 10000);
             let itemMonth = Math.trunc((itemDate - itemYear * 10000) / 100);
@@ -116,11 +121,17 @@ activitySchema.static('crtNewActivity',
                 });
 
             newActivity.save(function (err, newActivity) {
-                if (err) return console.error(err);
+                if (err) {
+                    console.log("Activity.savNewActivity save: " + JSON.stringify(err));
+                    cbSavActivity(err);
+                    return;
+                };
 
                 // Save files to local file system
                 saveFileToLocal(itemDate, newItem, pict_Name, pict_Body, pict_URL);
                 saveFileToLocal(itemDate, newItem, attach_Name, attach_Body, attach_URL);
+
+                cbSavActivity({});
 
             });
 
@@ -295,7 +306,7 @@ activitySchema.static('actActivity',
         let searchDate = date;
         let dltItem = item;
 
-        Activity.findOne({ date: searchDate, item: dltItem, active: "N" }, 
+        Activity.findOne({ date: searchDate, item: dltItem, active: "N" },
             function (err, thisActivity) {
                 if (err) {
                     cbActActivity(err);

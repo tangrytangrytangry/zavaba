@@ -35,7 +35,7 @@ function postData(url = '', data = {}) {
 
 	// Default options are marked with *
 
-	return fetch(url, {
+	return fetchfetch(url, {
 		method: 'POST', // *GET, POST, PUT, DELETE, etc.
 		mode: 'cors', // no-cors, cors, *same-origin
 		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -80,7 +80,6 @@ function getCurrentDateISO() {
 	return dateISO;
 
 } // getCurrentDateISO()
-
 
 // Create HTTP element
 function crtHTTPElem(tag, main, cls, name, disp, txt, id) {
@@ -171,6 +170,23 @@ function cvtCharDate8ToObj(p_CharDate8) {
 	return obj;
 
 } // cvtCharDate8ToObj()
+
+// Convert char ISO-date "YYYY-MM-DD" to number YYYYMMDD
+function cvtCharDateISOToNumber8(p_CharDateISO) {
+
+	let result = 0;
+
+	try {
+
+		result = Number(p_CharDateISO.substr(0, 4)) * 10000 +
+			Number(p_CharDateISO.substr(5, 2)) * 100 +
+			Number(p_CharDateISO.substr(8, 2));
+
+	} catch (error) { }
+
+	return result;
+
+} // cvtCharDateISOToNumber8()
 
 // Get event object Id from screen element Id :  "sometext_YYYYMMDD_NNN" -> { evdate: YYYYMMDD, evitem: NNN }  
 function getEventObjectFromId(parm_Id) {

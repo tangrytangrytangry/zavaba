@@ -414,6 +414,42 @@ app.post('/activateEventPost', function (req, res) {
 
 }); // app.post('/activateEventPost')
 
+// Cretae event
+app.post('/createEventPost', function (req, res) {
+
+    var inReqContent = req.body;
+
+    var evDate = inReqContent.evdate;
+    var evKind = inReqContent.evkind;
+
+    var pictName = inReqContent.pictname;
+    var pictText = inReqContent.picttext;
+    var pictBody = inReqContent.pictbody;
+
+    var attachName = inReqContent.attachname;
+    var attachText = inReqContent.attachtext;
+    var attachBody = inReqContent.attachbody;
+    
+    var activityTexts = inReqContent.activitytexts;
+
+    Activity.crtNewActivity(req.user.username, evDate, evKind,
+        pictName, pictText, pictBody,
+        attachName, attachText, attachBody,
+        activityTexts,
+        function (result) {
+            if (result.name) {
+                let err = {};
+                err.error = result;
+                res.end(JSON.stringify(err));
+                return;
+            }
+            else {
+                res.end("{}");
+            }
+        });
+
+}); // app.post('/createEventPost')
+
 // custom 404 page
 app.use(function (req, res, next) {
     res.type('text/plain');

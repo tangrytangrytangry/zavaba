@@ -21,10 +21,16 @@ var idInputSearchButton = "searchMainButton", inputSearchMainButton, $inputSearc
 var idInputEventDate = "idInputEventDate", inputEventDate;
 var idButtonSaveEvent = "idButtonSaveEvent", buttonSaveEvent;
 var idInputEventPicture = "idInputEventPicture", inputEventPicture, eventPictureSrc = "";
+var idInputEventAttachm = "idInputEventAttachm", inputEventAttachm, eventAttachmSrc = "";
+var idInputEventTextRU = "idInputEventTextRU", inputEventTextRU;
+var idInputEventTextES = "idInputEventTextES", inputEventTextES;
+var idInputEventTextEN = "idInputEventTextEN", inputEventTextEN;
 var idButtonCloseModal = "idButtonCloseModal", buttonCloseModal;
 var idButtonCloseEvent = "idButtonCloseEvent", buttonCloseEvent;
 var idEditEventModal = "idEditEventModal", editEventModal;
 var idInputPictureText = "idInputPictureText", inputPictureText;
+var idInputAttachmText = "idInputAttachmText", inputAttachmText;
+var eventUpdateMode = ""; // "create" or "update"
 
 // Load last events from server to screen
 function zbLastEventList(mode = 'INIT') {
@@ -54,9 +60,40 @@ function zbLastEventList(mode = 'INIT') {
                 img.setAttribute("width", "100");
                 img.setAttribute("height", "100");
             }
+            reader.readAsArrayBuffer(file);
+            //reader.readAsDataURL(file);
+            $("#" + idInputEventPicture).before(img);
+        }
+    });
+
+    // When event attachment selected put its source to a variable 
+    $("#" + idInputEventAttachm).change(function (e) {
+
+        eventAttachmSrc = "";
+
+        // Remove previous selected picture
+        if ($("#" + idInputEventAttachm)[0].previousSibling) {
+            $("#" + idInputEventAttachm)[0].previousSibling.remove();
+        }
+
+        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+
+            var file = e.originalEvent.srcElement.files[i];
+
+            //var img = document.createElement("img");
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                eventAttachmSrc = reader.result;
+                //img.src = reader.result;
+                //img.setAttribute("padding", "5");
+                //img.setAttribute("border", "1px solid black");
+                //img.setAttribute("alt", "Event picture");
+                //img.setAttribute("width", "100");
+                //img.setAttribute("height", "100");
+            }
             //reader.readAsArrayBuffer(file);
             reader.readAsDataURL(file);
-            $("#" + idInputEventPicture).before(img);
+            //$("#" + idInputEventPicture).before(img);
         }
     });
 
@@ -77,8 +114,13 @@ function zbLastEventList(mode = 'INIT') {
 
     inputEventDate = document.getElementById(idInputEventDate);
     inputEventPicture = document.getElementById(idInputEventPicture);
+    inputEventAttachm = document.getElementById(idInputEventAttachm);
     editEventModal = document.getElementById(idEditEventModal);
     inputPictureText = document.getElementById(idInputPictureText);
+    inputAttachmText = document.getElementById(idInputAttachmText);
+    inputEventTextRU = document.getElementById(idInputEventTextRU);
+    inputEventTextES = document.getElementById(idInputEventTextES);
+    inputEventTextEN = document.getElementById(idInputEventTextEN);
 
     // Get user info
 
@@ -874,8 +916,15 @@ function buttonEventNewPressed(mouseEvent) {
 
     //alert("New!");
 
+    eventUpdateMode = "create";
     inputEventPicture.value = "";
-    inputPictureText.value = "";
+
+    inputPictureText.value = inputPictureText.value.trim();
+    inputAttachmText.value = inputAttachmText.value.trim();
+    inputEventTextRU.value = inputEventTextRU.value.trim();
+    inputEventTextES.value = inputEventTextES.value.trim();
+    inputEventTextEN.value = inputEventTextEN.value.trim();
+
     $("#" + idInputEventPicture)[0].previousSibling.remove();
 
     $("#" + idEditEventModal).modal();
@@ -920,11 +969,68 @@ function buttonSaveEventPressed(ev) {
     if (inputPictureText.value == "") {
         alert("Error: no picture text entered !");
         return;
+    }
+
+    if (eventUpdateMode == "create") {
+        createEventPost();
     } else {
 
     }
 
 } // buttonSaveEventPressed()
 
+// Send .post to create new event 
+function createEventPost() {
 
+    var reqContentObj = {};
+    
+    // Item
+    reqContentObj.evdate = cvtCharDateISOToNumber8(inputEventDate.value);
+    reqContentObj.evkind = "ordinary";
+
+    // Picture 
+    if (inputEventPicture.files.length > 0) {
+        reqContentObj.pictname = inputEventPicture.files[0].name.trim();
+    } else {
+        reqContentObj.pictname = "";
+    }
+    reqContentObj.picttext = inputPictureText.value.trim();
+    reqContentObj.pictbody = eventPictureSrc;
+
+    // Attachment
+    if (inputEventAttachm.files.length > 0) {
+        reqContentObj.attachname = inputEventAttachm.files[0].name.trim();
+    }
+    else {
+        reqContentObj.attachname = "";
+    }
+    reqContentObj.attachtext = inputAttachmText.value.trim();
+    reqContentObj.attachbody = eventAttachmSrc;
+
+    // Descriptions
+    reqContentObj.activitytexts = [
+        { langcode: 'RU', text: inputEventTextRU.value.trim() },
+        { langcode: 'ES', text: inputEventTextES.value.trim() },
+        { langcode: 'EN', text: inputEventTextEN.value.trim() }
+    ];
+
+    postData('createEventPost', reqContentObj)
+        .then(function (res) {
+            if (res.error) {
+                SetInfo(res.error.name + ' ' + res.error.message + ' ' +
+                    res.error.stack, 'ERROR');
+                return;
+            } else {
+                SetInfo('Event ' + reqContentObj.evdate + '-' + reqContentObj.evitem + ' created.',
+                    'SUCCESS');
+                return;
+            }
+        })
+        .catch(function (error) {
+            SetInfo(error.name + ' ' + error.message + ' ' +
+                error.stack, 'ERROR');
+            return;
+        });
+
+} // createEventPost()
 
