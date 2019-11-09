@@ -91,8 +91,8 @@ function zbLastEventList(mode = 'INIT') {
                 //img.setAttribute("width", "100");
                 //img.setAttribute("height", "100");
             }
-            //reader.readAsArrayBuffer(file);
-            reader.readAsDataURL(file);
+            reader.readAsArrayBuffer(file);
+            //reader.readAsDataURL(file);
             //$("#" + idInputEventPicture).before(img);
         }
     });
@@ -983,6 +983,7 @@ function buttonSaveEventPressed(ev) {
 function createEventPost() {
 
     var reqContentObj = {};
+    var txtDecoder = new TextDecoder("utf-8");
     
     // Item
     reqContentObj.evdate = cvtCharDateISOToNumber8(inputEventDate.value);
@@ -995,7 +996,8 @@ function createEventPost() {
         reqContentObj.pictname = "";
     }
     reqContentObj.picttext = inputPictureText.value.trim();
-    reqContentObj.pictbody = eventPictureSrc;
+    reqContentObj.pictbody = encodeURIComponent(txtDecoder.decode(eventPictureSrc));
+    //reqContentObj.pictbody = "abc";
 
     // Attachment
     if (inputEventAttachm.files.length > 0) {
@@ -1021,7 +1023,7 @@ function createEventPost() {
                     res.error.stack, 'ERROR');
                 return;
             } else {
-                SetInfo('Event ' + reqContentObj.evdate + '-' + reqContentObj.evitem + ' created.',
+                SetInfo('Event ' + res.evdate + '-' + res.evitem + ' created.',
                     'SUCCESS');
                 return;
             }

@@ -131,7 +131,7 @@ activitySchema.static('crtNewActivity',
                 saveFileToLocal(itemDate, newItem, pict_Name, pict_Body, pict_URL);
                 saveFileToLocal(itemDate, newItem, attach_Name, attach_Body, attach_URL);
 
-                cbSavActivity({});
+                cbSavActivity({ evdate: itemDate, evitem: newItem });
 
             });
 

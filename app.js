@@ -10,6 +10,8 @@ var helmet = require('helmet');
 var flash = require('connect-flash');
 var reports = require('./lib/reports.js');
 
+var bodyParser = require('body-parser');
+
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
@@ -289,6 +291,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json({limit: '10mb', extended: true}));
+app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 
 app.use('/', function (req, res, next) {
     req.currentLang = app.get('currentLang');
@@ -444,7 +448,7 @@ app.post('/createEventPost', function (req, res) {
                 return;
             }
             else {
-                res.end("{}");
+                res.end(JSON.stringify(result));
             }
         });
 

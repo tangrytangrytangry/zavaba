@@ -39,7 +39,9 @@ router.get('/', function (req, res, next) {
   Activity.crtNewActivity(req.user.username, curDate, "ordinary",
     pictName, pictText, pictBody,
     attachName, attachText, attachBody,
-    activityTexts);
+    activityTexts, function name(res) {
+      
+    });
 
 
   /*
