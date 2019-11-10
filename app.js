@@ -8,6 +8,7 @@ var nunjucks = require('nunjucks');
 var crypto = require('crypto');
 var helmet = require('helmet');
 var flash = require('connect-flash');
+var formidable = require('formidable');
 var reports = require('./lib/reports.js');
 
 var bodyParser = require('body-parser');
@@ -291,8 +292,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json({limit: '10mb', extended: true}));
-app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
+app.use(bodyParser.json({ limit: '10mb', extended: true }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 
 app.use('/', function (req, res, next) {
     req.currentLang = app.get('currentLang');
@@ -418,7 +419,7 @@ app.post('/activateEventPost', function (req, res) {
 
 }); // app.post('/activateEventPost')
 
-// Cretae event
+// Create event
 app.post('/createEventPost', function (req, res) {
 
     var inReqContent = req.body;
@@ -433,7 +434,7 @@ app.post('/createEventPost', function (req, res) {
     var attachName = inReqContent.attachname;
     var attachText = inReqContent.attachtext;
     var attachBody = inReqContent.attachbody;
-    
+
     var activityTexts = inReqContent.activitytexts;
 
     Activity.crtNewActivity(req.user.username, evDate, evKind,
@@ -453,6 +454,47 @@ app.post('/createEventPost', function (req, res) {
         });
 
 }); // app.post('/createEventPost')
+
+// Upload files to server
+app.post('/uploadFilesPost', function (req, res) {
+
+    var inReqContent = req.body;
+    var form = new formidable.IncomingForm();
+
+    form.multiples = true;
+    form.uploadDir = path.join(__dirname, '/public/uploads');
+    form.keepExtensions = true;
+
+
+    //Emitted whenever a field / file pair has been received
+    form.on('file', function (name, file) {
+
+        //fileName = reqid + '_' + cleanString(file.name);
+        //fs.rename(file.path, path.join(form.uploadDir, fileName));
+
+        return;
+
+    });
+
+    // Emitted whenever a field / value pair has been received
+    form.on('field', function (name, value) {
+        return;
+    });
+
+    // Emitted when the entire request has been received, and all 
+    // contained files have finished flushing to disk. 
+    // This is a great place for you to send your response.
+    form.on('end', function() {
+    });
+
+    form.parse(req);
+
+    form.parse(req, function(err, fields, files) {
+        return;
+      });
+
+
+}); // app.post('/uploadFilesPost')
 
 // custom 404 page
 app.use(function (req, res, next) {

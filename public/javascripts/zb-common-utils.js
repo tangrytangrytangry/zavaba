@@ -7,7 +7,7 @@ function sendGetRequestToServerSync(url, inpParm) {
 	xhr.open('GET', url + inpParm, false);
 	xhr.send();
 	return xhr.responseText;
-}
+} // sendGetRequestToServerSync
 
 //Send GET-request to the server asynchronously
 function sendGetRequestToServerAsync(url, inpParm, callBack) {
@@ -49,8 +49,45 @@ function postData(url = '', data = {}) {
 		body: JSON.stringify(data), // body data type must match "Content-Type" header
 	})
 		.then(function (response) { return response.json(); }); // parses JSON response into native Javascript objects 
-}
 
+} // postData()
+
+//Upload files to the server
+function uploadFiles(parm_FilesArr = []) {
+
+	var formData = new FormData();
+
+	formData.append('reqRole', 'reqNew.Role');
+
+	for (let idx = 0; idx < parm_FilesArr.length; idx++) {
+
+		const file = parm_FilesArr[idx];
+		formData.append('uploadedFiles', file, file.name);
+
+	}
+
+	$.ajax({
+		url: '/uploadFilesPost',
+		type: 'POST',
+		data: formData,
+		async: true,
+		cache: false,
+		processData: false,
+		contentType: false,
+		success: function (result, status, xhr) { // A function to be run when the request succeeds
+			alert('Ok!');
+		},
+		error: function (xhr, status, error) { // A function to run if the request fails
+			alert("An error occured: " + xhr.status + " " + xhr.statusText);
+		}
+
+		//xhr: function () { } // A function used for creating the XMLHttpRequest object
+
+	});
+
+} // uploadFiles()
+
+// Calculate file base name 
 function getFileBaseName(path) {
 	let separator = '/'
 

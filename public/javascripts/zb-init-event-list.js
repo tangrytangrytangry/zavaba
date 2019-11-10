@@ -60,8 +60,8 @@ function zbLastEventList(mode = 'INIT') {
                 img.setAttribute("width", "100");
                 img.setAttribute("height", "100");
             }
-            reader.readAsArrayBuffer(file);
-            //reader.readAsDataURL(file);
+            //reader.readAsArrayBuffer(file);
+            reader.readAsDataURL(file);
             $("#" + idInputEventPicture).before(img);
         }
     });
@@ -984,6 +984,7 @@ function createEventPost() {
 
     var reqContentObj = {};
     var txtDecoder = new TextDecoder("utf-8");
+    var uploadFilesArr = [];
     
     // Item
     reqContentObj.evdate = cvtCharDateISOToNumber8(inputEventDate.value);
@@ -996,8 +997,10 @@ function createEventPost() {
         reqContentObj.pictname = "";
     }
     reqContentObj.picttext = inputPictureText.value.trim();
-    reqContentObj.pictbody = encodeURIComponent(txtDecoder.decode(eventPictureSrc));
-    //reqContentObj.pictbody = "abc";
+    //reqContentObj.pictbody = encodeURIComponent(txtDecoder.decode(eventPictureSrc));
+    reqContentObj.pictbody = "#";
+    uploadFilesArr[0] = inputEventPicture.files[0];
+    uploadFiles(uploadFilesArr);
 
     // Attachment
     if (inputEventAttachm.files.length > 0) {
