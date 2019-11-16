@@ -53,17 +53,18 @@ function postData(url = '', data = {}) {
 } // postData()
 
 //Upload files to the server
-function uploadFiles(parm_FilesArr = []) {
+function uploadFiles(parm_FilesArr = [], parm_FilesKeysArr = [],
+	parm_EvDate = 0, parm_EvNumber = 0) {
 
 	var formData = new FormData();
 
-	formData.append('reqRole', 'reqNew.Role');
+	formData.append('evdate', parm_EvDate);
+	formData.append('evnumber', parm_EvNumber);
 
 	for (let idx = 0; idx < parm_FilesArr.length; idx++) {
-
 		const file = parm_FilesArr[idx];
-		formData.append('uploadedFiles', file, file.name);
-
+		const key = parm_FilesKeysArr[idx];
+		formData.append(key, file, file.name);
 	}
 
 	$.ajax({
@@ -75,10 +76,15 @@ function uploadFiles(parm_FilesArr = []) {
 		processData: false,
 		contentType: false,
 		success: function (result, status, xhr) { // A function to be run when the request succeeds
-			alert('Ok!');
+			if (result) {
+				let err = JSON.parse(result);
+				if (err.error) {
+					alert('Error uploading file to server: ' + result);
+				}
+			}
 		},
 		error: function (xhr, status, error) { // A function to run if the request fails
-			alert("An error occured: " + xhr.status + " " + xhr.statusText);
+			alert("Error uploading file to server: " + xhr.status + " " + xhr.statusText);
 		}
 
 		//xhr: function () { } // A function used for creating the XMLHttpRequest object

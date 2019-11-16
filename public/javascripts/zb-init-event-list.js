@@ -984,8 +984,8 @@ function createEventPost() {
 
     var reqContentObj = {};
     var txtDecoder = new TextDecoder("utf-8");
-    var uploadFilesArr = [];
-    
+    var uploadFilesArr = [], uploadFilesKeysArr = [];
+
     // Item
     reqContentObj.evdate = cvtCharDateISOToNumber8(inputEventDate.value);
     reqContentObj.evkind = "ordinary";
@@ -1000,7 +1000,8 @@ function createEventPost() {
     //reqContentObj.pictbody = encodeURIComponent(txtDecoder.decode(eventPictureSrc));
     reqContentObj.pictbody = "#";
     uploadFilesArr[0] = inputEventPicture.files[0];
-    uploadFiles(uploadFilesArr);
+    uploadFilesKeysArr[0] = "picture";
+    uploadFiles(uploadFilesArr, uploadFilesKeysArr, reqContentObj.evdate, 0);
 
     // Attachment
     if (inputEventAttachm.files.length > 0) {

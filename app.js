@@ -1,6 +1,7 @@
 var express = require('express');
 var session = require('express-session');
 var path = require('path');
+var fs = require('fs');
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var debug = require('debug')('server:app');
@@ -293,7 +294,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({ limit: '10mb', extended: true }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
 app.use('/', function (req, res, next) {
     req.currentLang = app.get('currentLang');
@@ -460,39 +461,87 @@ app.post('/uploadFilesPost', function (req, res) {
 
     var inReqContent = req.body;
     var form = new formidable.IncomingForm();
+    var loadedFields = [], loadedFiles = [];
 
+    form.encoding = 'utf-8';
     form.multiples = true;
     form.uploadDir = path.join(__dirname, '/public/uploads');
     form.keepExtensions = true;
-
+    form.maxFileSize = 50 * 1024 * 1024;
 
     //Emitted whenever a field / file pair has been received
     form.on('file', function (name, file) {
-
-        //fileName = reqid + '_' + cleanString(file.name);
-        //fs.rename(file.path, path.join(form.uploadDir, fileName));
-
-        return;
-
+        //console.log(name, file);
+        //loadedFiles.push([name, file]);
     });
 
     // Emitted whenever a field / value pair has been received
     form.on('field', function (name, value) {
-        return;
+        //console.log(name, value);
+        //loadedFields.push([name, value]);
+    });
+
+    form.on('error', function (err) {
+        console.log('Ошибка при загрузке: ' + err);
     });
 
     // Emitted when the entire request has been received, and all 
     // contained files have finished flushing to disk. 
     // This is a great place for you to send your response.
-    form.on('end', function() {
+    form.on('end', function () {
     });
 
-    form.parse(req);
+    // Parses an incoming node.js request containing form data.  
+    //form.parse(req);
 
-    form.parse(req, function(err, fields, files) {
-        return;
-      });
+    // Parses an incoming node.js request containing form data. 
+    // If cb is provided, all fields and files are collected and passed to the callback:Parses an 
+    // incoming node.js request containing form data. If cb is provided, all 
+    // fields and files are collected and passed to the callback:
 
+    form.parse(req, function (err, fields, files) {
+
+        var FULLROOT = path.join(__dirname, 'public');
+        var FILEROORDIR = "/images";
+
+        var dirName = "", baseName = "", tagretPath = "", eventDir = "",
+            dirExists = false, err = {};
+
+        // Event picture
+        if (files.picture.path) {
+            dirName = path.dirname(files.picture.path);
+            baseName = path.basename(files.picture.path);
+
+            // Create directory /public/images/YYYYMMDD_nnn
+            eventDir = path.join(FULLROOT, FILEROORDIR, fields.evdate + "_" + fields.evnumber);
+            try {
+                dirExists = fs.existsSync(eventDir);
+                if (!dirExists) {
+                    fs.mkdirSync(eventDir);
+                }
+            } catch (error) {
+                err = {};
+                err.error = error;
+                res.end(JSON.stringify(err));
+                return;
+            }
+
+            // Save data to file in directory /public/images/YYYYMMDD_nnn/
+            tagretPath = path.join(eventDir, files.picture.name);
+            try {
+                fs.copyFileSync(files.picture.path, tagretPath);
+                fs.unlinkSync(files.picture.path);
+            } catch (error) {
+                err = {};
+                err.error = error;
+                res.end(JSON.stringify(err));
+                return;
+            }
+
+        }
+
+        return "{}";
+    });
 
 }); // app.post('/uploadFilesPost')
 
