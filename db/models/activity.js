@@ -60,7 +60,7 @@ activitySchema.static('crtNewActivity',
 
         Activity.countDocuments({ date: searchDate }, function (err, docCount) {
             if (err) {
-                console.log("Activity.crtNewActivity countDocuments: " + JSON.stringify(err));
+                //console.log("Activity.crtNewActivity countDocuments: " + JSON.stringify(err));
                 cbCrtActivity(err);
                 return;
             };
@@ -371,6 +371,52 @@ function saveFileToLocal(sfDate, sfItem, sfFileName, sfFileBody, fileURL) {
     return "";
 
 }; // saveFileToLocal()
+
+// Update activity file
+activitySchema.static('updActivityFile',
+    function (file_Date, file_Item, file_Type, file_Path, cbUpdActivityFile) {
+
+        Activity.findOne({ date: file_Date, item: file_Item }, function (err, thisActivity) {
+            if (err) {
+                cbUpdActivityFile(err);
+                return;
+            };
+            savActivity(thisActivity, cbUpdActivityFile);
+            return;
+        });
+
+        function savActivity(parActivity, cbSavActivity) {
+
+            var fileBody;
+
+            if (parActivity == null) { return; }
+
+            fileBody = fs.readFileSync(file_Path);
+
+            // Picture
+            if (file_Type == "picture") {
+                parActivity.data.picture.body = fileBody;
+            }
+
+            // Attachment
+            if (file_Type == "attachment") {
+                parActivity.data.attachment.body = fileBody;
+            }
+
+            parActivity.save(function (err, parActivity) {
+                if (err) {
+                    cbSavActivity(err);
+                    return;
+                };
+                cbSavActivity({});
+                return;
+            });
+
+        }; // savActivity()
+
+    } // updActivityFile()
+
+); // activitySchema.static('updActivityFile') 
 
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;

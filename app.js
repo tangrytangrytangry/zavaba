@@ -481,8 +481,11 @@ app.post('/uploadFilesPost', function (req, res) {
         //loadedFields.push([name, value]);
     });
 
-    form.on('error', function (err) {
-        console.log('Ошибка при загрузке: ' + err);
+    form.on('error', function (error) {
+        err = {};
+        err.error = error;
+        res.end(JSON.stringify(err));
+        return;
     });
 
     // Emitted when the entire request has been received, and all 
@@ -513,6 +516,7 @@ app.post('/uploadFilesPost', function (req, res) {
             baseName = path.basename(files.picture.path);
 
             // Create directory /public/images/YYYYMMDD_nnn
+            
             eventDir = path.join(FULLROOT, FILEROORDIR, fields.evdate + "_" + fields.evnumber);
             try {
                 dirExists = fs.existsSync(eventDir);
@@ -527,6 +531,7 @@ app.post('/uploadFilesPost', function (req, res) {
             }
 
             // Save data to file in directory /public/images/YYYYMMDD_nnn/
+
             tagretPath = path.join(eventDir, files.picture.name);
             try {
                 fs.copyFileSync(files.picture.path, tagretPath);
@@ -538,7 +543,74 @@ app.post('/uploadFilesPost', function (req, res) {
                 return;
             }
 
-        }
+            // Update in MomgoDB binary data of the event picture
+
+            Activity.updActivityFile(fields.evdate, fields.evnumber,
+                "picture", tagretPath,
+                function (result) {
+                    if (result.name) {
+                        let err = {};
+                        err.error = result;
+                        res.end(JSON.stringify(err));
+                        return;
+                    }
+                    else {
+                        res.end(JSON.stringify(result));
+                    }
+                });
+
+        } // if (files.picture.path) 
+
+        // Event attachment document
+        if (files.attachment.path) {
+            dirName = path.dirname(files.attachment.path);
+            baseName = path.basename(files.attachment.path);
+
+            // Create directory /public/images/YYYYMMDD_nnn
+
+            eventDir = path.join(FULLROOT, FILEROORDIR, fields.evdate + "_" + fields.evnumber);
+            try {
+                dirExists = fs.existsSync(eventDir);
+                if (!dirExists) {
+                    fs.mkdirSync(eventDir);
+                }
+            } catch (error) {
+                err = {};
+                err.error = error;
+                res.end(JSON.stringify(err));
+                return;
+            }
+
+            // Save data to file in directory /public/images/YYYYMMDD_nnn/
+
+            tagretPath = path.join(eventDir, files.attachment.name);
+            try {
+                fs.copyFileSync(files.attachment.path, tagretPath);
+                fs.unlinkSync(files.attachment.path);
+            } catch (error) {
+                err = {};
+                err.error = error;
+                res.end(JSON.stringify(err));
+                return;
+            }
+
+            // Update in MomgoDB binary data of the event attachment document
+
+            Activity.updActivityFile(fields.evdate, fields.evnumber,
+                "attachment", tagretPath,
+                function (result) {
+                    if (result.name) {
+                        let err = {};
+                        err.error = result;
+                        res.end(JSON.stringify(err));
+                        return;
+                    }
+                    else {
+                        res.end(JSON.stringify(result));
+                    }
+                });
+
+        } // if (files.attachment.path)
 
         return "{}";
     });

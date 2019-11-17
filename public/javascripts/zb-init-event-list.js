@@ -93,7 +93,7 @@ function zbLastEventList(mode = 'INIT') {
             }
             reader.readAsArrayBuffer(file);
             //reader.readAsDataURL(file);
-            //$("#" + idInputEventPicture).before(img);
+            //$("#" +  idInputEventAttachm).before(img);
         }
     });
 
@@ -1001,7 +1001,6 @@ function createEventPost() {
     reqContentObj.pictbody = "#";
     uploadFilesArr[0] = inputEventPicture.files[0];
     uploadFilesKeysArr[0] = "picture";
-    uploadFiles(uploadFilesArr, uploadFilesKeysArr, reqContentObj.evdate, 0);
 
     // Attachment
     if (inputEventAttachm.files.length > 0) {
@@ -1011,7 +1010,9 @@ function createEventPost() {
         reqContentObj.attachname = "";
     }
     reqContentObj.attachtext = inputAttachmText.value.trim();
-    reqContentObj.attachbody = eventAttachmSrc;
+    reqContentObj.attachbody = "#";
+    uploadFilesArr[1] = inputEventAttachm.files[0];
+    uploadFilesKeysArr[1] = "attachment";
 
     // Descriptions
     reqContentObj.activitytexts = [
@@ -1027,6 +1028,7 @@ function createEventPost() {
                     res.error.stack, 'ERROR');
                 return;
             } else {
+                uploadFiles(uploadFilesArr, uploadFilesKeysArr, res.evdate, res.evitem);
                 SetInfo('Event ' + res.evdate + '-' + res.evitem + ' created.',
                     'SUCCESS');
                 return;
