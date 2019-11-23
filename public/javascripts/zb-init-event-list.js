@@ -606,7 +606,9 @@ function getEventTable(evDate, evNumber, evActive) {
         ' <table style="width:100%">' +
         '  <tr>' +
         '   <td rowspan="3">' +
-        '    <div id="' + getEventTableDivPicId(evDate, evNumber) + '">' + '</div>' +
+        '    <div id="' + getEventTableDivPicId(evDate, evNumber) + '"' +
+        '         style="width:200px;height:200px;"' + '>' +
+        '</div>' +
         '   </td>' +
         '   <td>' + evDate + '-' + evNumber + '</td>' +
         '   <td>' +
@@ -984,7 +986,7 @@ function createEventPost() {
 
     var reqContentObj = {};
     var txtDecoder = new TextDecoder("utf-8");
-    var uploadFilesArr = [], uploadFilesKeysArr = [];
+    var uploadFilesArr = [], uploadFilesKeysArr = [], fileCount = -1;
 
     // Item
     reqContentObj.evdate = cvtCharDateISOToNumber8(inputEventDate.value);
@@ -993,26 +995,28 @@ function createEventPost() {
     // Picture 
     if (inputEventPicture.files.length > 0) {
         reqContentObj.pictname = inputEventPicture.files[0].name.trim();
+        //reqContentObj.pictbody = encodeURIComponent(txtDecoder.decode(eventPictureSrc));
+        fileCount = fileCount + 1;
+        uploadFilesArr[fileCount] = inputEventPicture.files[0];
+        uploadFilesKeysArr[fileCount] = "picture";
     } else {
         reqContentObj.pictname = "";
     }
-    reqContentObj.picttext = inputPictureText.value.trim();
-    //reqContentObj.pictbody = encodeURIComponent(txtDecoder.decode(eventPictureSrc));
     reqContentObj.pictbody = "#";
-    uploadFilesArr[0] = inputEventPicture.files[0];
-    uploadFilesKeysArr[0] = "picture";
+    reqContentObj.picttext = inputPictureText.value.trim();
 
     // Attachment
     if (inputEventAttachm.files.length > 0) {
         reqContentObj.attachname = inputEventAttachm.files[0].name.trim();
+        fileCount = fileCount + 1;
+        uploadFilesArr[fileCount] = inputEventAttachm.files[0];
+        uploadFilesKeysArr[fileCount] = "attachment";
     }
     else {
         reqContentObj.attachname = "";
     }
-    reqContentObj.attachtext = inputAttachmText.value.trim();
     reqContentObj.attachbody = "#";
-    uploadFilesArr[1] = inputEventAttachm.files[0];
-    uploadFilesKeysArr[1] = "attachment";
+    reqContentObj.attachtext = inputAttachmText.value.trim();
 
     // Descriptions
     reqContentObj.activitytexts = [

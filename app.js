@@ -511,12 +511,12 @@ app.post('/uploadFilesPost', function (req, res) {
             dirExists = false, err = {};
 
         // Event picture
-        if (files.picture.path) {
+        if (files.picture) {
             dirName = path.dirname(files.picture.path);
             baseName = path.basename(files.picture.path);
 
             // Create directory /public/images/YYYYMMDD_nnn
-            
+
             eventDir = path.join(FULLROOT, FILEROORDIR, fields.evdate + "_" + fields.evnumber);
             try {
                 dirExists = fs.existsSync(eventDir);
@@ -562,7 +562,7 @@ app.post('/uploadFilesPost', function (req, res) {
         } // if (files.picture.path) 
 
         // Event attachment document
-        if (files.attachment.path) {
+        if (files.attachment) {
             dirName = path.dirname(files.attachment.path);
             baseName = path.basename(files.attachment.path);
 

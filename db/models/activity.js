@@ -70,9 +70,13 @@ activitySchema.static('crtNewActivity',
 
             if (restArgs) {
                 for (let index = 0; index < restArgs.length; index++) {
-                    Description.crtNewDescription(user, searchDate, newItem,
-                        restArgs[index].langcode,
-                        restArgs[index].text);
+                    if (restArgs[index].langcode && restArgs[index].text) {
+                        if (restArgs[index].langcode.trim() != "" && restArgs[index].text.trim() != "") {
+                            Description.crtNewDescription(user, searchDate, newItem,
+                                restArgs[index].langcode.trim(),
+                                restArgs[index].text.trim());
+                        }
+                    }
                 }
             }
             return;
