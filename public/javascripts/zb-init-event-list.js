@@ -343,15 +343,28 @@ function cbOneEventData(oneEventData) {
         divEventIcons.style.display = "none";
     }
 
+
     // Show event picture
     let divPictId = getEventTableDivPicId(objEventData[0].date, objEventData[0].item);
+    /*
     let divPict = $("#" + divPictId);
     divPict.append("<img></img>");
     $("#" + currEventId + " :last-child")
         .attr({
             src: pictureURL,
-            alt: objEventData[0].data.picture.text
+            alt: objEventData[0].data.picture.text,
+            width: 200,
+            height: 200
         });
+    */
+
+    var divPict = document.getElementById(divPictId);
+    var evImg = crtHTTPElem('img', divPict, '', '', '', '', '');
+    evImg.setAttribute("src", pictureURL);
+    evImg.setAttribute("alt", objEventData[0].data.picture.text);
+    evImg.setAttribute("width", "200");
+    evImg.setAttribute("height", "200");
+
 
     // Show event attachment
     let divAttaId = getEventTableDivAttId(objEventData[0].date, objEventData[0].item);
@@ -606,9 +619,7 @@ function getEventTable(evDate, evNumber, evActive) {
         ' <table style="width:100%">' +
         '  <tr>' +
         '   <td rowspan="3">' +
-        '    <div id="' + getEventTableDivPicId(evDate, evNumber) + '"' +
-        '         style="width:200px;height:200px;"' + '>' +
-        '</div>' +
+        '    <div id="' + getEventTableDivPicId(evDate, evNumber) + '"></div>' +
         '   </td>' +
         '   <td>' + evDate + '-' + evNumber + '</td>' +
         '   <td>' +
@@ -978,6 +989,8 @@ function buttonSaveEventPressed(ev) {
     } else {
 
     }
+
+    $("#" + idEditEventModal).modal("hide");
 
 } // buttonSaveEventPressed()
 
