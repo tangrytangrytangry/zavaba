@@ -1048,6 +1048,7 @@ function createEventPost() {
                 uploadFiles(uploadFilesArr, uploadFilesKeysArr, res.evdate, res.evitem);
                 SetInfo('Event ' + res.evdate + '-' + res.evitem + ' created.',
                     'SUCCESS');
+                addNewEventToCurrentPage( res.evdate, res.evitem);
                 return;
             }
         })
@@ -1058,4 +1059,38 @@ function createEventPost() {
         });
 
 } // createEventPost()
+
+// Add new just created event on the current page
+function addNewEventToCurrentPage(parEvDate, parEvNumber) {
+
+    var elID = "", elText = "", li, $li, evData = {};
+
+    elText = "";
+    elID = getListEventId(parEvDate, parEvNumber);
+
+    li = crtHTTPElem('li', ulEventList, "list-group-item", '', '', elText, elID);
+    evData = {
+        pagenumber: currentScreenPage,
+        evdate: parEvDate,
+        evnumber: parEvNumber,
+        evactive: "Y",
+        evlisteners: "N"
+    };
+    $("#" + elID).data(evData);
+
+    // Draw table with the new even data
+    $li = $("#" + elID);
+    $li.append(getEventTable(parEvDate, parEvNumber, "Y"));
+
+    li.style.display = "block";
+    evData.evloaded = 'N';
+    $("#" + elID).data(evData);
+
+    // All new event data to screen
+    showOneEventData(parEvDate, parEvDate);
+
+    // Show current screen page
+    showCurrentScreenPage();
+
+} // addNewEventToCurrentPage()
 
